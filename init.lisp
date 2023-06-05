@@ -1,0 +1,1 @@
+/home/izder456/.stumpwm.d/init.lisp
