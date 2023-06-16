@@ -110,7 +110,7 @@
 (define-key *root-map* (kbd "M-b") "exec feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")
 (define-key *root-map* (kbd "P") "exec st -T ncspot -e ncspot")
 (define-key *root-map* (kbd "i") "exec st -T htop -e htop")
-(define-key *root-map* (kbd "e") "exec emacsclient -c -a 'emacs'")
+(define-key *root-map* (kbd "e") "exec st -T nvim -e nvim")
 (define-key *root-map* (kbd "x") "exec xkill")
 
 ;; Window movement between groups
