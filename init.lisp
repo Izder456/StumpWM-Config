@@ -3,7 +3,7 @@
 (in-package :stumpwm)
 
 ;; Set font and colors for the message window
-(set-font "xft:GohuFont 14 Nerd Font Mono:style=Regular")
+(set-font "xft:GohuFont uni14 Nerd Font Mono:style=Regular")
 (set-fg-color "#ebdbb2")
 (set-bg-color "#282828")
 (set-border-color "#ebdbb2")
@@ -110,18 +110,19 @@
 (define-key *root-map* (kbd "M-b") "exec feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")
 (define-key *root-map* (kbd "P") "exec st -T ncspot -e ncspot")
 (define-key *root-map* (kbd "i") "exec st -T htop -e htop")
-(define-key *root-map* (kbd "e") "exec st -T nvim -e nvim")
-(define-key *root-map* (kbd "x") "exec xkill")
 
 ;; Window movement between groups
 (define-key *root-map* (kbd "m") "mark")
 (define-key *root-map* (kbd "M") "gmove-marked")
+(define-key *root-map* (kbd "e") "exec emacsclient -c -a  emacs")
+(define-key *root-map* (kbd "x") "exec xkill")
+(define-key *root-map* (kbd "L") "exec slock")
 
 ;; Special keys
 (define-key *top-map* (kbd "Print") "exec scrot -F ~/Pictures/screenshot-`date +%F`.png")
-(define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec sndioctl output.level=+0.05")
-(define-key *top-map* (kbd "XF86AudioLowerVolume") "exec sndioctl output.level=-0.05")
-(define-key *top-map* (kbd "XF86AudioMute") "exec sndioctl output.mute=!")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec ~/.local/bin/volControl.sh up")
+(define-key *top-map* (kbd "XF86AudioLowerVolume") "exec ~/.local/bin/volControl.sh down")
+(define-key *top-map* (kbd "XF86AudioMute") "exec ~/.local/bin/volControl.sh mute")
 
 ;; Web jump commands
 (defmacro make-web-jump (name prefix)
