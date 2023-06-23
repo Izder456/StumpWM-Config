@@ -108,15 +108,17 @@
 (define-key *root-map* (kbd "F") "exec caja")
 (define-key *root-map* (kbd "space") "exec rofi -i -show drun -modi drun -show-icons")
 (define-key *root-map* (kbd "M-b") "exec feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")
-(define-key *root-map* (kbd "P") "exec st -T ncspot -e ncspot")
-(define-key *root-map* (kbd "i") "exec st -T htop -e htop")
+
+(define-key *root-map* (kbd "e") "exec emacsclient -c -a  emacs")
+(define-key *root-map* (kbd "P") "exec alacritty -T ncspot -e ncspot")
+(define-key *root-map* (kbd "i") "exec alacritty -T htop -e htop")
+(define-key *root-map* (kbd "I") "exec alacritty --hold -T fetch -e neofetch")
+(define-key *root-map* (kbd "x") "exec xkill")
+(define-key *root-map* (kbd "L") "exec slock")
 
 ;; Window movement between groups
 (define-key *root-map* (kbd "m") "mark")
 (define-key *root-map* (kbd "M") "gmove-marked")
-(define-key *root-map* (kbd "e") "exec emacsclient -c -a  emacs")
-(define-key *root-map* (kbd "x") "exec xkill")
-(define-key *root-map* (kbd "L") "exec slock")
 
 ;; Special keys
 (define-key *top-map* (kbd "Print") "exec scrot -F ~/Pictures/screenshot-`date +%F`.png")
