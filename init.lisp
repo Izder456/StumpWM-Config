@@ -103,8 +103,8 @@
 
 ;; Application and command keybindings
 (define-key *root-map* (kbd "f") "exec qutebrowser")
-(define-key *root-map* (kbd "c") "exec st")
-(define-key *root-map* (kbd "C-c") "exec st")
+(define-key *root-map* (kbd "c") "exec alacritty")
+(define-key *root-map* (kbd "C-c") "exec alacritty")
 (define-key *root-map* (kbd "F") "exec caja")
 (define-key *root-map* (kbd "space") "exec rofi -i -show drun -modi drun -show-icons")
 (define-key *root-map* (kbd "M-b") "exec feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")
