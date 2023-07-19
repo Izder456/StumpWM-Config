@@ -33,7 +33,7 @@
 
 ;; Show the temperature
 (defun show-temp ()
-  (run-shell-command-and-format "sysctl -n hw.sensors.acpithinkpad0.temp4"))
+  (run-shell-command-and-format "sysctl -n hw.sensors.cpu0.temp0"))
 
 ;; Show the window title
 (defun show-window-title ()
@@ -102,14 +102,13 @@
 (define-key *root-map* (kbd "M-q") "quit")
 
 ;; Application and command keybindings
-(define-key *root-map* (kbd "f") "exec qutebrowser")
+(define-key *root-map* (kbd "f") "exec firefox-esr")
 (define-key *root-map* (kbd "c") "exec alacritty")
 (define-key *root-map* (kbd "C-c") "exec alacritty")
 (define-key *root-map* (kbd "F") "exec caja")
 (define-key *root-map* (kbd "space") "exec rofi -i -show drun -modi drun -show-icons")
 (define-key *root-map* (kbd "M-b") "exec feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")
-
-(define-key *root-map* (kbd "e") "exec emacsclient -c -a  emacs")
+(define-key *root-map* (kbd "e") "exec emacs")
 (define-key *root-map* (kbd "P") "exec alacritty -T ncspot -e ncspot")
 (define-key *root-map* (kbd "i") "exec alacritty -T htop -e htop")
 (define-key *root-map* (kbd "I") "exec alacritty --hold -T fetch -e neofetch")
@@ -122,9 +121,9 @@
 
 ;; Special keys
 (define-key *top-map* (kbd "Print") "exec scrot -F ~/Pictures/screenshot-`date +%F`.png")
-(define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec ~/.local/bin/volControl.sh up")
-(define-key *top-map* (kbd "XF86AudioLowerVolume") "exec ~/.local/bin/volControl.sh down")
-(define-key *top-map* (kbd "XF86AudioMute") "exec ~/.local/bin/volControl.sh mute")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec sndioctl output.level=+0.05")
+(define-key *top-map* (kbd "XF86AudioLowerVolume") "exec sndioctl output.level=-0.05")
+(define-key *top-map* (kbd "XF86AudioMute") "exec sndioctl output.mute=\!")
 
 ;; Web jump commands
 (defmacro make-web-jump (name prefix)
@@ -133,9 +132,9 @@
      (nsubstitute #\+ #\Space search)
      (run-shell-command (concatenate 'string ,prefix search))))
 
-(make-web-jump "linxer" "qutebrowser https://linxer.org/search.php?q=")
-(make-web-jump "ddg" "qutebrowser https://lite.duckduckgo.com/lite?q=")
-(make-web-jump "whoogle" "qutebrowser https://whoogle.click/search?q=")
+(make-web-jump "librex" "firefox-esr https://librex.me/search.php?q=")
+(make-web-jump "ddg" "firefox-esr https://lite.duckduckgo.com/lite?q=")
+(make-web-jump "whoogle" "firefox-esr https://whoogle.click/search?q=")
 
 ;; Keybindings for web jumps
 (define-key *root-map* (kbd "M-s") "linxer")
