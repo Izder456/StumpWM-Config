@@ -54,7 +54,7 @@
 (setf stumpwm:*group-format* "%n %t")
 
 ;; Time modeline format
-(setf stumpwm:*time-modeline-string* "%a, %B %d %Y @%I:%M%p")
+(setf stumpwm:*time-modeline-string* "%a, %b %d @%I:%M%p")
 
 ;; Window format
 (setf stumpwm:*window-format* "^b^(:fg \"#b8bb26\")<%25t>")
@@ -84,10 +84,6 @@
 (stumpwm:gnewbg "Paula")
 (stumpwm:gnewbg "Jeff")
 (stumpwm:gnewbg "Poo")
-(stumpwm:gnewbg "Ninten")
-(stumpwm:gnewbg "Ana")
-(stumpwm:gnewbg "Loid")
-(stumpwm:gnewbg "Teddy")
 
 ;; Toggle mode line display
 (stumpwm:toggle-mode-line (stumpwm:current-screen) (stumpwm:current-head))
@@ -140,3 +136,5 @@
 (define-key *root-map* (kbd "M-s") "linxer")
 (define-key *root-map* (kbd "M-d") "ddg")
 (define-key *root-map* (kbd "M-w") "whoogle")
+
+(run-shell-command "exec emacs --daemon && notify-send 'Emacs Init!'")
