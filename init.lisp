@@ -104,7 +104,7 @@
 (define-key *root-map* (kbd "F") "exec caja")
 (define-key *root-map* (kbd "space") "exec rofi -i -show drun -modi drun -show-icons")
 (define-key *root-map* (kbd "M-b") "exec feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")
-(define-key *root-map* (kbd "e") "exec emacs")
+(define-key *root-map* (kbd "e") "exec emacsclient --create-frame --alternate-editor='emacs'")
 (define-key *root-map* (kbd "P") "exec alacritty -T ncspot -e ncspot")
 (define-key *root-map* (kbd "i") "exec alacritty -T htop -e htop")
 (define-key *root-map* (kbd "I") "exec alacritty --hold -T fetch -e neofetch")
@@ -128,13 +128,11 @@
      (nsubstitute #\+ #\Space search)
      (run-shell-command (concatenate 'string ,prefix search))))
 
-(make-web-jump "librex" "firefox-esr https://librex.me/search.php?q=")
+(make-web-jump "librey" "firefox-esr https://search.ahwx.org/search.php?q=")
 (make-web-jump "ddg" "firefox-esr https://lite.duckduckgo.com/lite?q=")
-(make-web-jump "whoogle" "firefox-esr https://whoogle.click/search?q=")
 
 ;; Keybindings for web jumps
-(define-key *root-map* (kbd "M-s") "linxer")
+(define-key *root-map* (kbd "M-s") "librey")
 (define-key *root-map* (kbd "M-d") "ddg")
-(define-key *root-map* (kbd "M-w") "whoogle")
 
 (run-shell-command "exec emacs --daemon && notify-send 'Emacs Init!'")
