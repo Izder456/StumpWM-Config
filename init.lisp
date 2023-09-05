@@ -3,7 +3,6 @@
 (in-package :stumpwm)
 
 ;; Set font and colors for the message window
-(set-font "xft:GohuFont uni14 Nerd Font Mono:style=Regular")
 (set-fg-color "#ebdbb2")
 (set-bg-color "#282828")
 (set-border-color "#ebdbb2")
@@ -54,7 +53,7 @@
 (setf stumpwm:*group-format* "%n %t")
 
 ;; Time modeline format
-(setf stumpwm:*time-modeline-string* "%a, %b %d @%I:%M%p")
+(setf stumpwm:*time-modeline-string* "%a, %b%d @%I:%M%p")
 
 ;; Window format
 (setf stumpwm:*window-format* "^b^(:fg \"#b8bb26\")<%25t>")
@@ -91,35 +90,46 @@
 ;; Set prefix key
 (set-prefix-key (kbd "C-t"))
 
-;; Define keybindings
+;; Define Bind Macro
+(defmacro bind-shell-to-key (key command &optional (map *root-map*))
+  `(define-key ,map (kbd ,key) (concatenate 'string
+                                            "run-shell-command "
+                                            ,command)))
+
+;; Set Special keys
+(defvar *my-special-key-commands*
+           '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
+             ("XF86AudioRaiseVolume" "sndioctl output.level=+0.05")
+             ("XF86AudioLowerVolume" "sndioctl output.level=-0.05")
+             ("XF86AudioMute" "sndioctl output.level=\!")))
+
+(loop for (key cmd) in *my-special-key-commands* do
+  (bind-shell-to-key key cmd))
+
+;; Set App Keys
+(defvar *my-app-key-commands*
+           '(("c" "alacritty")
+            ("space" "rofi -i -show drun -modi drun -show-icons")
+            ("e" "emacsclient --create-frame --alternate-editor='emacs'")
+            ("f" "firefox-esr")
+            ("E" "thunderbird")
+            ("F" "caja")
+            ("x" "xkill")
+            ("l" "slock")
+            ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
+
+(loop for (key cmd) in *my-app-key-commands* do
+  (bind-shell-to-key key cmd))
+
+;; Define WM keybindings
 
 ;; Global keybindings
 (define-key *root-map* (kbd "M-ESC") "mode-line")
 (define-key *root-map* (kbd "M-q") "quit")
 
-;; Application and command keybindings
-(define-key *root-map* (kbd "f") "exec firefox-esr")
-(define-key *root-map* (kbd "c") "exec alacritty")
-(define-key *root-map* (kbd "C-c") "exec alacritty")
-(define-key *root-map* (kbd "F") "exec caja")
-(define-key *root-map* (kbd "space") "exec rofi -i -show drun -modi drun -show-icons")
-(define-key *root-map* (kbd "M-b") "exec feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")
-(define-key *root-map* (kbd "e") "exec emacsclient --create-frame --alternate-editor='emacs'")
-(define-key *root-map* (kbd "P") "exec alacritty -T ncspot -e ncspot")
-(define-key *root-map* (kbd "i") "exec alacritty -T htop -e htop")
-(define-key *root-map* (kbd "I") "exec alacritty --hold -T fetch -e neofetch")
-(define-key *root-map* (kbd "x") "exec xkill")
-(define-key *root-map* (kbd "L") "exec slock")
-
 ;; Window movement between groups
 (define-key *root-map* (kbd "m") "mark")
 (define-key *root-map* (kbd "M") "gmove-marked")
-
-;; Special keys
-(define-key *top-map* (kbd "Print") "exec scrot -F ~/Pictures/screenshot-`date +%F`.png")
-(define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec sndioctl output.level=+0.05")
-(define-key *top-map* (kbd "XF86AudioLowerVolume") "exec sndioctl output.level=-0.05")
-(define-key *top-map* (kbd "XF86AudioMute") "exec sndioctl output.mute=\!")
 
 ;; Web jump commands
 (defmacro make-web-jump (name prefix)
