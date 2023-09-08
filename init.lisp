@@ -96,6 +96,11 @@
                                             "run-shell-command "
                                             ,command)))
 
+(defmacro bind-shell-to-topkey (key command &optional (map *top-map*))
+  `(define-key ,map (kbd ,key) (concatenate 'string
+                                            "run-shell-command "
+                                            ,command)))
+
 ;; Set Special keys
 (defvar *my-special-key-commands*
            '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
@@ -104,7 +109,7 @@
              ("XF86AudioMute" "sndioctl output.level=\!")))
 
 (loop for (key cmd) in *my-special-key-commands* do
-  (bind-shell-to-key key cmd))
+  (bind-shell-to-topkey key cmd))
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
