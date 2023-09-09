@@ -101,6 +101,21 @@
                                             "run-shell-command "
                                             ,command)))
 
+
+(defmacro bind-rofi-to-key (key command &optional (map *root-map*))
+  `(define-key ,map (kbd ,key) (concatenate 'string
+                                            "run-shell-command "
+					    '"rofi -i -show-icons -show "
+                                            ,command)))
+
+;; Set Rofi Keys
+(defvar *my-rofi-key-commands*
+  	   '(("Space" "drun")
+	     ("Return" "window")))
+
+(loop for (key cmd) in *my-rofi-key-commands* do
+  (bind-rofi-to-key key cmd))
+
 ;; Set Special keys
 (defvar *my-special-key-commands*
            '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
