@@ -130,7 +130,6 @@
 (defvar *my-app-key-commands*
            '(("c" "alacritty")
             ("C-c" "alacritty")
-            ("space" "rofi -i -show drun -modi drun -show-icons")
             ("e" "emacsclient --create-frame --alternate-editor='emacs'")
             ("f" "firefox-esr")
             ("E" "thunderbird")
