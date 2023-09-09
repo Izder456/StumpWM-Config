@@ -137,18 +137,38 @@
 (define-key *root-map* (kbd "m") "mark")
 (define-key *root-map* (kbd "M") "gmove-marked")
 
-;; Web jump commands
+;; Web Jump commands
 (defmacro make-web-jump (name prefix)
   `(defcommand ,(intern name) (search)
      ((:rest ,(concatenate 'string name " search: ")))
      (nsubstitute #\+ #\Space search)
      (run-shell-command (concatenate 'string ,prefix search))))
 
-(make-web-jump "librey" "firefox-esr https://search.ahwx.org/search.php?q=")
-(make-web-jump "ddg" "firefox-esr https://lite.duckduckgo.com/lite?q=")
+;; Term Jump commands
+(defmacro make-term-jump (name prefix)
+  `(defcommand ,(intern name) (search)
+     ((:rest ,(concatenate 'string name " termsearch: ")))
+     (nsubstitute #\+ #\Space search)
+     (run-shell-command (concatenate 'string ,prefix search))))
 
-;; Keybindings for web jumps
-(define-key *root-map* (kbd "M-s") "librey")
+;; Define Web Jumps
+(make-web-jump "eco" "firefox-esr https://ecosia.org/search?q=")
+(make-web-jump "ddg" "firefox-esr https://html.duckduckgo.com/html?q=")
+
+;; Define Terminal Jumps
+(make-term-jump "mansearch" "alacritty --hold -e apropos ")
+(make-term-jump "manpage" "alacritty --hold -e man ")
+(make-term-jump "pkgname" "alacritty --hold -e pkg_info -Q ")
+(make-term-jump "pkgloc" "alacritty --hold -e pkg_locate ")
+
+;; Keybindings for Web Jumps
+(define-key *root-map* (kbd "M-s") "eco")
 (define-key *root-map* (kbd "M-d") "ddg")
+
+;; Keybindings for Terminal Jumps
+(define-key *root-map* (kbd "M-m") "mansearch")
+(define-key *root-map* (kbd "M-M") "manpage")
+(define-key *root-map* (kbd "M-p") "pkgname")
+(define-key *root-map* (kbd "M-P") "pkgloc")
 
 (run-shell-command "exec emacs --daemon && notify-send 'Emacs Init!'")
