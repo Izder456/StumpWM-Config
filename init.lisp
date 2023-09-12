@@ -7,10 +7,8 @@
 (set-bg-color "#282828")
 (set-border-color "#ebdbb2")
 (set-msg-border-width 4)
+(set-font "-misc-spleen-medium-r-normal--16-160-72-72-c-80-iso10646-1")
 
-;; Define color variables
-(defvar color1 "#fabd2f")
-(defvar color2 "#282828")
 
 ;; Utility functions for displaying system information
 
@@ -41,8 +39,8 @@
 ;; Configure StumpWM appearance settings
 
 ;; Mode line settings
-(setf stumpwm:*mode-line-background-color* color2
-      stumpwm:*mode-line-foreground-color* color1
+(setf stumpwm:*mode-line-background-color* "#282828"
+      stumpwm:*mode-line-foreground-color* "#fabd2f"
       stumpwm:*mode-line-border-color* "#ebdbb2"
       stumpwm:*mode-line-border-width* 4
       stumpwm:*mode-line-pad-x* 16
@@ -110,8 +108,8 @@
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
-  	   '(("Space" "drun")
-	     ("Return" "window")))
+  	   '(("SPC" "drun")
+	     ("RET" "window")))
 
 (loop for (key cmd) in *my-rofi-key-commands* do
   (bind-rofi-to-key key cmd))
