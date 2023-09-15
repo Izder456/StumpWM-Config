@@ -103,13 +103,13 @@
 (defmacro bind-rofi-to-key (key command &optional (map *root-map*))
   `(define-key ,map (kbd ,key) (concatenate 'string
                                             "run-shell-command "
-					    '"rofi -i -show-icons -show "
+                                            '"rofi -i -show-icons -show "
                                             ,command)))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
-  	   '(("SPC" "drun")
-	     ("RET" "window")))
+  '(("SPC" "drun")
+    ("RET" "window")))
 
 (loop for (key cmd) in *my-rofi-key-commands* do
   (bind-rofi-to-key key cmd))
@@ -174,13 +174,13 @@
 (make-term-jump "pkgloc" "alacritty --hold -e pkg_locate ")
 
 ;; Keybindings for Web Jumps
-(define-key *root-map* (kbd "M-s") "eco")
-(define-key *root-map* (kbd "M-d") "ddg")
+(define-key *top-map* (kbd "M-s") "eco")
+(define-key *top-map* (kbd "M-d") "ddg")
 
 ;; Keybindings for Terminal Jumps
-(define-key *root-map* (kbd "M-m") "mansearch")
-(define-key *root-map* (kbd "M-M") "manpage")
-(define-key *root-map* (kbd "M-p") "pkgname")
-(define-key *root-map* (kbd "M-P") "pkgloc")
+(define-key *top-map* (kbd "M-m") "mansearch")
+(define-key *top-map* (kbd "M-M") "manpage")
+(define-key *top-map* (kbd "M-p") "pkgname")
+(define-key *top-map* (kbd "M-P") "pkgloc")
 
-(run-shell-command "exec emacs --daemon && notify-send 'Emacs Init!'")
+(run-shell-command "exec emacs --daemon")
