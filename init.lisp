@@ -8,7 +8,9 @@
 (set-border-color "#ebdbb2")
 (set-msg-border-width 4)
 (set-font "-misc-spleen-medium-r-normal--16-160-72-72-c-80-iso10646-1")
-
+(setf *mouse-focus-policy* :click)
+(run-shell-command "xsetroot -cursor_name left_ptr")
+(setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
 
 ;; Utility functions for displaying system information
 
@@ -129,7 +131,7 @@
            '(("c" "alacritty")
             ("C-c" "alacritty")
             ("e" "emacsclient --create-frame --alternate-editor='emacs'")
-            ("f" "firefox-esr")
+            ("f" "ungoogled-chromium")
             ("E" "thunderbird")
             ("F" "caja")
             ("x" "xkill")
@@ -164,8 +166,8 @@
      (run-shell-command (concatenate 'string ,prefix search))))
 
 ;; Define Web Jumps
-(make-web-jump "eco" "firefox-esr https://ecosia.org/search?q=")
-(make-web-jump "ddg" "firefox-esr https://html.duckduckgo.com/html?q=")
+(make-web-jump "eco" "ungoogled-chromium https://ecosia.org/search?q=")
+(make-web-jump "ddg" "ungoogled-chromium https://html.duckduckgo.com/html?q=")
 
 ;; Define Terminal Jumps
 (make-term-jump "mansearch" "alacritty --hold -e apropos ")
