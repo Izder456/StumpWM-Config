@@ -119,6 +119,8 @@
 ;; Set Special keys
 (defvar *my-special-key-commands*
            '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
+             ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png")
+             ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")
              ("XF86AudioRaiseVolume" "sndioctl output.level=+0.05")
              ("XF86AudioLowerVolume" "sndioctl output.level=-0.05")
              ("XF86AudioMute" "sndioctl output.level=\!")))
@@ -144,8 +146,8 @@
 ;; Define WM keybindings
 
 ;; Global keybindings
-(define-key *root-map* (kbd "M-ESC") "mode-line")
-(define-key *root-map* (kbd "M-q") "quit")
+(define-key *top-map* (kbd "M-ESC") "mode-line")
+(define-key *root-map* (kbd "M-Q") "quit")
 
 ;; Window movement between groups
 (define-key *root-map* (kbd "m") "mark")
