@@ -21,8 +21,8 @@
 (make-web-jump "ddg" "ungoogled-chromium https://html.duckduckgo.com/html?q=")
 
 ;; Define Terminal Jumps
-(make-term-jump "mansearch" "alacritty --hold -e PAGER=most apropos ")
-(make-term-jump "manpage" "alacritty --hold -e PAGER=most man ")
+(make-term-jump "mansearch" "alacritty --hold -e apropos ")
+(make-term-jump "manpage" "alacritty --hold -e man ")
 (make-term-jump "pkgname" "alacritty --hold -e pkg_info -Q ")
 (make-term-jump "pkgloc" "alacritty --hold -e pkg_locate ")
 
