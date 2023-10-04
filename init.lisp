@@ -1,10 +1,10 @@
-;; StumpWM configuration file
+;; StumpWM init file
 
 (in-package :stumpwm)
 
-;;;
-;; SET WM SETTINGS
-;;;
+;;;;;;;;;;;;;;;;;;;;;
+;; SET WM SETTINGS ;;
+;;;;;;;;;;;;;;;;;;;;;
 
 ;; Set font and colors for the message window
 (set-fg-color "#ebdbb2")
@@ -14,7 +14,12 @@
 (set-font "-misc-spleen-medium-r-normal--16-160-72-72-c-80-iso10646-1")
 (setf *mouse-focus-policy* :click)
 (run-shell-command "xsetroot -cursor_name left_ptr")
+(setq *startup-message* (format nil "Welcome Izzy!"))
+
+;; Set env vars
 (setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
+(setf (getenv "PAGER") "most")
+(setf (getenv "TERM") "xterm-256color")
 
 ;; Mode line settings
 (setf stumpwm:*mode-line-background-color* "#282828"
@@ -51,9 +56,9 @@
 (setf stumpwm:*message-window-y-padding* 14)
 (setf stumpwm:*message-window-gravity* :bottom-left)
 
-;;;
-;; UTILIITY FUNCS FOR MODELINE
-;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; UTILIITY FUNCS FOR MODELINE ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Run a shell command and format the output
 (defun run-shell-command-and-format (command)
@@ -91,9 +96,9 @@
 ;; Toggle mode line display
 (stumpwm:toggle-mode-line (stumpwm:current-screen) (stumpwm:current-head))
 
-;;;
-;; LOAD OTHER FILES
-;;;
+;;;;;;;;;;;;;;;;;;;;;;
+;; LOAD OTHER FILES ;;
+;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Load BIND file
 (load "~/.stumpwm.d/bind.lisp")
