@@ -1,0 +1,18 @@
+* Iz's StumpWM Config
+
+- Mainly for personal backups, but if you want them, feel free to use them.
+
+- I won't provide support for any issues on your machine, as this is a pet project.
+
+** Structure
+- =bind.lisp= is for keybinds
+- =jumps.lisp= is for jump bind macros
+- =init.lisp= is for everything else
+
+* DISCLAIMER
+
+- I'm not responsible for any system breakage due to my code.
+
+- If you're unsure, refer to [[LICENSE.txt][THE LICENSE]] to see how seriously I take this.
+
+- Use with caution.
