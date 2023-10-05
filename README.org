@@ -1,8 +1,9 @@
 #+TITLE: Iz's StumpWM Config
+#+DESCRIPTION: Mainly for personal backups, but if you want them, feel free to use them.
+#+KEYWORDS: org-mode, stumpwm, readme, lisp, izder
+#+LANGUAGE: en
 
-- Mainly for personal backups, but if you want them, feel free to use them.
-
-- I won't provide support for any issues on your machine, as this is a pet project.
+/I won't provide support for any issues on your machine, as this is a pet project./
 
 * DISCLAIMER
 
@@ -10,7 +11,7 @@
 
 - If you're unsure, refer to [[LICENSE.txt][THE LICENSE]] to see how seriously I take this.
 
-- Use with caution.
+- Use with *caution*.
 
 * Code Structure
 
@@ -18,7 +19,7 @@
 
 This is the first thing the WM Loads.
 
-- =WM-BOILERPLATE=
+*** =WM-BOILERPLATE=
 
 #+BEGIN_SRC lisp :tangle init.lisp
 ;; this automatically prefixes 'stumpwm:' to commands that need it
@@ -53,7 +54,7 @@ This is the first thing the WM Loads.
 (stumpwm:set-unfocus-color "#282828")
 #+END_SRC
 
-- =GROUP-SETTING=
+*** =GROUP-SETTING=
 
 #+BEGIN_SRC lisp :tangle init.lisp
 ;; Rename and create new groups
@@ -80,7 +81,7 @@ This is the first thing the WM Loads.
 
 #+END_SRC
 
-- =MODE-LINE=
+*** =MODE-LINE=
 
 #+BEGIN_SRC lisp :tangle init.lisp
 ;; Run a shell command and format the output
@@ -120,7 +121,7 @@ This is the first thing the WM Loads.
 (stumpwm:toggle-mode-line (stumpwm:current-screen) (stumpwm:current-head))
 #+END_SRC
 
-- =AUTOSTART=
+*** =AUTOSTART=
 
 #+BEGIN_SRC lisp :tangle init.lisp
 ;; Load BIND file
@@ -134,14 +135,14 @@ This is the first thing the WM Loads.
 
 This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bindings, whereas =*top-map*= is a variable that handles /Non-Prefixed/ bindings.
 
-- =SET-PREFIX=
+*** =SET-PREFIX=
 
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Set prefix key
 (set-prefix-key (kbd "C-t"))
 #+END_SRC
 
-- =SET-MACROS=
+*** =SET-MACROS=
 
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Bind to *root-map*
@@ -164,7 +165,7 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
                                             ,command)))
 #+END_SRC
 
-- =DEFINE-BIND-LISTS=
+*** =DEFINE-BIND-LISTS=
 
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Set Rofi Keys
@@ -193,9 +194,10 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
             ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
 #+END_SRC
 
-- =LOOP-BIND-LISTS=
+*** =LOOP-BIND-LISTS=
 
 #+BEGIN_SRC lisp :tangle bind.lisp
+;; Loop through keybind lists
 (loop for (key cmd) in *my-rofi-key-commands* do
   (bind-rofi-to-key key cmd))
 
@@ -206,7 +208,7 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
   (bind-shell-to-topkey key cmd))
 #+END_SRC
 
-- =FINAL-MISC-BINDS=
+*** =FINAL-MISC-BINDS=
 
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Global keybindings
@@ -229,7 +231,7 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
 
 These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfing
 
-- =DEFINE-JUMP-MACROS=
+*** =DEFINE-JUMP-MACROS=
 
 #+BEGIN_SRC lisp :tangle jumps.lisp
 ;; Web Jump commands
@@ -247,7 +249,7 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
      (run-shell-command (concatenate 'string ,prefix search))))
 #+END_SRC
 
-- =MAKE-JUMP-ALIASES=
+*** =MAKE-JUMP-ALIASES=
 
 #+BEGIN_SRC lisp :tangle jumps.lisp
 ;; Define Web Jumps
@@ -261,7 +263,7 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 (make-term-jump "pkgloc" "alacritty --hold -e pkg_locate ")
 #+END_SRC
 
-- =BIND-JUMP-ALIASES=
+*** =BIND-JUMP-ALIASES=
 
 #+BEGIN_SRC lisp :tangle jumps.lisp
 ;; Keybindings for Web Jumps

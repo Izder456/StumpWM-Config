@@ -45,6 +45,7 @@
             ("l" "slock")
             ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
 
+;; Loop through keybind lists
 (loop for (key cmd) in *my-rofi-key-commands* do
   (bind-rofi-to-key key cmd))
 
