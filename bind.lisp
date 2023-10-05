@@ -1,13 +1,5 @@
-;; StumpWM binds file
-
-(in-package :stumpwm)
-
 ;; Set prefix key
 (set-prefix-key (kbd "C-t"))
-
-;;;;;;;;;;;;;;;;;
-;; BIND MACROS ;;
-;;;;;;;;;;;;;;;;;
 
 ;; Bind to *root-map*
 (defmacro bind-shell-to-key (key command &optional (map *root-map*))
@@ -27,10 +19,6 @@
                                             "run-shell-command "
                                             '"rofi -i -show-icons -show "
                                             ,command)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; DEFINE BINDING LISTS ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
@@ -57,10 +45,6 @@
             ("l" "slock")
             ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; LOOP OVER BINDING LISTS ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (loop for (key cmd) in *my-rofi-key-commands* do
   (bind-rofi-to-key key cmd))
 
@@ -70,19 +54,17 @@
 (loop for (key cmd) in *my-special-key-commands* do
   (bind-shell-to-topkey key cmd))
 
-;; Define WM keybindings
-
 ;; Global keybindings
 (define-key *top-map* (kbd "M-ESC") "mode-line")
 (define-key *root-map* (kbd "M-Q") "quit")
+
+;; Window movement/swapping
+(define-key *root-map* (kbd "m") "mark")
+(define-key *root-map* (kbd "M") "gmove-marked")
 (define-key *root-map* (kbd "C-Up") "exchange-direction up")
 (define-key *root-map* (kbd "C-Down") "exchange-direction down")
 (define-key *root-map* (kbd "C-Left") "exchange-direction left")
 (define-key *root-map* (kbd "C-Right") "exchange-direction right")
-
-;; Window movement between groups
-(define-key *root-map* (kbd "m") "mark")
-(define-key *root-map* (kbd "M") "gmove-marked")
 
 ;; EMACS!!
 (define-key *root-map* (kbd "e") "emacs")

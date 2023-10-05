@@ -1,10 +1,5 @@
-;; StumpWM init file
-
+;; this automatically prefixes 'stumpwm:' to commands that need it
 (in-package :stumpwm)
-
-;;;;;;;;;;;;;;;;;;;;;
-;; SET WM SETTINGS ;;
-;;;;;;;;;;;;;;;;;;;;;
 
 ;; Set font and colors for the message window
 (set-fg-color "#ebdbb2")
@@ -56,10 +51,6 @@
 (setf stumpwm:*message-window-y-padding* 14)
 (setf stumpwm:*message-window-gravity* :bottom-left)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; UTILIITY FUNCS FOR MODELINE ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; Run a shell command and format the output
 (defun run-shell-command-and-format (command)
   (substitute #\Space #\Newline (run-shell-command command t)))
@@ -95,10 +86,6 @@
 
 ;; Toggle mode line display
 (stumpwm:toggle-mode-line (stumpwm:current-screen) (stumpwm:current-head))
-
-;;;;;;;;;;;;;;;;;;;;;;
-;; LOAD OTHER FILES ;;
-;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Load BIND file
 (load "~/.stumpwm.d/bind.lisp")
