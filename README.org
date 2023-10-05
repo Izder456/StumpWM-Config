@@ -1,7 +1,5 @@
 #+TITLE: Iz's StumpWM Config
 
-* Iz's StumpWM Config
-
 - Mainly for personal backups, but if you want them, feel free to use them.
 
 - I won't provide support for any issues on your machine, as this is a pet project.
