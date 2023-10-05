@@ -15,7 +15,7 @@
 
 - If you're unsure, refer to [[LICENSE.txt][THE LICENSE]] to see how seriously I take this.
 
-- /Use with/ */caution/*.
+- /Use with *caution*/
 
 -----
 
