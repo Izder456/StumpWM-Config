@@ -1,9 +1,13 @@
 #+TITLE: Iz's StumpWM Config
-#+DESCRIPTION: Mainly for personal backups, but if you want them, feel free to use them.
+#+DESCRIPTION: Mainly for personal backups, but if you want 'em, use 'em.
 #+KEYWORDS: org-mode, stumpwm, readme, lisp, izder
 #+LANGUAGE: en
 
-/I won't provide support for any issues on your machine, as this is a pet project./
++ Mainly for personal backups, but if you want 'em, use 'em!
+
++ /I won't provide support for any issues on your machine, as this is a pet project./
+
+-----
 
 * DISCLAIMER
 
@@ -11,7 +15,9 @@
 
 - If you're unsure, refer to [[LICENSE.txt][THE LICENSE]] to see how seriously I take this.
 
-- Use with *caution*.
+- /Use with/ */caution/*.
+
+-----
 
 * Code Structure
 
@@ -131,6 +137,8 @@ This is the first thing the WM Loads.
 (load "~/.stumpwm.d/jumps.lisp")
 #+END_SRC
 
+-----
+
 ** [[bind.lisp][=bind.lisp=]]
 
 This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bindings, whereas =*top-map*= is a variable that handles /Non-Prefixed/ bindings.
@@ -227,6 +235,8 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
 (define-key *root-map* (kbd "e") "emacs")
 #+END_SRC
 
+-----
+
 ** [[jumps.lisp][=jumps.lisp=]]
 
 These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfing
@@ -276,3 +286,5 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 (define-key *top-map* (kbd "M-p") "pkgname")
 (define-key *top-map* (kbd "M-P") "pkgloc")
 #+END_SRC
+
+-----
