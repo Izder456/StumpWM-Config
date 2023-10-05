@@ -4,11 +4,6 @@
 
 - I won't provide support for any issues on your machine, as this is a pet project.
 
-** Structure
-- [[=init.lisp=][=init.lisp=]] is for starting everything
-- [[=bind.lisp=][=bind.lisp=]] is for keybinds
-- [[=jumps.lisp=][=jumps.lisp=]] is for jump bind macros
-
 * DISCLAIMER
 
 - I'm not responsible for any system breakage due to my code.
