@@ -11,10 +11,10 @@
 - If you're unsure, refer to [[LICENSE.txt][THE LICENSE]] to see how seriously I take this.
 
 - Use with caution.
- .
+
 * Code Structure
 
-** =init.lisp=
+** [[init.lisp][=init.lisp=]]
 
 This is the first thing the WM Loads.
 
@@ -130,7 +130,7 @@ This is the first thing the WM Loads.
 (load "~/.stumpwm.d/jumps.lisp")
 #+END_SRC
 
-** =bind.lisp=
+** [[bind.lisp][=bind.lisp=]]
 
 This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bindings, whereas =*top-map*= is a variable that handles /Non-Prefixed/ bindings.
 
@@ -225,7 +225,7 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
 (define-key *root-map* (kbd "e") "emacs")
 #+END_SRC
 
-** =jumps.lisp=
+** [[jumps.lisp][=jumps.lisp=]]
 
 These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfing
 
