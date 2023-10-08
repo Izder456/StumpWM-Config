@@ -48,18 +48,11 @@
 
 ;; Set Gaps
 (load-module "swm-gaps")
-
-;; Head gaps run along the 4 borders of the monitor(s)
-;; (setf swm-gaps:*head-gaps-size* 6)
-
-;; Inner gaps run along all the 4 borders of a window
 (setf swm-gaps:*inner-gaps-size* 10)
-
-;; Outer gaps add more padding to the outermost borders of a window (touching the screen border)
 (setf swm-gaps:*outer-gaps-size* 12)
 
-;; Turn em on
-(swm-gaps:toggle-gaps)
+;; Turn em onV
+(swm-gaps:toggle-gaps-on)
 
 ;; Mode line settings
 (setf *mode-line-background-color* iz-black
