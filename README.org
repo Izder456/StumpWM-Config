@@ -25,7 +25,7 @@
 
 This is the first thing the WM Loads.
 
-*** =WM-BOILERPLATE=
+*** WM-BOILERPLATE
 
 #+BEGIN_SRC lisp :tangle init.lisp
 ;; Quicklisp Setup
@@ -71,17 +71,26 @@ This is the first thing the WM Loads.
 (setq *startup-message* (format nil "Welcome Izzy!"))
 
 ;; Set env vars
+(setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin")
 (setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
 (setf (getenv "PAGER") "most")
 (setf (getenv "TERM") "xterm-256color")
 (setf (getenv "PKG_PATH") "https://cdn.OpenBSD.org/pub/OpenBSD/snapshots/packages/amd64")
+#+END_SRC
+
+*** MODULES
+
+#+BEGIN_SRC lisp :tangle init.lisp
+;; GAAAAAPs
+(load-module "swm-gaps")
+;; Cleaner SNDIO interface
+(load-module "stumpwm-sndioctl")
 
 ;; Set Gaps
-(load-module "swm-gaps")
-(setf swm-gaps:*inner-gaps-size* 10)
-(setf swm-gaps:*outer-gaps-size* 12)
+(setf swm-gaps:*inner-gaps-size* 8)
+(setf swm-gaps:*outer-gaps-size* 10)
 
-;; Turn em onV
+;; Turn em on
 (swm-gaps:toggle-gaps-on)
 
 ;; Mode line settings
@@ -98,7 +107,7 @@ This is the first thing the WM Loads.
 (set-unfocus-color iz-gray)
 #+END_SRC
 
-*** =GROUP-SETTING=
+*** GROUP-SETTING
 
 #+BEGIN_SRC lisp :tangle init.lisp
 ;; Rename and create new groups
@@ -127,7 +136,7 @@ This is the first thing the WM Loads.
 (setf *input-window-gravity* :center)
 #+END_SRC
 
-*** =MODE-LINE=
+*** MODE-LINE
 
 #+BEGIN_SRC lisp :tangle init.lisp
 ;; Run a shell command and format the output
@@ -167,7 +176,7 @@ This is the first thing the WM Loads.
 (toggle-mode-line (current-screen) (current-head))
 #+END_SRC
 
-*** =AUTOSTART=
+*** AUTOSTART
 
 #+BEGIN_SRC lisp :tangle init.lisp
 ;; Load BIND file
@@ -183,14 +192,14 @@ This is the first thing the WM Loads.
 
 This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bindings, whereas =*top-map*= is a variable that handles /Non-Prefixed/ bindings.
 
-*** =SET-PREFIX=
+*** SET-PREFIX
 
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Set prefix key
 (set-prefix-key (kbd "C-t"))
 #+END_SRC
 
-*** =SET-MACROS=
+*** SET-MACROS
 
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Bind to *root-map*
@@ -213,7 +222,7 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
                                             ,command)))
 #+END_SRC
 
-*** =DEFINE-BIND-LISTS=
+*** DEFINE-BIND-LISTS
 
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Set Rofi Keys
@@ -226,14 +235,16 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
            '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
              ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png")
              ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")
-             ("XF86AudioRaiseVolume" "sndioctl output.level=+0.05")
-             ("XF86AudioLowerVolume" "sndioctl output.level=-0.05")
-             ("XF86AudioMute" "sndioctl output.level=\!")))
+             ("XF86AudioRaiseVolume" "volume-up")
+             ("XF86AudioLowerVolume" "volume-down")
+             ("XF86AudioMute" "toggle-mute")))
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
            '(("c" "alacritty")
             ("C-c" "alacritty")
+            ("m" "alacritty -e mocp")
+            ("i" "alacritty -e htop")
             ("f" "ungoogled-chromium")
             ("E" "thunderbird")
             ("F" "caja")
@@ -242,7 +253,7 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
             ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
 #+END_SRC
 
-*** =LOOP-BIND-LISTS=
+*** LOOP-BIND-LISTS
 
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Loop through keybind lists
@@ -256,7 +267,7 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
   (bind-shell-to-topkey key cmd))
 #+END_SRC
 
-*** =FINAL-MISC-BINDS=
+*** FINAL-MISC-BINDS
 
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Global keybindings

@@ -41,17 +41,22 @@
 (setq *startup-message* (format nil "Welcome Izzy!"))
 
 ;; Set env vars
+(setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin")
 (setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
 (setf (getenv "PAGER") "most")
 (setf (getenv "TERM") "xterm-256color")
 (setf (getenv "PKG_PATH") "https://cdn.OpenBSD.org/pub/OpenBSD/snapshots/packages/amd64")
 
-;; Set Gaps
+;; GAAAAAPs
 (load-module "swm-gaps")
-(setf swm-gaps:*inner-gaps-size* 10)
-(setf swm-gaps:*outer-gaps-size* 12)
+;; Cleaner SNDIO interface
+(load-module "stumpwm-sndioctl")
 
-;; Turn em onV
+;; Set Gaps
+(setf swm-gaps:*inner-gaps-size* 8)
+(setf swm-gaps:*outer-gaps-size* 10)
+
+;; Turn em on
 (swm-gaps:toggle-gaps-on)
 
 ;; Mode line settings

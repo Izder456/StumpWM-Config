@@ -30,14 +30,16 @@
            '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
              ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png")
              ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")
-             ("XF86AudioRaiseVolume" "sndioctl output.level=+0.05")
-             ("XF86AudioLowerVolume" "sndioctl output.level=-0.05")
-             ("XF86AudioMute" "sndioctl output.level=\!")))
+             ("XF86AudioRaiseVolume" "volume-up")
+             ("XF86AudioLowerVolume" "volume-down")
+             ("XF86AudioMute" "toggle-mute")))
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
            '(("c" "alacritty")
             ("C-c" "alacritty")
+            ("m" "alacritty -e mocp")
+            ("i" "alacritty -e htop")
             ("f" "ungoogled-chromium")
             ("E" "thunderbird")
             ("F" "caja")
