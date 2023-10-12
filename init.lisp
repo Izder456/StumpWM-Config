@@ -35,7 +35,7 @@
 (set-bg-color iz-black)
 (set-border-color iz-white)
 (set-msg-border-width 4)
-(set-font "-misc-spleen-medium-r-normal--16-160-72-72-c-80-iso10646-1")
+(set-font "-*-spleen-*-*-*-*-12-*-*-*-*-*-*-*")
 (setf *mouse-focus-policy* :click)
 (run-shell-command "xsetroot -cursor_name left_ptr")
 (setq *startup-message* (format nil "Welcome Izzy!"))
@@ -46,6 +46,10 @@
 (setf (getenv "PAGER") "most")
 (setf (getenv "TERM") "xterm-256color")
 (setf (getenv "PKG_PATH") "https://cdn.OpenBSD.org/pub/OpenBSD/snapshots/packages/amd64")
+
+;; Set focus and unfocus colors
+(set-focus-color iz-white)
+(set-unfocus-color iz-gray)
 
 ;; GAAAAAPs
 (load-module "swm-gaps")
@@ -59,19 +63,6 @@
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
 
-;; Mode line settings
-(setf *mode-line-background-color* iz-black
-      *mode-line-foreground-color* iz-softyellow
-      *mode-line-border-color* iz-white
-      *mode-line-border-width* 4
-      *mode-line-pad-x* 16
-      *mode-line-pad-y* 14
-      *mode-line-timeout* 5)
-
-;; Set focus and unfocus colors
-(set-focus-color iz-white)
-(set-unfocus-color iz-gray)
-
 ;; Rename and create new groups
 (grename "Ness")
 (gnewbg "Paula")
@@ -81,17 +72,14 @@
 ;; Group format
 (setf *group-format* "%n %t")
 
-;; Time modeline format
-(setf *time-modeline-string* "%a, %b%d @%I:%M%p")
-
 ;; Window format
 (setf *window-format* (format NIL "^b^(:fg \"~A\")<%25t>" iz-softgreen))
 (setf *window-border-style* :tight)
 (setf *normal-border-width* 4)
 
 ;; Message window settings
-(setf *message-window-padding* 16)
-(setf *message-window-y-padding* 14)
+(setf *message-window-padding* 12)
+(setf *message-window-y-padding* 10)
 (setf *message-window-gravity* :center)
 
 ;; Input window settings
@@ -122,13 +110,23 @@
   (substitute #\Space #\Newline (window-title (current-window))))
 
 ;; Screen mode line format
-(setf stumpwm:*screen-mode-line-format*
+(setf *screen-mode-line-format*
       (list "%g | %v ^>^7 | "
             '(:eval (show-hostname))
             "| " '(:eval (show-kernel))
             "| " '(:eval (show-battery))
             "| " '(:eval (show-temp))
             "| %d"))
+
+;; Format Modeline
+(setf *time-modeline-string* "%a, %b%d @%I:%M%p"
+      *mode-line-background-color* iz-black
+      *mode-line-foreground-color* iz-softyellow
+      *mode-line-border-color* iz-white
+      *mode-line-border-width* 4
+      *mode-line-pad-x* 12
+      *mode-line-pad-y* 10
+      *mode-line-timeout* 5)
 
 ;; Toggle mode line display
 (toggle-mode-line (current-screen) (current-head))

@@ -14,7 +14,7 @@
 
 ;; Define Web Jumps
 (make-web-jump "ddg" "ungoogled-chromium https://html.duckduckgo.com/html?q=")
-(make-web-jump "lite" "ungoogled-chromium https://lite.duckduckgo.com/lite?q=")
+(make-web-jump "lite" "alacritty -e links https://lite.duckduckgo.com/lite?q=")
 
 ;; Define Terminal Jumps
 (make-term-jump "mansearch" "alacritty --hold -e apropos ")
