@@ -36,10 +36,10 @@
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
-           '(("c" "alacritty")
-            ("C-c" "alacritty")
-            ("m" "alacritty -e mocp")
-            ("i" "alacritty -e htop")
+           '(("c" "st")
+            ("C-c" "st")
+            ("m" "st -e mocp")
+            ("i" "st -e htop")
             ("f" "ungoogled-chromium")
             ("E" "thunderbird")
             ("F" "caja")

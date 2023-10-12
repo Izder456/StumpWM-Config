@@ -239,10 +239,10 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
-           '(("c" "alacritty")
-            ("C-c" "alacritty")
-            ("m" "alacritty -e mocp")
-            ("i" "alacritty -e htop")
+           '(("c" "st")
+            ("C-c" "st")
+            ("m" "st -e mocp")
+            ("i" "st -e htop")
             ("f" "ungoogled-chromium")
             ("E" "thunderbird")
             ("F" "caja")
@@ -313,13 +313,13 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 #+BEGIN_SRC lisp :tangle jumps.lisp
 ;; Define Web Jumps
 (make-web-jump "ddg" "ungoogled-chromium https://html.duckduckgo.com/html?q=")
-(make-web-jump "lite" "alacritty -e links https://lite.duckduckgo.com/lite?q=")
+(make-web-jump "lite" "st -e links https://lite.duckduckgo.com/lite?q=")
 
 ;; Define Terminal Jumps
-(make-term-jump "mansearch" "alacritty --hold -e apropos ")
-(make-term-jump "manpage" "alacritty --hold -e man ")
-(make-term-jump "pkgname" "alacritty --hold -e pkg_info -Q ")
-(make-term-jump "pkgloc" "alacritty --hold -e pkg_locate ")
+(make-term-jump "mansearch" "st --hold -e apropos ")
+(make-term-jump "manpage" "st --hold -e man ")
+(make-term-jump "pkgname" "st --hold -e pkg_info -Q ")
+(make-term-jump "pkgloc" "st --hold -e pkg_locate ")
 #+END_SRC
 
 *** =BIND-JUMP-ALIASES=

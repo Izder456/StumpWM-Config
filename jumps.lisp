@@ -14,13 +14,13 @@
 
 ;; Define Web Jumps
 (make-web-jump "ddg" "ungoogled-chromium https://html.duckduckgo.com/html?q=")
-(make-web-jump "lite" "alacritty -e links https://lite.duckduckgo.com/lite?q=")
+(make-web-jump "lite" "st -e links https://lite.duckduckgo.com/lite?q=")
 
 ;; Define Terminal Jumps
-(make-term-jump "mansearch" "alacritty --hold -e apropos ")
-(make-term-jump "manpage" "alacritty --hold -e man ")
-(make-term-jump "pkgname" "alacritty --hold -e pkg_info -Q ")
-(make-term-jump "pkgloc" "alacritty --hold -e pkg_locate ")
+(make-term-jump "mansearch" "st --hold -e apropos ")
+(make-term-jump "manpage" "st --hold -e man ")
+(make-term-jump "pkgname" "st --hold -e pkg_info -Q ")
+(make-term-jump "pkgloc" "st --hold -e pkg_locate ")
 
 ;; Keybindings for Web Jumps
 (define-key *top-map* (kbd "M-s") "ddg")
