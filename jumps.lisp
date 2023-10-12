@@ -17,8 +17,8 @@
 (make-web-jump "lite" "st -e links https://lite.duckduckgo.com/lite?q=")
 
 ;; Define Terminal Jumps
-(make-term-jump "mansearch" "st -e apropos ")
-(make-term-jump "manpage" "st -e man ")
+(make-term-jump "mansearch" "xterm -hold -e apropos ")
+(make-term-jump "manpage" "xterm -hold -e man ")
 (make-term-jump "pkgname" "xterm -hold -e pkg_info -Q ")
 (make-term-jump "pkgloc" "xterm -hold -e pkg_locate ")
 
