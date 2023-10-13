@@ -38,7 +38,7 @@
 (defvar *my-app-key-commands*
            '(("c" "st")
             ("C-c" "st")
-            ("m" "st -e mocp")
+            ("M-m" "st -e mocp")
             ("i" "st -e htop")
             ("f" "ungoogled-chromium")
             ("E" "thunderbird")
