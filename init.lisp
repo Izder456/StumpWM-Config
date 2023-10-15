@@ -122,7 +122,7 @@
             "| " "%h " ;; Hostname
             "| " "%B " ;; Battery
             "| " '(:eval (show-temp)) ;; Cpu Temp
-            "| " "%d " ;; Date
+            "| " "%d |" ;; Date
             "^5 ]" ;; Magenta
             "^3)" ;; Yellow
             ))
@@ -140,7 +140,7 @@
 ;; Toggle mode line display
 (toggle-mode-line (current-screen) (current-head))
 
-;; Load BIND fil
+;; Load BIND file
 (load "~/.stumpwm.d/bind.lisp")
 
 ;; Load JUMPS file

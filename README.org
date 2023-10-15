@@ -164,7 +164,7 @@ This is the first thing the WM Loads.
             "| " "%h " ;; Hostname
             "| " "%B " ;; Battery
             "| " '(:eval (show-temp)) ;; Cpu Temp
-            "| " "%d " ;; Date
+            "| " "%d |" ;; Date
             "^5 ]" ;; Magenta
             "^3)" ;; Yellow
             ))
@@ -186,7 +186,7 @@ This is the first thing the WM Loads.
 *** AUTOSTART
 
 #+BEGIN_SRC lisp :tangle init.lisp
-;; Load BIND fil
+;; Load BIND file
 (load "~/.stumpwm.d/bind.lisp")
 
 ;; Load JUMPS file
