@@ -41,7 +41,7 @@
 
 ;; Set env vars
 (setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin")
-(setf (getenv "PAGER") "most")
+(setf (getenv "PAGER") "bat")
 (setf (getenv "TERM") "xterm-256color")
 (setf (getenv "PKG_PATH") "https://cdn.OpenBSD.org/pub/OpenBSD/snapshots/packages/amd64")
 
@@ -51,15 +51,23 @@
 
 ;; GAAAAAPs
 (load-module "swm-gaps")
-;; Cleaner SNDIO interface
-(load-module "stumpwm-sndioctl")
-
 ;; Set Gaps
 (setf swm-gaps:*inner-gaps-size* 8)
 (setf swm-gaps:*outer-gaps-size* 10)
-
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
+
+;; Emacs
+(load-module "swm-emacs")
+
+;; Hostname
+(load-module "hostname")
+
+;; Battery
+(load-module "battery-portable")
+
+;; Cleaner SNDIO interface
+(load-module "stumpwm-sndioctl")
 
 ;; Rename and create new groups
 (grename "Ness")
@@ -91,10 +99,6 @@
 (defun show-kernel ()
   (run-shell-command-and-format "uname -r"))
 
-;; Show the hostname
-(defun show-hostname ()
-  (run-shell-command-and-format "hostname"))
-
 ;; Show battery information
 (defun show-battery ()
   (run-shell-command-and-format "battstat -c '++' -d '--' {i} {p}"))
@@ -109,15 +113,25 @@
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
-      (list "%g | %v ^>^7 | "
-            '(:eval (show-hostname))
-            "| " '(:eval (show-kernel))
-            "| " '(:eval (show-battery))
+      (list "^3( " ;; Yellow
+            "^n%g " ;; Groups
+            ;; Windows
+            "^1[ " ;; Red
+            "^n%v ^>^7 ";; Default
+            "^1] " ;; Red
+            ;; Statuses
+            "^5[ " ;; Magenta
+            "^n" ;; Default
+            "| " "%h " ;; Hostname
+            "| " "%B " ;; Battery
             "| " '(:eval (show-temp))
-            "| %d"))
+            "| " "%d "
+            "^5 ]" ;; Magenta
+            "^3)" ;; Yellow
+            ))
 
 ;; Format Modeline
-(setf *time-modeline-string* "%a, %b%d @%I:%M%p"
+(setf *time-modeline-string* "%a, %b %d @%I:%M%p"
       *mode-line-background-color* iz-black
       *mode-line-foreground-color* iz-softyellow
       *mode-line-border-color* iz-white
@@ -129,7 +143,7 @@
 ;; Toggle mode line display
 (toggle-mode-line (current-screen) (current-head))
 
-;; Load BIND file
+;; Load BIND fil
 (load "~/.stumpwm.d/bind.lisp")
 
 ;; Load JUMPS file

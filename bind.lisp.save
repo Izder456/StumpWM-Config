@@ -23,16 +23,16 @@
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
   '(("SPC" "drun")
-    ("RET" "window")))
+    ("RET" "window"))
 
 ;; Set Special keys
 (defvar *my-special-key-commands*
-           '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png && notify-send -i camera -u low -a Scrot scrot")
-             ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png && notify-send -i camera -u normal -a Split scrot")
-             ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png && notify-send -i camera -u critical -a Window scrot")
+           '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
+             ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png")
+             ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")
              ("XF86AudioRaiseVolume" "volume-up")
              ("XF86AudioLowerVolume" "volume-down")
-             ("XF86AudioMute" "toggle-mute")))
+             ("XF86AudioMute" "toggle-mute"))))
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
@@ -59,6 +59,7 @@
 
 ;; Global keybindings
 (define-key *top-map* (kbd "M-ESC") "mode-line")
+(define-key *root-map* (kbd "M-Q") "quit")
 
 ;; Window movement/swapping
 (define-key *root-map* (kbd "m") "mark")
@@ -69,5 +70,4 @@
 (define-key *root-map* (kbd "C-Right") "exchange-direction right")
 
 ;; EMACS!!
-(define-key *root-map* (kbd "e") "swm-emacs")
-(define-key *root-map* (kbd "C-e") "swm-emacs")
+(define-key *root-map* (kbd "e") "emacs")

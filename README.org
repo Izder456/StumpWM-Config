@@ -71,7 +71,7 @@ This is the first thing the WM Loads.
 
 ;; Set env vars
 (setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin")
-(setf (getenv "PAGER") "most")
+(setf (getenv "PAGER") "bat")
 (setf (getenv "TERM") "xterm-256color")
 (setf (getenv "PKG_PATH") "https://cdn.OpenBSD.org/pub/OpenBSD/snapshots/packages/amd64")
 
@@ -85,15 +85,23 @@ This is the first thing the WM Loads.
 #+BEGIN_SRC lisp :tangle init.lisp
 ;; GAAAAAPs
 (load-module "swm-gaps")
-;; Cleaner SNDIO interface
-(load-module "stumpwm-sndioctl")
-
 ;; Set Gaps
 (setf swm-gaps:*inner-gaps-size* 8)
 (setf swm-gaps:*outer-gaps-size* 10)
-
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
+
+;; Emacs
+(load-module "swm-emacs")
+
+;; Hostname
+(load-module "hostname")
+
+;; Battery
+(load-module "battery-portable")
+
+;; Cleaner SNDIO interface
+(load-module "stumpwm-sndioctl")
 #+END_SRC
 
 *** GROUP-SETTING
@@ -133,10 +141,6 @@ This is the first thing the WM Loads.
 (defun show-kernel ()
   (run-shell-command-and-format "uname -r"))
 
-;; Show the hostname
-(defun show-hostname ()
-  (run-shell-command-and-format "hostname"))
-
 ;; Show battery information
 (defun show-battery ()
   (run-shell-command-and-format "battstat -c '++' -d '--' {i} {p}"))
@@ -151,15 +155,25 @@ This is the first thing the WM Loads.
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
-      (list "%g | %v ^>^7 | "
-            '(:eval (show-hostname))
-            "| " '(:eval (show-kernel))
-            "| " '(:eval (show-battery))
+      (list "^3( " ;; Yellow
+            "^n%g " ;; Groups
+            ;; Windows
+            "^1[ " ;; Red
+            "^n%v ^>^7 ";; Default
+            "^1] " ;; Red
+            ;; Statuses
+            "^5[ " ;; Magenta
+            "^n" ;; Default
+            "| " "%h " ;; Hostname
+            "| " "%B " ;; Battery
             "| " '(:eval (show-temp))
-            "| %d"))
+            "| " "%d "
+            "^5 ]" ;; Magenta
+            "^3)" ;; Yellow
+            ))
 
 ;; Format Modeline
-(setf *time-modeline-string* "%a, %b%d @%I:%M%p"
+(setf *time-modeline-string* "%a, %b %d @%I:%M%p"
       ,*mode-line-background-color* iz-black
       ,*mode-line-foreground-color* iz-softyellow
       ,*mode-line-border-color* iz-white
@@ -175,7 +189,7 @@ This is the first thing the WM Loads.
 *** AUTOSTART
 
 #+BEGIN_SRC lisp :tangle init.lisp
-;; Load BIND file
+;; Load BIND fil
 (load "~/.stumpwm.d/bind.lisp")
 
 ;; Load JUMPS file
@@ -228,9 +242,9 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
 
 ;; Set Special keys
 (defvar *my-special-key-commands*
-           '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
-             ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png")
-             ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")
+           '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png && notify-send -i camera -u low -a Scrot scrot")
+             ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png && notify-send -i camera -u normal -a Split scrot")
+             ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png && notify-send -i camera -u critical -a Window scrot")
              ("XF86AudioRaiseVolume" "volume-up")
              ("XF86AudioLowerVolume" "volume-down")
              ("XF86AudioMute" "toggle-mute")))
@@ -268,7 +282,6 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Global keybindings
 (define-key *top-map* (kbd "M-ESC") "mode-line")
-(define-key *root-map* (kbd "M-Q") "quit")
 
 ;; Window movement/swapping
 (define-key *root-map* (kbd "m") "mark")
@@ -279,7 +292,8 @@ This is my bindings file. =*root-map*= is a variable that handles /Prefixed/ bin
 (define-key *root-map* (kbd "C-Right") "exchange-direction right")
 
 ;; EMACS!!
-(define-key *root-map* (kbd "e") "emacs")
+(define-key *root-map* (kbd "e") "swm-emacs")
+(define-key *root-map* (kbd "C-e") "swm-emacs")
 #+END_SRC
 
 -----
