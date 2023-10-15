@@ -99,10 +99,6 @@
 (defun show-kernel ()
   (run-shell-command-and-format "uname -r"))
 
-;; Show battery information
-(defun show-battery ()
-  (run-shell-command-and-format "battstat -c '++' -d '--' {i} {p}"))
-
 ;; Show the temperature
 (defun show-temp ()
   (run-shell-command-and-format "sysctl -n hw.sensors.cpu0.temp0"))
@@ -113,8 +109,9 @@
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
-      (list "^3( " ;; Yellow
-            "^n%g " ;; Groups
+      (list ;; Groups
+            "^3( " ;; Yellow
+            "^n%g " ;; Default
             ;; Windows
             "^1[ " ;; Red
             "^n%v ^>^7 ";; Default
@@ -124,8 +121,8 @@
             "^n" ;; Default
             "| " "%h " ;; Hostname
             "| " "%B " ;; Battery
-            "| " '(:eval (show-temp))
-            "| " "%d "
+            "| " '(:eval (show-temp)) ;; Cpu Temp
+            "| " "%d " ;; Date
             "^5 ]" ;; Magenta
             "^3)" ;; Yellow
             ))
