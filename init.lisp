@@ -199,7 +199,7 @@
             "^5[ " ;; Magenta
             status-fmt
             "^5 ]" ;; Magenta
-            "^3)" ;; Yellow
+            "^3^b)" ;; Yellow
             ))
 
 ;; Format Modeline
