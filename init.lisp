@@ -13,7 +13,7 @@
 (setf *default-package* :stumpwm)
 
 ;; Set Modules
-(set-module-dir "/home/izder456/.stumpwm.d/modules")
+(set-module-dir "~/.stumpwm.d/modules")
 
 ;;;
 ;; Colors
@@ -90,6 +90,9 @@
 ;; Modules & their config
 ;;;
 
+;; Init modules
+(init-load-path *module-dir*)
+
 ;; GAAAAAPs
 (load-module "swm-gaps")
 ;; Set Gaps
@@ -98,6 +101,8 @@
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
 
+;; load-path
+(add-to-load-path "~/.stumpwm.d/extras")
 ;; Scratchpad
 (load-module "scratchpad")
 (defcommand scratchpad-term () ()
