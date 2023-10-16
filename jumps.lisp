@@ -1,3 +1,7 @@
+;;;
+;; Jump Macros
+;;;
+
 ;; Web Jump commands
 (defmacro make-web-jump (name prefix)
   `(defcommand ,(intern name) (search)
@@ -12,6 +16,10 @@
      (nsubstitute #\+ #\Space search)
      (run-shell-command (concatenate 'string ,prefix search))))
 
+;;;
+;; Define Jumps
+;;;
+
 ;; Define Web Jumps
 (make-web-jump "ddg" "ungoogled-chromium https://html.duckduckgo.com/html?q=")
 (make-web-jump "lite" "st -e links https://lite.duckduckgo.com/lite?q=")
@@ -21,6 +29,10 @@
 (make-term-jump "manpage" "xterm -hold -e man ")
 (make-term-jump "pkgname" "xterm -hold -e pkg_info -Q ")
 (make-term-jump "pkgloc" "xterm -hold -e pkg_locate ")
+
+;;;
+;; Bind Jump Defines from Earlier
+;;;
 
 ;; Keybindings for Web Jumps
 (define-key *top-map* (kbd "M-s") "ddg")

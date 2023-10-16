@@ -1,5 +1,13 @@
+;;;
+;; Bindings
+;;;
+
 ;; Set prefix key
 (set-prefix-key (kbd "C-t"))
+
+;;;
+;; Bind Key Macro
+;;;
 
 ;; Bind to *root-map*
 (defmacro bind-shell-to-key (key command &optional (map *root-map*))
@@ -19,6 +27,10 @@
                                             "run-shell-command "
                                             '"rofi -i -show-icons -show "
                                             ,command)))
+
+;;;
+;; Bind Key Lists
+;;;
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
@@ -47,6 +59,10 @@
             ("l" "slock")
             ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
 
+;;;
+;; Loop & Bind with Macros from earlier
+;;;
+
 ;; Loop through keybind lists
 (loop for (key cmd) in *my-rofi-key-commands* do
   (bind-rofi-to-key key cmd))
@@ -57,8 +73,13 @@
 (loop for (key cmd) in *my-special-key-commands* do
   (bind-shell-to-topkey key cmd))
 
+;;;
+;; Misc Bindings
+;;;
+
 ;; Global keybindings
 (define-key *top-map* (kbd "M-ESC") "mode-line")
+(define-key *root-map* (kbd "M-q") "quit")
 
 ;; Window movement/swapping
 (define-key *root-map* (kbd "m") "mark")
