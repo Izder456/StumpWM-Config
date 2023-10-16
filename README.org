@@ -149,7 +149,7 @@ This is the first thing the WM Loads.
 (swm-gaps:toggle-gaps-on)
 
 ;; load-path
-(add-to-load-path "~/.stumpwm.d/extras")
+(add-to-load-path "~/.stumpwm.d/extras/scratchpad")
 ;; Scratchpad
 (load-module "scratchpad")
 (defcommand scratchpad-term () ()
