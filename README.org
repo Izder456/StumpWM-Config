@@ -1,7 +1,6 @@
 #+TITLE: Iz's StumpWM Config
 #+DESCRIPTION: Mainly for personal backups, but if you want 'em, use 'em.
 #+KEYWORDS: org-mode, stumpwm, readme, lisp, izder
-#+LANGUAGE: en
 
 + Mainly for personal backups, but if you want 'em, use 'em!
 
@@ -154,7 +153,7 @@ This is the first thing the WM Loads.
 (load-module "scratchpad")
 (defcommand scratchpad-term () ()
   (scratchpad:toggle-floating-scratchpad "term" "st"
-                                         :initial-gravity :bottom
+                                         :initial-gravity :center
                                          :initial-width 640
                                          :initial-height 480))
 ;; Bind Scratchpad to Super+t

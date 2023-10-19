@@ -107,7 +107,7 @@
 (load-module "scratchpad")
 (defcommand scratchpad-term () ()
   (scratchpad:toggle-floating-scratchpad "term" "st"
-                                         :initial-gravity :bottom
+                                         :initial-gravity :center
                                          :initial-width 640
                                          :initial-height 480))
 ;; Bind Scratchpad to Super+t
