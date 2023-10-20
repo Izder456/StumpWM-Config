@@ -15,6 +15,12 @@
                                             "run-shell-command "
                                             ,command)))
 
+;; Bind to *root-map*
+(defmacro bind-app-to-key (key command &optional (map *root-map*))
+  `(define-key ,map (kbd ,key) (concatenate 'string
+                                            "run-shell-command "
+                                            ,command)))
+
 ;; Bind to *top-map*
 (defmacro bind-shell-to-topkey (key command &optional (map *top-map*))
   `(define-key ,map (kbd ,key) (concatenate 'string
@@ -39,25 +45,28 @@
 
 ;; Set Special keys
 (defvar *my-special-key-commands*
-           '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png && notify-send -i camera -u low -a Scrot scrot")
-             ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png && notify-send -i camera -u normal -a Split scrot")
-             ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png && notify-send -i camera -u critical -a Window scrot")
-             ("XF86AudioRaiseVolume" "volume-up")
-             ("XF86AudioLowerVolume" "volume-down")
-             ("XF86AudioMute" "toggle-mute")))
+  '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png && notify-send -i camera -u low -a Scrot scrot")
+    ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png && notify-send -i camera -u normal -a Split scrot")
+    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png && notify-send -i camera -u critical -a Window scrot")
+    ("XF86AudioRaiseVolume" "volume-up")
+    ("XF86AudioLowerVolume" "volume-down")
+    ("XF86AudioMute" "toggle-mute")))
+
+;; Set Shell Keys
+(defvar *my-shell-key-commands*
+  '(("c" "st")
+    ("C-c" "st")
+    ("M-m" "st -e mocp")
+    ("i" "st -e htop")
+    ("x" "xkill")
+    ("l" "slock")
+    ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
-           '(("c" "st")
-            ("C-c" "st")
-            ("M-m" "st -e mocp")
-            ("i" "st -e htop")
-            ("f" "ungoogled-chromium")
-            ("E" "thunderbird")
-            ("F" "caja")
-            ("x" "xkill")
-            ("l" "slock")
-            ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
+  '(("f" "ungoogled-chromium")
+    ("E" "thunderbird")
+    ("F" "caja")))
 
 ;;;
 ;; Loop & Bind with Macros from earlier
@@ -67,8 +76,11 @@
 (loop for (key cmd) in *my-rofi-key-commands* do
   (bind-rofi-to-key key cmd))
 
-(loop for (key cmd) in *my-app-key-commands* do
+(loop for (key cmd) in *my-shell-key-commands* do
   (bind-shell-to-key key cmd))
+
+(loop for (key cmd) in *my-app-key-commands* do
+  (bind-app-to-key key cmd))
 
 (loop for (key cmd) in *my-special-key-commands* do
   (bind-shell-to-topkey key cmd))
@@ -76,6 +88,23 @@
 ;;;
 ;; Misc Bindings
 ;;;
+
+;; Kill/Enable AutoSleep
+(defcommand kill-sleep() ()
+  (message "Killing Autosleep")
+  (run-commands
+   "run-shell-command xset s off"
+   "run-shell-command xset s noblank"
+   "run-shell-command xset -dpms"
+   "run-shell-command pkill xidle"))
+(defcommand enable-sleep() ()
+  (message "Enable Autosleep")
+  (run-commands
+   "run-shell-command xset s on"
+   "run-shell-command xset s blank"
+   "run-shell-command xidle -delay 5 -nw -program /usr/local/bin/slock -timeo   ut 1800 &"))
+(define-key *root-map* (kbd "Menu") "kill-sleep")
+(define-key *root-map* (kbd "C-Menu") "enable-sleep")
 
 ;; Global keybindings
 (define-key *top-map* (kbd "M-ESC") "mode-line")
