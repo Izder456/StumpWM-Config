@@ -107,13 +107,10 @@
 (defcommand scratchpad-term () ()
   (scratchpad:toggle-floating-scratchpad "term" "st"
                                          :initial-gravity :center
-                                         :initial-width 640
+                                         :initial-width 720
                                          :initial-height 480))
 ;; Bind Scratchpad to Super+t
 (define-key *top-map* (kbd "s-t") "scratchpad-term")
-
-;; Emacs
-(load-module "swm-emacs")
 
 ;; Hostname
 (load-module "hostname")

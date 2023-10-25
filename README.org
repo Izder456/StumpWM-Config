@@ -154,13 +154,10 @@ This is the first thing the WM Loads.
 (defcommand scratchpad-term () ()
   (scratchpad:toggle-floating-scratchpad "term" "st"
                                          :initial-gravity :center
-                                         :initial-width 640
+                                         :initial-width 720
                                          :initial-height 480))
 ;; Bind Scratchpad to Super+t
 (define-key *top-map* (kbd "s-t") "scratchpad-term")
-
-;; Emacs
-(load-module "swm-emacs")
 
 ;; Hostname
 (load-module "hostname")
@@ -410,7 +407,7 @@ Handling bindings
   (run-commands
    "run-shell-command xset s on"
    "run-shell-command xset s blank"
-   "run-shell-command xidle -delay 5 -nw -program /usr/local/bin/slock -timeo   ut 1800 &"))
+   "run-shell-command xidle -delay 5 -nw -program /usr/local/bin/slock -timeout 1800 &"))
 (define-key *root-map* (kbd "Menu") "kill-sleep")
 (define-key *root-map* (kbd "C-Menu") "enable-sleep")
 
@@ -427,8 +424,8 @@ Handling bindings
 (define-key *root-map* (kbd "C-Right") "exchange-direction right")
 
 ;; EMACS!!
-(define-key *root-map* (kbd "e") "swm-emacs")
-(define-key *root-map* (kbd "C-e") "swm-emacs")
+(define-key *root-map* (kbd "e") "emacs")
+(define-key *root-map* (kbd "C-e") "emacs")
 #+END_SRC
 
 -----

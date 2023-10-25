@@ -102,7 +102,7 @@
   (run-commands
    "run-shell-command xset s on"
    "run-shell-command xset s blank"
-   "run-shell-command xidle -delay 5 -nw -program /usr/local/bin/slock -timeo   ut 1800 &"))
+   "run-shell-command xidle -delay 5 -nw -program /usr/local/bin/slock -timeout 1800 &"))
 (define-key *root-map* (kbd "Menu") "kill-sleep")
 (define-key *root-map* (kbd "C-Menu") "enable-sleep")
 
@@ -119,5 +119,5 @@
 (define-key *root-map* (kbd "C-Right") "exchange-direction right")
 
 ;; EMACS!!
-(define-key *root-map* (kbd "e") "swm-emacs")
-(define-key *root-map* (kbd "C-e") "swm-emacs")
+(define-key *root-map* (kbd "e") "emacs")
+(define-key *root-map* (kbd "C-e") "emacs")
