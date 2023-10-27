@@ -66,7 +66,7 @@
 (defvar *my-app-key-commands*
   '(("f" "ungoogled-chromium")
     ("E" "thunderbird")
-    ("F" "caja")))
+    ("F" "rox-filer")))
 
 ;;;
 ;; Loop & Bind with Macros from earlier
@@ -119,5 +119,7 @@
 (define-key *root-map* (kbd "C-Right") "exchange-direction right")
 
 ;; EMACS!!
+(define-key *top-map* (kbd "s-e") "emacs-daemon-kill-force")
+(define-key *top-map* (kbd "s-E") "run-shell-command emacs --daemon")
 (define-key *root-map* (kbd "e") "emacs")
 (define-key *root-map* (kbd "C-e") "emacs")

@@ -100,6 +100,9 @@
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
 
+;; Emacs
+(load-module "swm-emacs")
+
 ;; load-path
 (add-to-load-path "~/.stumpwm.d/extras/scratchpad")
 ;; Scratchpad

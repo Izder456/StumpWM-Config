@@ -147,6 +147,9 @@ This is the first thing the WM Loads.
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
 
+;; Emacs
+(load-module "swm-emacs")
+
 ;; load-path
 (add-to-load-path "~/.stumpwm.d/extras/scratchpad")
 ;; Scratchpad
@@ -363,7 +366,7 @@ Handling bindings
 (defvar *my-app-key-commands*
   '(("f" "ungoogled-chromium")
     ("E" "thunderbird")
-    ("F" "caja")))
+    ("F" "rox-filer")))
 #+END_SRC
 
 *** Loop Bind Keylists
@@ -424,6 +427,8 @@ Handling bindings
 (define-key *root-map* (kbd "C-Right") "exchange-direction right")
 
 ;; EMACS!!
+(define-key *top-map* (kbd "s-e") "emacs-daemon-kill-force")
+(define-key *top-map* (kbd "s-E") "run-shell-command emacs --daemon")
 (define-key *root-map* (kbd "e") "emacs")
 (define-key *root-map* (kbd "C-e") "emacs")
 #+END_SRC
