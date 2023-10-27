@@ -365,8 +365,8 @@ Handling bindings
 ;; Set App Keys
 (defvar *my-app-key-commands*
   '(("f" "ungoogled-chromium")
-    ("E" "thunderbird")
-    ("F" "rox-filer")))
+    ("E" "claws-mail")
+    ("F" "rox")))
 #+END_SRC
 
 *** Loop Bind Keylists

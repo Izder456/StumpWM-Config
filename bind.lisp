@@ -65,8 +65,8 @@
 ;; Set App Keys
 (defvar *my-app-key-commands*
   '(("f" "ungoogled-chromium")
-    ("E" "thunderbird")
-    ("F" "rox-filer")))
+    ("E" "claws-mail")
+    ("F" "rox")))
 
 ;;;
 ;; Loop & Bind with Macros from earlier
