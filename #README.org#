@@ -195,7 +195,7 @@ This is the first thing the WM Loads.
 ;; Message window settings
 (setf *message-window-padding* 12)
 (setf *message-window-y-padding* 10)
-(setf *message-window-gravity* :center)
+(setf *message-window-gravity* :center)[B
 
 ;; Input window settings
 (setf *input-window-gravity* :center)
@@ -364,9 +364,9 @@ Handling bindings
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
-  '(("f" "firefox-esr")
-    ("E" "claws-mail")
-    ("F" "pcmanfm")))
+  '(("f" "ungoogled-chromium")
+    ("E" "pcmanfmws-mail")
+    ("F" "rox")))
 #+END_SRC
 
 *** Loop Bind Keylists

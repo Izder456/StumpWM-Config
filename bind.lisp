@@ -64,9 +64,9 @@
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
-  '(("f" "ungoogled-chromium")
+  '(("f" "firefox-esr")
     ("E" "claws-mail")
-    ("F" "rox")))
+    ("F" "pcmanfm")))
 
 ;;;
 ;; Loop & Bind with Macros from earlier
@@ -120,6 +120,5 @@
 
 ;; EMACS!!
 (define-key *top-map* (kbd "s-e") "emacs-daemon-kill-force")
-(define-key *top-map* (kbd "s-E") "run-shell-command emacs --daemon")
-(define-key *root-map* (kbd "e") "emacs")
-(define-key *root-map* (kbd "C-e") "emacs")
+(define-key *root-map* (kbd "e") "swm-emacs")
+(define-key *root-map* (kbd "C-e") "swm-emacs")
