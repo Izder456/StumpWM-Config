@@ -21,7 +21,7 @@
 ;;;
 
 ;; Define Web Jumps
-(make-web-jump "ddg" "ungoogled-chromium https://html.duckduckgo.com/html?q=")
+(make-web-jump "ddg" "surf https://html.duckduckgo.com/html?q=")
 (make-web-jump "lite" "st -e links https://lite.duckduckgo.com/lite?q=")
 
 ;; Define Terminal Jumps
