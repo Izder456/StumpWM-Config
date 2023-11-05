@@ -45,9 +45,9 @@
 
 ;; Set Special keys
 (defvar *my-special-key-commands*
-  '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png && stumpish notifications-add 'Full scrot'")
-    ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png && stumpish notifications-add 'Split scrot'")
-    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png && stumpish notifications-add 'Window scrot'")
+  '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
+    ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png")
+    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")
     ("XF86AudioRaiseVolume" "volume-up")
     ("XF86AudioLowerVolume" "volume-down")
     ("XF86AudioMute" "toggle-mute")))
@@ -118,7 +118,7 @@
 (define-key *root-map* (kbd "C-Right") "exchange-direction right")
 
 ;; Browser
-(define-key *root-map* (kbd "F") "browse")
+(define-key *root-map* (kbd "f") "browse")
 
 ;; EMACS!!
 (define-key *top-map* (kbd "s-e") "emacs-daemon-kill-force")
