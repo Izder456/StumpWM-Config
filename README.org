@@ -150,6 +150,22 @@ This is the first thing the WM Loads.
 ;; Emacs
 (load-module "swm-emacs")
 
+;; Browser
+(load-module "browse")
+(setf *homepage* "http://68k.news")
+
+;; Web Searches
+(load-module "searchengines")
+(setf searchengines:*search-browser-executable* "firefox-esr")
+;; Set Search Engine Params
+(defparameter *URL-DDG* "https://html.duckduckgo.com/html/s?num=100&q=~a")
+(defparameter *URL-LIBRE* "https://search.ahwx.org/search?num=100&q=~a")
+;; Set Search Selects
+(searchengines:make-searchengine-selection "search-ddg-selection" *URL-DDG* "DuckDuckGo search" :map *top-map* :key "M-C-s")
+(searchengines:make-searchengine-prompt "search-ddg-prompt" "DuckDuckGo" *URL-DDG* "DuckDuckGo search" :map *top-map* :key "M-s")
+(searchengines:make-searchengine-selection "search-libre-selection" *URL-LIBRE* "LibreY search" :map *top-map* :key "M-C-l")
+(searchengines:make-searchengine-prompt "search-libre-prompt" "LibreY" *URL-LIBRE* "LibreY search" :map *top-map* :key "M-l")
+
 ;; load-path
 (add-to-load-path "~/.stumpwm.d/extras/scratchpad")
 ;; Scratchpad
@@ -164,7 +180,7 @@ This is the first thing the WM Loads.
 
 ;; Hostname
 (load-module "hostname")
-
+//
 ;; Battery
 (load-module "battery-portable")
 
@@ -345,9 +361,9 @@ Handling bindings
 
 ;; Set Special keys
 (defvar *my-special-key-commands*
-  '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png && notify-send -i camera -u low -a Scrot scrot")
-    ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png && notify-send -i camera -u normal -a Split scrot")
-    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png && notify-send -i camera -u critical -a Window scrot")
+  '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png && stumpish notifications-add 'Full scrot'")
+    ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png && stumpish notifications-add 'Split scrot'")
+    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png && stumpish notifications-add 'Window scrot'")
     ("XF86AudioRaiseVolume" "volume-up")
     ("XF86AudioLowerVolume" "volume-down")
     ("XF86AudioMute" "toggle-mute")))
@@ -364,8 +380,7 @@ Handling bindings
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
-  '(("f" "firefox-esr")
-    ("E" "claws-mail")
+  '(("E" "claws-mail")
     ("F" "pcmanfm")))
 #+END_SRC
 
@@ -426,6 +441,9 @@ Handling bindings
 (define-key *root-map* (kbd "C-Left") "exchange-direction left")
 (define-key *root-map* (kbd "C-Right") "exchange-direction right")
 
+;; Browser
+(define-key *root-map* (kbd "F") "browse")
+
 ;; EMACS!!
 (define-key *top-map* (kbd "s-e") "emacs-daemon-kill-force")
 (define-key *root-map* (kbd "e") "swm-emacs")
@@ -445,13 +463,6 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;; Jump Macros
 ;;;
 
-;; Web Jump commands
-(defmacro make-web-jump (name prefix)
-  `(defcommand ,(intern name) (search)
-     ((:rest ,(concatenate 'string name " search: ")))
-     (nsubstitute #\+ #\Space search)
-     (run-shell-command (concatenate 'string ,prefix search))))
-
 ;; Term Jump commands
 (defmacro make-term-jump (name prefix)
   `(defcommand ,(intern name) (search)
@@ -466,10 +477,6 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;;;
 ;; Define Jumps
 ;;;
-
-;; Define Web Jumps
-(make-web-jump "ddg" "surf https://html.duckduckgo.com/html?q=")
-(make-web-jump "lite" "st -e links https://lite.duckduckgo.com/lite?q=")
 
 ;; Define Terminal Jumps
 (make-term-jump "mansearch" "xterm -hold -e apropos ")

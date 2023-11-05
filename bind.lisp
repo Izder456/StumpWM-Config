@@ -45,9 +45,9 @@
 
 ;; Set Special keys
 (defvar *my-special-key-commands*
-  '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png && notify-send -i camera -u low -a Scrot scrot")
-    ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png && notify-send -i camera -u normal -a Split scrot")
-    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png && notify-send -i camera -u critical -a Window scrot")
+  '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png && stumpish notifications-add 'Full scrot'")
+    ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png && stumpish notifications-add 'Split scrot'")
+    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png && stumpish notifications-add 'Window scrot'")
     ("XF86AudioRaiseVolume" "volume-up")
     ("XF86AudioLowerVolume" "volume-down")
     ("XF86AudioMute" "toggle-mute")))
@@ -64,8 +64,7 @@
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
-  '(("f" "firefox-esr")
-    ("E" "claws-mail")
+  '(("E" "claws-mail")
     ("F" "pcmanfm")))
 
 ;;;
@@ -117,6 +116,9 @@
 (define-key *root-map* (kbd "C-Down") "exchange-direction down")
 (define-key *root-map* (kbd "C-Left") "exchange-direction left")
 (define-key *root-map* (kbd "C-Right") "exchange-direction right")
+
+;; Browser
+(define-key *root-map* (kbd "F") "browse")
 
 ;; EMACS!!
 (define-key *top-map* (kbd "s-e") "emacs-daemon-kill-force")
