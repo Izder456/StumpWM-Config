@@ -23,10 +23,6 @@
 ;; Bind Jump Defines from Earlier
 ;;;
 
-;; Keybindings for Web Jumps
-(define-key *top-map* (kbd "M-s") "ddg")
-(define-key *top-map* (kbd "M-d") "lite")
-
 ;; Keybindings for Terminal Jumps
 (define-key *top-map* (kbd "M-m") "mansearch")
 (define-key *top-map* (kbd "M-M") "manpage")
