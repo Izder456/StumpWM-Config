@@ -133,7 +133,7 @@
 
 ;; Hostname
 (load-module "hostname")
-//
+
 ;; Battery
 (load-module "battery-portable")
 

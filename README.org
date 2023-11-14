@@ -180,7 +180,7 @@ This is the first thing the WM Loads.
 
 ;; Hostname
 (load-module "hostname")
-//
+
 ;; Battery
 (load-module "battery-portable")
 
@@ -217,7 +217,7 @@ This is the first thing the WM Loads.
 (setf *input-window-gravity* :center)
 #+END_SRC
 
-*** Moedeline Formatting
+*** Modeline Formatting
 
 #+BEGIN_SRC lisp :tangle init.lisp
 ;;;
