@@ -19,8 +19,30 @@
 
 -----
 
-* Code Structure
+* Table of Contents :TOC_4:
+- [[#disclaimer][DISCLAIMER]]
+- [[#code-structure][Code Structure]]
+  - [[#initlisp][init.lisp]]
+    - [[#wm-boilerplate][WM Boilerplate]]
+    - [[#colors][Colors]]
+    - [[#styling][Styling]]
+    - [[#environment-variables][Environment Variables]]
+    - [[#modules][Modules]]
+    - [[#window-groups][Window Groups]]
+    - [[#modeline-formatting][Modeline Formatting]]
+    - [[#autostarts][Autostarts]]
+  - [[#bindlisp][bind.lisp]]
+    - [[#set-key-prefix][Set Key Prefix]]
+    - [[#define-key-macros][Define Key Macros]]
+    - [[#define-bind-keylists][Define Bind Keylists]]
+    - [[#loop-bind-keylists][Loop Bind Keylists]]
+    - [[#set-misc-binds][Set Misc. Binds]]
+  - [[#jumpslisp][jumps.lisp]]
+    - [[#define-jumo-macros][Define Jumo Macros]]
+    - [[#set-jump-aliases][Set Jump Aliases]]
+    - [[#bind-jump-aliases][Bind Jump Aliases]]
 
+* Code Structure
 ** [[init.lisp][init.lisp]]
 
 This is the first thing the WM Loads.
