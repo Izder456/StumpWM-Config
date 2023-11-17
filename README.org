@@ -169,6 +169,25 @@ This is the first thing the WM Loads.
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
 
+;;; Moving the mouse for me
+;; Used for warping the cursor
+(load-module "beckon")
+(defmacro with-focus-lost (&body body)
+  "Make sure WIN is on the top level while the body is running and
+restore it's always-on-top state afterwords"
+  `(progn (banish)
+          ,@body
+          (when (current-window)
+            (beckon:beckon))))
+
+;;; Undo And Redo Functionality
+(load-module "winner-mode")
+(define-key *root-map* (kbd "u") "winner-undo")
+(define-key *root-map* (kbd "C-r") "winner-redo")
+(add-hook *post-command-hook* (lambda (command)
+                                (when (member command winner-mode:*default-commands*)
+                                  (winner-mode:dump-group-to-file))))
+
 ;; Emacs
 (load-module "swm-emacs")
 
@@ -213,6 +232,8 @@ This is the first thing the WM Loads.
 *** Window Groups
 
 #+BEGIN_SRC lisp :tangle init.lisp
+;;  Dynamic groups, if any is created, should have a split ratio of half of the available space.
+(setf *dynamic-group-master-split-ratio* 1/2)
 ;; Rename and create new groups
 (grename "Ness")
 (gnewbg "Paula")
@@ -426,14 +447,11 @@ Handling bindings
 (loop for (key cmd) in *my-special-key-commands* do
   (bind-shell-to-topkey key cmd))
 #+END_SRC
-
 *** Set Misc. Binds
-
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;;;
 ;; Misc Bindings
 ;;;
-
 ;; Kill/Enable AutoSleep
 (defcommand kill-sleep() ()
   (message "Killing Autosleep")

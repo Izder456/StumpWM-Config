@@ -100,6 +100,25 @@
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
 
+;;; Moving the mouse for me
+;; Used for warping the cursor
+(load-module "beckon")
+(defmacro with-focus-lost (&body body)
+  "Make sure WIN is on the top level while the body is running and
+restore it's always-on-top state afterwords"
+  `(progn (banish)
+          ,@body
+          (when (current-window)
+            (beckon:beckon))))
+
+;;; Undo And Redo Functionality
+(load-module "winner-mode")
+(define-key *root-map* (kbd "u") "winner-undo")
+(define-key *root-map* (kbd "C-r") "winner-redo")
+(add-hook *post-command-hook* (lambda (command)
+                                (when (member command winner-mode:*default-commands*)
+                                  (winner-mode:dump-group-to-file))))
+
 ;; Emacs
 (load-module "swm-emacs")
 
@@ -140,6 +159,8 @@
 ;; Cleaner SNDIO interface
 (load-module "stumpwm-sndioctl")
 
+;;  Dynamic groups, if any is created, should have a split ratio of half of the available space.
+(setf *dynamic-group-master-split-ratio* 1/2)
 ;; Rename and create new groups
 (grename "Ness")
 (gnewbg "Paula")

@@ -87,7 +87,6 @@
 ;;;
 ;; Misc Bindings
 ;;;
-
 ;; Kill/Enable AutoSleep
 (defcommand kill-sleep() ()
   (message "Killing Autosleep")
