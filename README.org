@@ -235,7 +235,12 @@ restore it's always-on-top state afterwords"
 #+BEGIN_SRC lisp :tangle init.lisp
 ;; Play Startup sound
 (defun play-startup-sound ()
-  (run-shell-command "ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
+  (run-shell-command "sleep 1 && ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
+
+(defun set-default-sounds ()
+  (run-shell-command "sndioctl input.level=0.74")
+  (run-shell-command "sndioctl output.level=1.00"))
+
 #+END_SRC
 
 *** Window Groups
@@ -349,6 +354,7 @@ restore it's always-on-top state afterwords"
 (load "~/.stumpwm.d/jumps.lisp")
 
 ;; Startup Sound
+(set-default-sounds)
 (play-startup-sound)
 #+END_SRC
 

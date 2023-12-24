@@ -161,7 +161,11 @@ restore it's always-on-top state afterwords"
 
 ;; Play Startup sound
 (defun play-startup-sound ()
-  (run-shell-command "ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
+  (run-shell-command "sleep 1 && ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
+
+(defun set-default-sounds ()
+  (run-shell-command "sndioctl input.level=0.74")
+  (run-shell-command "sndioctl output.level=1.00"))
 
 ;; Rename and create new groups
 (grename "Ness")
@@ -263,4 +267,5 @@ restore it's always-on-top state afterwords"
 (load "~/.stumpwm.d/jumps.lisp")
 
 ;; Startup Sound
+(set-default-sounds)
 (play-startup-sound)
