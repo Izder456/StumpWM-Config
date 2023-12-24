@@ -124,13 +124,13 @@ restore it's always-on-top state afterwords"
 
 ;; Browser
 (load-module "browse")
-(setf *homepage* "http://68k.news")
+(setf browse::*homepage* "http://68k.news")
 
 ;; Web Searches
 (load-module "searchengines")
 (setf searchengines:*search-browser-executable* "firefox-esr")
 ;; Set Search Engine Params
-(defparameter *URL-DDG* "https://html.duckduckgo.com/html/s?num=100&q=~a")
+(defparameter *URL-DDG* "https://duckduckgo.com/s?num=100&q=~a")
 (defparameter *URL-LIBRE* "https://search.ahwx.org/search?num=100&q=~a")
 ;; Set Search Selects
 (searchengines:make-searchengine-selection "search-ddg-selection" *URL-DDG* "DuckDuckGo search" :map *top-map* :key "M-C-s")
@@ -159,8 +159,10 @@ restore it's always-on-top state afterwords"
 ;; Cleaner SNDIO interface
 (load-module "stumpwm-sndioctl")
 
-;;  Dynamic groups, if any is created, should have a split ratio of half of the available space.
-(setf *dynamic-group-master-split-ratio* 1/2)
+;; Play Startup sound
+(defun play-startup-sound ()
+  (run-shell-command "ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
+
 ;; Rename and create new groups
 (grename "Ness")
 (gnewbg "Paula")
@@ -259,3 +261,6 @@ restore it's always-on-top state afterwords"
 
 ;; jumps
 (load "~/.stumpwm.d/jumps.lisp")
+
+;; Startup Sound
+(play-startup-sound)

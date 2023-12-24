@@ -28,6 +28,7 @@
     - [[#styling][Styling]]
     - [[#environment-variables][Environment Variables]]
     - [[#modules][Modules]]
+    - [[#play-startup-sound][Play startup sound]]
     - [[#window-groups][Window Groups]]
     - [[#modeline-formatting][Modeline Formatting]]
     - [[#autostarts][Autostarts]]
@@ -229,6 +230,14 @@ restore it's always-on-top state afterwords"
 (load-module "stumpwm-sndioctl")
 #+END_SRC
 
+*** Play startup sound
+
+#+BEGIN_SRC lisp :tangle init.lisp
+;; Play Startup sound
+(defun play-startup-sound ()
+  (run-shell-command "ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
+#+END_SRC
+
 *** Window Groups
 
 #+BEGIN_SRC lisp :tangle init.lisp
@@ -338,6 +347,9 @@ restore it's always-on-top state afterwords"
 
 ;; jumps
 (load "~/.stumpwm.d/jumps.lisp")
+
+;; Startup Sound
+(play-startup-sound)
 #+END_SRC
 
 ** [[bind.lisp][bind.lisp]]
