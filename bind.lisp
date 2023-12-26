@@ -98,8 +98,11 @@
 (define-key *root-map* (kbd "f") "browse")
 
 ;; Push/Pop Current Window Into a Floating group
-(define-key *root-map* (kbd "P") "float-this")
-(define-key *root-map* (kbd "p") "unfloat-this")
+(defcommand toggle-float () ()
+	    (if (float-window-p (current-window))
+		(unfloat-this)
+		(float-this)))
+(define-key *root-map* (kbd "p") "toggle-float")
 
 ;; Flatten all flating windows into tiled frames
 (define-key *root-map* (kbd "M-p") "flatten-floats")

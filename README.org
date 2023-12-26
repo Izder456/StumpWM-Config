@@ -1,3 +1,4 @@
+
 #+TITLE: Iz's StumpWM Config
 #+DESCRIPTION: Mainly for personal backups, but if you want 'em, use 'em.
 #+KEYWORDS: org-mode, stumpwm, readme, lisp, izder
@@ -79,8 +80,7 @@
 | =C-t=    | =FnKey=                      | switch to group                         |
 | =C-t=    | =n=                          | rotate frame                            |
 | =C-t=    | =R=                          | resize mode                             |
-| =C-t=    | =p=                          | "push" floating window to frame         |
-| =C-t=    | =P=                          | "pop" frame to floating group           |
+| =C-t=    | =p=                          | toggle push/pop frame to/from floating group |
 | =C-t=    | =M-p=                        | "flatten" all floating windows to frame |
 
 ** Misc
@@ -90,10 +90,13 @@
 | =NONE=   | =PrintScreen=   | screenshot full                 |
 | =NONE=   | =M-PrintScreen= | screenshot interactive select   |
 | =NONE=   | =s-PrintScreen= | screenshot active frame/window  |
+| =C-t=    | =q=             | Prompt to exit session          |
+| =C-t=    | =M-q=           | Quick exit session              |
 | =C-t=    | =Space=         | rofi drun menu                  |
 | =C-t=    | =Return=        | rofi window select menu         |
 | =C-t=    | =M-b=           | shuffle background              |
 | =C-t=    | =l=             | lock screen with slock          |
+| =NONE= | =M-Escape=      | Toggle Modeline                 |
 | =NONE=   | =M-C-s=         | Search Duckduckgo for selection |
 | =NONE=   | =M-s=           | Search Duckduckgo for prompt    |
 | =NONE=   | =M-C-l=         | Search LibreY for selection     |
@@ -541,8 +544,11 @@ Handling bindings
 (define-key *root-map* (kbd "f") "browse")
 
 ;; Push/Pop Current Window Into a Floating group
-(define-key *root-map* (kbd "P") "float-this")
-(define-key *root-map* (kbd "p") "unfloat-this")
+(defcommand toggle-float () ()
+	    (if (float-window-p (current-window))
+		(unfloat-this)
+		(float-this)))
+(define-key *root-map* (kbd "p") "toggle-float")
 
 ;; Flatten all flating windows into tiled frames
 (define-key *root-map* (kbd "M-p") "flatten-floats")
