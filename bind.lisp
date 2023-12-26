@@ -127,6 +127,13 @@
 ;; Browser
 (define-key *root-map* (kbd "f") "browse")
 
+;; Push/Pop Current Window Into a Floating group
+(define-key *root-map* (kbd "P") "float-this")
+(define-key *root-map* (kbd "p") "unfloat-this")
+
+;; Flatten all flating windows into tiled frames
+(define-key *root-map* (kbd "M-p") "flatten-floats")
+
 ;; EMACS!!
 (define-key *top-map* (kbd "s-e") "emacs-daemon-kill-force")
 (define-key *root-map* (kbd "e") "swm-emacs")
