@@ -25,6 +25,7 @@
   - [[#apps][Apps]]
   - [[#window-management][Window Management]]
   - [[#misc][Misc]]
+    - [[#note][/Note/]]
 - [[#code-structure][Code Structure]]
   - [[#initlisp][init.lisp]]
     - [[#wm-boilerplate][WM Boilerplate]]
@@ -53,42 +54,62 @@
 
 ** Apps
 
-| Prefix | Bind     | Function           |
-|--------+----------+--------------------|
-| =C-t=    | =c OR C-c= | open suckless term |
-| =C-t=    | =f=        | open firefox       |
-| =C-t=    | =F=        | open pcmanfm       |
-| =C-t=    | =x=        | open xkill         |
-| =C-t=    | =E=        | open claws-mail    |
+| Prefix | Bind       | Function                                |
+|--------+------------+-----------------------------------------|
+| =C-t=    | =c= /OR/ =C-c= | open suckless term                      |
+| =C-t=    | =f=          | open firefox                            |
+| =C-t=    | =F=          | open pcmanfm                            |
+| =C-t=    | =x=          | open xkill (like force-quit on macOS X) |
+| =C-t=    | =E=          | open claws-mail                         |
+| =C-t= | =e= /OR/ =C-e= | open emacs daemon /OR/ open client |
+| =C-t= | =s-e= | force kill emacs daemon |
 
 ** Window Management
 
-| Prefix | Bind              | Function                                |
-|--------+-------------------+-----------------------------------------|
-| =C-t=    | =s=                 | vertical split                          |
-| =C-t=    | =S=                 | horizontal split                        |
-| =C-t=    | =Q=                 | maximize frame                          |
-| =C-t=    | =C-<Direction-Key>= | swap frame in direction                 |
-| =C-t=    | =m=                 | select window for bulk move             |
-| =C-t=    | =M=                 | move bulk select to group               |
-| =C-t=    | =FnKey=             | switch to group                         |
-| =C-t=    | =n=                 | rotate frame                            |
-| =C-t=    | =R=                 | resize mode                             |
-| =C-t=    | =p=                 | "push" floating window to frame         |
-| =C-t=    | =P=                 | "pop" frame to floating group           |
-| =C-t=    | =M-p=               | "flatten" all floating windows to frame |
+| Prefix | Bind                       | Function                                |
+|--------+----------------------------+-----------------------------------------|
+| =C-t=    | =s=                          | vertical split                          |
+| =C-t=    | =S=                          | horizontal split                        |
+| =C-t=    | =Q=                          | maximize frame                          |
+| =C-t=    | =<Direction-Key>= /OR/ =<Click>= | select frame to focus                   |
+| =C-t=    | =C-<Direction-Key>=          | swap frame in direction                 |
+| =C-t=    | =k=                          | kill active frame                       |
+| =C-t=    | =m=                          | select frame for bulk move              |
+| =C-t=    | =M=                          | move bulk select to group               |
+| =C-t=    | =FnKey=                      | switch to group                         |
+| =C-t=    | =n=                          | rotate frame                            |
+| =C-t=    | =R=                          | resize mode                             |
+| =C-t=    | =p=                          | "push" floating window to frame         |
+| =C-t=    | =P=                          | "pop" frame to floating group           |
+| =C-t=    | =M-p=                        | "flatten" all floating windows to frame |
 
 ** Misc
 
-| Prefix | Bind          | Function                      |
-|--------+---------------+-------------------------------|
-| =NONE=   | =PrintScreen=   | screenshot full               |
-| =NONE=   | =M-PrintScreen= | screenshot interactive select |
-| =NONE=   | =S-PrintScreen= | screenshot active win         |
-| =C-t=    | =Space=         | rofi drun menu                |
-| =C-t=    | =Return=        | rofi window select menu       |
-| =C-t=    | =M-b=           | shuffle background            |
-| =C-t=    | =l=             | lock screen with slock        |
+| Prefix | Bind          | Function                        |
+|--------+---------------+---------------------------------|
+| =NONE=   | =PrintScreen=   | screenshot full                 |
+| =NONE=   | =M-PrintScreen= | screenshot interactive select   |
+| =NONE=   | =s-PrintScreen= | screenshot active frame/window  |
+| =C-t=    | =Space=         | rofi drun menu                  |
+| =C-t=    | =Return=        | rofi window select menu         |
+| =C-t=    | =M-b=           | shuffle background              |
+| =C-t=    | =l=             | lock screen with slock          |
+| =NONE=   | =M-C-s=         | Search Duckduckgo for selection |
+| =NONE=   | =M-s=           | Search Duckduckgo for prompt    |
+| =NONE=   | =M-C-l=         | Search LibreY for selection     |
+| =NONE=   | =M-l=           | Search LibreY for prompt        |
+| =NONE=   | =M-m=           | Search Manpages                 |
+| =NONE=   | =M-M=           | Open Manpage                    |
+| =NONE=   | =M-p=           | Search Package Name             |
+| =NONE=   | =M-P=           | Search Package File             |
+
+*** /Note/
+
+when a window is in floating mode,
++ the =Super= key is the prefix
++ left click (and drag) is move
++ right click (and drag) is resize
++ you can only mark (and move) frames, so flatten any floating windows before swapping groups
 
 * Code Structure
 ** [[init.lisp][init.lisp]]
@@ -227,14 +248,6 @@ restore it's always-on-top state afterwords"
           ,@body
           (when (current-window)
             (beckon:beckon))))
-
-;;; Undo And Redo Functionality
-(load-module "winner-mode")
-(define-key *root-map* (kbd "u") "winner-undo")
-(define-key *root-map* (kbd "C-r") "winner-redo")
-(add-hook *post-command-hook* (lambda (command)
-                                (when (member command winner-mode:*default-commands*)
-                                  (winner-mode:dump-group-to-file))))
 
 ;; Emacs
 (load-module "swm-emacs")
@@ -473,21 +486,12 @@ Handling bindings
     ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")
     ("XF86AudioRaiseVolume" "volume-up")
     ("XF86AudioLowerVolume" "volume-down")
-    ("XF86AudioMute" "toggle-mute")
-    ("s-Right" "playerctl next")
-    ("s-Left" "playerctl previous")
-    ("s-S" "playerctl shuffle toggle")
-    ("s-R" "playerctl loop Playlist")
-    ("s-SPC" "playerctl play-pause")
-    ("s-SunPageUp" "playerctl volume .1+")
-    ("s-SunPageDown" "playerctl volume .1-")))
+    ("XF86AudioMute" "toggle-mute")))
 
 ;; Set Shell Keys
 (defvar *my-shell-key-commands*
   '(("c" "st")
     ("C-c" "st")
-    ("M-m" "st -e mocp")
-    ("i" "st -e htop")
     ("x" "xkill")
     ("l" "slock")
     ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
@@ -519,28 +523,8 @@ Handling bindings
   (bind-shell-to-topkey key cmd))
 #+END_SRC
 *** Set Misc. Binds
-#+BEGIN_SRC lisp :tangle bind.lisp
-;;;
-;; Misc Bindings
-;;;
-;; Kill/Enable AutoSleep
-(defcommand kill-sleep() ()
-  (message "Killing Autosleep")
-  (run-commands
-   "run-shell-command xset s off"
-   "run-shell-command xset s noblank"
-   "run-shell-command xset -dpms"
-   "run-shell-command pkill xidle"))
-(defcommand enable-sleep() ()
-  (message "Enable Autosleep")
-  (run-commands
-   "run-shell-command xset s on"
-   "run-shell-command xset s blank"
-   "run-shell-command xset dpms"
-   "run-shell-command xidle -delay 5 -nw -program /usr/local/bin/slock -timeout 1800 &"))
-(define-key *root-map* (kbd "Menu") "kill-sleep")
-(define-key *root-map* (kbd "C-Menu") "enable-sleep")
 
+#+BEGIN_SRC lisp :tangle bind.lisp
 ;; Global keybindings
 (define-key *top-map* (kbd "M-ESC") "mode-line")
 (define-key *root-map* (kbd "M-q") "quit")

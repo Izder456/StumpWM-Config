@@ -111,14 +111,6 @@ restore it's always-on-top state afterwords"
           (when (current-window)
             (beckon:beckon))))
 
-;;; Undo And Redo Functionality
-(load-module "winner-mode")
-(define-key *root-map* (kbd "u") "winner-undo")
-(define-key *root-map* (kbd "C-r") "winner-redo")
-(add-hook *post-command-hook* (lambda (command)
-                                (when (member command winner-mode:*default-commands*)
-                                  (winner-mode:dump-group-to-file))))
-
 ;; Emacs
 (load-module "swm-emacs")
 

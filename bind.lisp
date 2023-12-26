@@ -50,21 +50,12 @@
     ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")
     ("XF86AudioRaiseVolume" "volume-up")
     ("XF86AudioLowerVolume" "volume-down")
-    ("XF86AudioMute" "toggle-mute")
-    ("s-Right" "playerctl next")
-    ("s-Left" "playerctl previous")
-    ("s-S" "playerctl shuffle toggle")
-    ("s-R" "playerctl loop Playlist")
-    ("s-SPC" "playerctl play-pause")
-    ("s-SunPageUp" "playerctl volume .1+")
-    ("s-SunPageDown" "playerctl volume .1-")))
+    ("XF86AudioMute" "toggle-mute")))
 
 ;; Set Shell Keys
 (defvar *my-shell-key-commands*
   '(("c" "st")
     ("C-c" "st")
-    ("M-m" "st -e mocp")
-    ("i" "st -e htop")
     ("x" "xkill")
     ("l" "slock")
     ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
@@ -90,27 +81,6 @@
 
 (loop for (key cmd) in *my-special-key-commands* do
   (bind-shell-to-topkey key cmd))
-
-;;;
-;; Misc Bindings
-;;;
-;; Kill/Enable AutoSleep
-(defcommand kill-sleep() ()
-  (message "Killing Autosleep")
-  (run-commands
-   "run-shell-command xset s off"
-   "run-shell-command xset s noblank"
-   "run-shell-command xset -dpms"
-   "run-shell-command pkill xidle"))
-(defcommand enable-sleep() ()
-  (message "Enable Autosleep")
-  (run-commands
-   "run-shell-command xset s on"
-   "run-shell-command xset s blank"
-   "run-shell-command xset dpms"
-   "run-shell-command xidle -delay 5 -nw -program /usr/local/bin/slock -timeout 1800 &"))
-(define-key *root-map* (kbd "Menu") "kill-sleep")
-(define-key *root-map* (kbd "C-Menu") "enable-sleep")
 
 ;; Global keybindings
 (define-key *top-map* (kbd "M-ESC") "mode-line")
