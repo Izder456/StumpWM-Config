@@ -21,6 +21,10 @@
 
 * Table of Contents :TOC_4:
 - [[#disclaimer][DISCLAIMER]]
+- [[#binds][Binds]]
+  - [[#apps][Apps]]
+  - [[#window-management][Window Management]]
+  - [[#misc][Misc]]
 - [[#code-structure][Code Structure]]
   - [[#initlisp][init.lisp]]
     - [[#wm-boilerplate][WM Boilerplate]]
@@ -42,6 +46,49 @@
     - [[#define-jumo-macros][Define Jumo Macros]]
     - [[#set-jump-aliases][Set Jump Aliases]]
     - [[#bind-jump-aliases][Bind Jump Aliases]]
+
+* Binds
+
+/Note/ this may become out of date, please refer to the code for the binds
+
+** Apps
+
+| Prefix | Bind     | Function           |
+|--------+----------+--------------------|
+| =C-t=    | =c OR C-c= | open suckless term |
+| =C-t=    | =f=        | open firefox       |
+| =C-t=    | =F=        | open pcmanfm       |
+| =C-t=    | =x=        | open xkill         |
+| =C-t=    | =E=        | open claws-mail    |
+
+** Window Management
+
+| Prefix | Bind              | Function                                |
+|--------+-------------------+-----------------------------------------|
+| =C-t=    | =s=                 | vertical split                          |
+| =C-t=    | =S=                 | horizontal split                        |
+| =C-t=    | =Q=                 | maximize frame                          |
+| =C-t=    | =C-<Direction-Key>= | swap frame in direction                 |
+| =C-t=    | =m=                 | select window for bulk move             |
+| =C-t=    | =M=                 | move bulk select to group               |
+| =C-t=    | =FnKey=             | switch to group                         |
+| =C-t=    | =n=                 | rotate frame                            |
+| =C-t=    | =R=                 | resize mode                             |
+| =C-t=    | =p=                 | "push" floating window to frame         |
+| =C-t=    | =P=                 | "pop" frame to floating group           |
+| =C-t=    | =M-p=               | "flatten" all floating windows to frame |
+
+** Misc
+
+| Prefix | Bind          | Function                      |
+|--------+---------------+-------------------------------|
+| =NONE=   | =PrintScreen=   | screenshot full               |
+| =NONE=   | =M-PrintScreen= | screenshot interactive select |
+| =NONE=   | =S-PrintScreen= | screenshot active win         |
+| =C-t=    | =Space=         | rofi drun menu                |
+| =C-t=    | =Return=        | rofi window select menu       |
+| =C-t=    | =M-b=           | shuffle background            |
+| =C-t=    | =l=             | lock screen with slock        |
 
 * Code Structure
 ** [[init.lisp][init.lisp]]
