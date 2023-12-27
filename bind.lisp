@@ -9,51 +9,31 @@
 ;; Bind Macro
 ;;;
 
+;; Bind shell command to a specified map (default is *root-map*)
 (defmacro bind-shell-to-key (key command &optional (map *root-map*))
  `(let ((thread (sb-thread:make-thread
                 (lambda ()
                   (define-key ,map (kbd ,key) (concatenate 'string "run-shell-command " ,command))))))
    (sb-thread:join-thread thread)))
 
+;; Bind stumpwm command to a specified map (default is *root-map*)
 (defmacro bind-to-key (key command &optional (map *root-map*))
  `(let ((thread (sb-thread:make-thread
                 (lambda ()
                   (define-key ,map (kbd ,key) ,command)))))
    (sb-thread:join-thread thread)))
 
+;;;
+;; Loop & Bind Macro
+;;;
+
+;; Loop through keybind lists and bind them
 (defmacro loop-and-bind (key-cmd-list bind-macro &optional (map *root-map*))
  `(dolist (key-cmd ,key-cmd-list)
    (let ((thread (sb-thread:make-thread
                   (lambda ()
                     (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
      (sb-thread:join-thread thread))))
-
-;; ;; Bind shell command to a specified map (default is *root-map*)
-;; (defmacro bind-shell-to-key (key command &optional (map *root-map*))
-;;  `(progn
-;;     (let ((thread (sb-thread:make-thread
-;; 		   (lambda ()
-;; 		     (define-key ,map (kbd ,key) (concatenate 'string "run-shell-command " ,command))))))
-;;       (sb-thread:join-thread thread))))
-
-;; ;; Bind stumpwm command to a specified map (default is *root-map*)
-;; (defmacro bind-to-key (key command &optional (map *root-map*))
-;;  `(progn
-;;     (let ((thread (sb-thread:make-thread
-;; 		   (lambda ()
-;; 		     (define-key ,map (kbd ,key) ,command))))))
-;;     (sb-thread:join-thread thread)))
-
-;; ;;;
-;; ;; Loop & Bind Macro
-;; ;;;
-
-;; ;; Loop through keybind lists and bind them
-;; (defmacro loop-and-bind (key-cmd-list bind-macro &optional (map *root-map*))
-;;  `(dolist (key-cmd ,key-cmd-list)
-;;     (sb-thread:make-thread
-;;       (lambda ()
-;;         (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
 
 ;; Push/Pop Current Window Into a Floating group
 (defcommand toggle-float () ()
