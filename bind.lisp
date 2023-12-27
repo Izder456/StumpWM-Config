@@ -6,43 +6,37 @@
 (set-prefix-key (kbd "C-t"))
 
 ;;;
-;; Bind Key Macro
+;; Bind Macro
 ;;;
 
-;; Bind to *root-map*
+;; Bind shell command to a specified map (default is *root-map*)
 (defmacro bind-shell-to-key (key command &optional (map *root-map*))
-  `(define-key ,map (kbd ,key) (concatenate 'string
-                                            "run-shell-command "
-                                            ,command)))
+  `(define-key ,map (kbd ,key) (concatenate 'string "run-shell-command " ,command)))
 
-;; Bind to *root-map*
-(defmacro bind-app-to-key (key command &optional (map *root-map*))
-  `(define-key ,map (kbd ,key) (concatenate 'string
-                                            "run-shell-command "
-                                            ,command)))
+;; Bind stumpwm command to a specified map (default is *root-map*)
+(defmacro bind-to-key (key command &optional (map *root-map*))
+  `(define-key ,map (kbd ,key) ,command))
 
-;; Bind to *top-map*
-(defmacro bind-shell-to-topkey (key command &optional (map *top-map*))
-  `(define-key ,map (kbd ,key) (concatenate 'string
-                                            "run-shell-command "
-                                            ,command)))
+;;;
+;; Loop & Bind Macro
+;;;
 
-;; Bind roft command to *root-map*
-(defmacro bind-rofi-to-key (key command &optional (map *root-map*))
-  `(define-key ,map (kbd ,key) (concatenate 'string
-                                            "run-shell-command "
-                                            '"rofi -i -show-icons -show "
-                                            ,command)))
+;; Loop through keybind lists and bind them
+(defmacro loop-and-bind (key-cmd-list bind-macro &optional (map *root-map*))
+  `(dolist (key-cmd ,key-cmd-list)
+     (,bind-macro (first key-cmd) (second key-cmd) ,map)))
+
+;; Push/Pop Current Window Into a Floating group
+(defcommand toggle-float () ()
+	    (if (float-window-p (current-window))
+		(unfloat-this)
+		(float-this)))
 
 ;;;
 ;; Bind Key Lists
 ;;;
 
 ;; Set Rofi Keys
-(defvar *my-rofi-key-commands*
-  '(("SPC" "drun")
-    ("RET" "window")))
-
 ;; Set Special keys
 (defvar *my-special-key-commands*
   '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
@@ -65,49 +59,48 @@
   '(("E" "claws-mail")
     ("F" "pcmanfm")))
 
+;; Set Rofi Keys
+(defvar *my-rofi-key-commands*
+  '(("SPC" "rofi -i -show-icons -show drun")
+    ("RET" "rofi -i -show-icons -show window")))
+
+;; Raw StumpWM Window-managing Commands
+(defvar *my-wm-window-commands*
+  '(("M-ESC" "mode-line")
+    ("M-q" "quit")
+    ("m" "mark")
+    ("M" "gmove-marked")
+    ("C-Up" "exchange-direction up")
+    ("C-Down" "exchange-direction down")
+    ("C-Left" "exchange-direction left")
+    ("C-Right" "exchange-direction right")
+    ("p" "toggle-float")
+    ("M-p" "flatten-floats")))
+
+;; Raw StumpWM Module Commands
+(defvar *my-wm-module-commands*
+  '(("f" "browse")
+    ("s-e" "emacs-daemon-kill-force")
+    ("e" "swm-emacs")
+    ("C-e" "swm-emacs")))
+
 ;;;
 ;; Loop & Bind with Macros from earlier
 ;;;
+;; Bind special keys to *top-map*
+(loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*)
 
-;; Loop through keybind lists
-(loop for (key cmd) in *my-rofi-key-commands* do
-  (bind-rofi-to-key key cmd))
+;; Bind shell keys to *root-map*
+(loop-and-bind *my-shell-key-commands* bind-shell-to-key)
 
-(loop for (key cmd) in *my-shell-key-commands* do
-  (bind-shell-to-key key cmd))
+;; Bind app keys to *root-map*
+(loop-and-bind *my-app-key-commands* bind-shell-to-key)
 
-(loop for (key cmd) in *my-app-key-commands* do
-  (bind-app-to-key key cmd))
+;; Bind rofi keys to *root-map*
+(loop-and-bind *my-rofi-key-commands* bind-shell-to-key)
 
-(loop for (key cmd) in *my-special-key-commands* do
-  (bind-shell-to-topkey key cmd))
+;; Bind window management command keys to *root-map*
+(loop-and-bind *my-wm-window-commands* bind-to-key)
 
-;; Global keybindings
-(define-key *top-map* (kbd "M-ESC") "mode-line")
-(define-key *root-map* (kbd "M-q") "quit")
-
-;; Window movement/swapping
-(define-key *root-map* (kbd "m") "mark")
-(define-key *root-map* (kbd "M") "gmove-marked")
-(define-key *root-map* (kbd "C-Up") "exchange-direction up")
-(define-key *root-map* (kbd "C-Down") "exchange-direction down")
-(define-key *root-map* (kbd "C-Left") "exchange-direction left")
-(define-key *root-map* (kbd "C-Right") "exchange-direction right")
-
-;; Browser
-(define-key *root-map* (kbd "f") "browse")
-
-;; Push/Pop Current Window Into a Floating group
-(defcommand toggle-float () ()
-	    (if (float-window-p (current-window))
-		(unfloat-this)
-		(float-this)))
-(define-key *root-map* (kbd "p") "toggle-float")
-
-;; Flatten all flating windows into tiled frames
-(define-key *root-map* (kbd "M-p") "flatten-floats")
-
-;; EMACS!!
-(define-key *top-map* (kbd "s-e") "emacs-daemon-kill-force")
-(define-key *root-map* (kbd "e") "swm-emacs")
-(define-key *root-map* (kbd "C-e") "swm-emacs")
+;; Bind module command keys to *root-map*
+(loop-and-bind *my-wm-module-commands* bind-to-key)
