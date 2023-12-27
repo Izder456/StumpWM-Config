@@ -55,15 +55,15 @@
 
 ** Apps
 
-| Prefix | Bind       | Function                                |
-|--------+------------+-----------------------------------------|
+| Prefix | Bind     | Function                                |
+|--------+----------+-----------------------------------------|
 | =C-t=    | =c= /OR/ =C-c= | open suckless term                      |
-| =C-t=    | =f=          | open firefox                            |
-| =C-t=    | =F=          | open pcmanfm                            |
-| =C-t=    | =x=          | open xkill (like force-quit on macOS X) |
-| =C-t=    | =E=          | open claws-mail                         |
-| =C-t= | =e= /OR/ =C-e= | open emacs daemon /OR/ open client |
-| =C-t= | =s-e= | force kill emacs daemon |
+| =C-t=    | =f=        | open firefox                            |
+| =C-t=    | =F=        | open pcmanfm                            |
+| =C-t=    | =x=        | open xkill (like force-quit on macOS X) |
+| =C-t=    | =E=        | open claws-mail                         |
+| =C-t=    | =e= /OR/ =C-e= | open emacs daemon /OR/ open client        |
+| =C-t=    | =s-e=      | force kill emacs daemon                 |
 
 ** Window Management
 
@@ -96,7 +96,7 @@
 | =C-t=    | =Return=        | rofi window select menu         |
 | =C-t=    | =M-b=           | shuffle background              |
 | =C-t=    | =l=             | lock screen with slock          |
-| =NONE= | =M-Escape=      | Toggle Modeline                 |
+| =NONE=   | =M-Escape=      | Toggle Modeline                 |
 | =NONE=   | =M-C-s=         | Search Duckduckgo for selection |
 | =NONE=   | =M-s=           | Search Duckduckgo for prompt    |
 | =NONE=   | =M-C-l=         | Search LibreY for selection     |
@@ -220,7 +220,6 @@ This is the first thing the WM Loads.
 ;; Set env vars
 (setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin")
 (setf (getenv "PAGER") "most")
-(setf (getenv "PKG_PATH") "https://cdn.OpenBSD.org/pub/OpenBSD/snapshots/packages/amd64")
 #+END_SRC
 
 *** Modules
@@ -446,11 +445,17 @@ Handling bindings
 
 ;; Bind shell command to a specified map (default is *root-map*)
 (defmacro bind-shell-to-key (key command &optional (map *root-map*))
-  `(define-key ,map (kbd ,key) (concatenate 'string "run-shell-command " ,command)))
+ `(let ((thread (sb-thread:make-thread
+                (lambda ()
+                  (define-key ,map (kbd ,key) (concatenate 'string "run-shell-command " ,command))))))
+   (sb-thread:join-thread thread)))
 
 ;; Bind stumpwm command to a specified map (default is *root-map*)
 (defmacro bind-to-key (key command &optional (map *root-map*))
-  `(define-key ,map (kbd ,key) ,command))
+ `(let ((thread (sb-thread:make-thread
+                (lambda ()
+                  (define-key ,map (kbd ,key) ,command)))))
+   (sb-thread:join-thread thread)))
 
 ;;;
 ;; Loop & Bind Macro
@@ -458,8 +463,11 @@ Handling bindings
 
 ;; Loop through keybind lists and bind them
 (defmacro loop-and-bind (key-cmd-list bind-macro &optional (map *root-map*))
-  `(dolist (key-cmd ,key-cmd-list)
-     (,bind-macro (first key-cmd) (second key-cmd) ,map)))
+ `(dolist (key-cmd ,key-cmd-list)
+   (let ((thread (sb-thread:make-thread
+                  (lambda ()
+                    (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
+     (sb-thread:join-thread thread))))
 #+END_SRC
 
 *** Define toggle-float command
@@ -467,9 +475,11 @@ Handling bindings
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Push/Pop Current Window Into a Floating group
 (defcommand toggle-float () ()
-	    (if (float-window-p (current-window))
-		(unfloat-this)
-		(float-this)))
+  (sb-thread:make-thread
+   (lambda ()
+     (if (float-window-p (current-window))
+         (unfloat-this)
+         (float-this)))))
 #+END_SRC
 
 *** Define Bind Keylists
@@ -479,7 +489,6 @@ Handling bindings
 ;; Bind Key Lists
 ;;;
 
-;; Set Rofi Keys
 ;; Set Special keys
 (defvar *my-special-key-commands*
   '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
@@ -526,7 +535,6 @@ Handling bindings
     ("s-e" "emacs-daemon-kill-force")
     ("e" "swm-emacs")
     ("C-e" "swm-emacs")))
-
 #+END_SRC
 
 *** Loop Bind Keylists
