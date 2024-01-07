@@ -3,21 +3,21 @@
 ;;;
 
 ;; Term Jump commands
-(defmacro make-term-jump (name prefix)
-  `(defcommand ,(intern name) (search)
-     ((:rest ,(concatenate 'string name " termsearch: ")))
-     (nsubstitute #\+ #\Space search)
-     (run-shell-command (concatenate 'string ,prefix search))))
+(defmacro make-term-jump (name command term)
+ `(defcommand ,(intern name) (search)
+    ((:rest ,(concatenate 'string name " termsearch: ")))
+    (nsubstitute #\+ #\Space search)
+    (run-shell-command (format nil "~a -e sh -c '~a ~a | most'" ,term ,command search))))
 
 ;;;
 ;; Define Jumps
 ;;;
 
 ;; Define Terminal Jumps
-(make-term-jump "mansearch" "xterm -hold -e apropos ")
-(make-term-jump "manpage" "xterm -hold -e man ")
-(make-term-jump "pkgname" "xterm -hold -e pkg_info -Q ")
-(make-term-jump "pkgloc" "xterm -hold -e pkg_locate ")
+(make-term-jump "mansearch" "apropos" "st")
+(make-term-jump "manpage" "man" "st")
+(make-term-jump "pkgname" "pkg_info -Q" "st")
+(make-term-jump "pkgloc" "pkg_locate" "st")
 
 ;;;
 ;; Bind Jump Defines from Earlier

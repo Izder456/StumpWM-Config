@@ -209,27 +209,27 @@ restore it's always-on-top state afterwords"
 
 ;; Break out modeline formatting
 (defvar group-fmt (list
-                   "^n%g " ;; Default
+                   "^n%g" ;; Default
                    ))
 (defvar win-fmt (list
-                 "^n%v ^>^7 " ;; Default -> Right Allign
+                 "^n%v ^>^7" ;; Default -> Right Allign
                  ))
 (defvar status-fmt (list
                     "^n" ;; Default
-                    "| " "%h " ;; Hostname
-                    "| " "%B " ;; Battery
-                    "| " '(:eval (show-temp)) ;; Cpu Temp
-                    "| " "%d |" ;; Date
+                    "|" "%h " ;; Hostname
+                    "|" "%B " ;; Battery
+                    "|" '(:eval (show-temp)) ;; Cpu Temp
+                    "|" "%d |" ;; Date
                     ))
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
-      (list "^b( " ;; Yellow
+      (list "^b(" ;; Yellow
             group-fmt
-            "^1[ " ;; Red
+            "^1[" ;; Red
             win-fmt
             "^1 ]" ;; Red
-            "^5[ " ;; Magenta
+            "^5[" ;; Magenta
             status-fmt
             "^5 ]" ;; Magenta
             "^3^b)" ;; Yellow

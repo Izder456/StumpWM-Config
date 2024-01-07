@@ -364,27 +364,27 @@ restore it's always-on-top state afterwords"
 
 ;; Break out modeline formatting
 (defvar group-fmt (list
-                   "^n%g " ;; Default
+                   "^n%g" ;; Default
                    ))
 (defvar win-fmt (list
-                 "^n%v ^>^7 " ;; Default -> Right Allign
+                 "^n%v ^>^7" ;; Default -> Right Allign
                  ))
 (defvar status-fmt (list
                     "^n" ;; Default
-                    "| " "%h " ;; Hostname
-                    "| " "%B " ;; Battery
-                    "| " '(:eval (show-temp)) ;; Cpu Temp
-                    "| " "%d |" ;; Date
+                    "|" "%h " ;; Hostname
+                    "|" "%B " ;; Battery
+                    "|" '(:eval (show-temp)) ;; Cpu Temp
+                    "|" "%d |" ;; Date
                     ))
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
-      (list "^b( " ;; Yellow
+      (list "^b(" ;; Yellow
             group-fmt
-            "^1[ " ;; Red
+            "^1[" ;; Red
             win-fmt
             "^1 ]" ;; Red
-            "^5[ " ;; Magenta
+            "^5[" ;; Magenta
             status-fmt
             "^5 ]" ;; Magenta
             "^3^b)" ;; Yellow
@@ -574,11 +574,11 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;;;
 
 ;; Term Jump commands
-(defmacro make-term-jump (name prefix)
-  `(defcommand ,(intern name) (search)
-     ((:rest ,(concatenate 'string name " termsearch: ")))
-     (nsubstitute #\+ #\Space search)
-     (run-shell-command (concatenate 'string ,prefix search))))
+(defmacro make-term-jump (name command term)
+ `(defcommand ,(intern name) (search)
+    ((:rest ,(concatenate 'string name " termsearch: ")))
+    (nsubstitute #\+ #\Space search)
+    (run-shell-command (format nil "~a -e sh -c '~a ~a | most'" ,term ,command search))))
 #+END_SRC
 
 *** Set Jump Aliases
@@ -589,10 +589,10 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;;;
 
 ;; Define Terminal Jumps
-(make-term-jump "mansearch" "xterm -hold -e apropos ")
-(make-term-jump "manpage" "xterm -hold -e man ")
-(make-term-jump "pkgname" "xterm -hold -e pkg_info -Q ")
-(make-term-jump "pkgloc" "xterm -hold -e pkg_locate ")
+(make-term-jump "mansearch" "apropos" "st")
+(make-term-jump "manpage" "man" "st")
+(make-term-jump "pkgname" "pkg_info -Q" "st")
+(make-term-jump "pkgloc" "pkg_locate" "st")
 #+END_SRC
 
 *** Bind Jump Aliases
