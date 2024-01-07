@@ -22,8 +22,8 @@
 (setf searchengines:*search-browser-executable* "firefox-esr")
 
 ;; Set Search Engine Params
-(defparameter *URL-DDG* "https://duckduckgo.com/s?q=~a")
-(defparameter *URL-LIBRE* "https://search.ahwx.org/search?q=~a")
+(defparameter *URL-DDG* "https://duckduckgo.com/?q=~a")
+(defparameter *URL-LIBRE* "https://search.ahwx.org/search.php?q=~a")
 (defparameter *URL-PORTS* "https://openports.eu/search?q=~a")
 
 ;; Set Search Selects
