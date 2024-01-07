@@ -182,7 +182,7 @@ restore it's always-on-top state afterwords"
 
 ;; Show the temperature
 (defun show-temp ()
-  (run-shell-command-and-format "sysctl -n hw.sensors.cpu0.temp0"))
+  (concatenate " " (run-shell-command-and-format "sysctl -n hw.sensors.cpu0.temp0")))
 
 ;; Show the window title
 (defun show-window-title ()
@@ -201,22 +201,22 @@ restore it's always-on-top state afterwords"
                  ))
 (defvar status-fmt (list
                     "^n" ;; Default
-                    "|" "%h " ;; Hostname
-                    "|" "%B " ;; Battery
+                    "|" " %h " ;; Hostname
+                    "|" " %B " ;; Battery
                     "|" '(:eval (show-temp)) ;; Cpu Temp
-                    "|" "%d |" ;; Date
+                    "|" " %d " ;; Date
                     ))
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
       (list "^b(" ;; Yellow
             group-fmt
-            "^1[" ;; Red
+            "^1[ " ;; Red
             win-fmt
-            "^1 ]" ;; Red
+            "^1] " ;; Red
             "^5[" ;; Magenta
             status-fmt
-            "^5 ]" ;; Magenta
+            "^5]" ;; Magenta
             "^3^b)" ;; Yellow
             ))
 

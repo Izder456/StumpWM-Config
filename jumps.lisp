@@ -31,8 +31,8 @@
 (searchengines:make-searchengine-prompt "search-ddg-prompt" "DuckDuckGo" *URL-DDG* "DuckDuckGo search" :map *top-map* :key "M-s")
 (searchengines:make-searchengine-selection "search-libre-selection" *URL-LIBRE* "LibreY search" :map *top-map* :key "M-C-l")
 (searchengines:make-searchengine-prompt "search-libre-prompt" "LibreY" *URL-LIBRE* "LibreY search" :map *top-map* :key "M-l")
-(searchengines:make-searchengine-selection "search-ports-prompt" "Ports" *URL-PORTS* "Ports Search" :map *top-map* :key "M-C-o")
-(searchengines:make-searchengine-prompt "search-ports-prompt" *URL-PORTS* "Ports Search" :map *top-map* :key "M-o")
+(searchengines:make-searchengine-selection "search-ports-selection" *URL-PORTS* "Ports Search" :map *top-map* :key "M-C-o")
+(searchengines:make-searchengine-prompt "search-ports-prompt" "Ports" *URL-PORTS* "Ports Search" :map *top-map* :key "M-o")
 
 ;;;
 ;; Define Jumps
