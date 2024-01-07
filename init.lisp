@@ -193,6 +193,11 @@ restore it's always-on-top state afterwords"
 ;;;
 
 ;; Break out modeline formatting
+
+;; Constants
+(defvar pipe "|")
+
+;; Format Lists
 (defvar group-fmt (list
                    "^n%g" ;; Default
                    ))
@@ -200,18 +205,18 @@ restore it's always-on-top state afterwords"
                  "^n%v ^>^7" ;; Default -> Right Allign
                  ))
 (defvar status-fmt (list
-                    "^n" ;; Default
-                    "|" " %h " ;; Hostname
-                    "|" " %B " ;; Battery
-                    "|" '(:eval (show-temp)) ;; Cpu Temp
-                    "|" " %d " ;; Date
+                    "^n" pipe ;; Default
+                    " %h " pipe ;; Hostname
+                    " %B " pipe ;; Battery
+                    '(:eval (show-temp)) pipe;; Cpu Temp
+                    " %d " pipe ;; Date
                     ))
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
       (list "^b(" ;; Yellow
             group-fmt
-            "^1[ " ;; Red
+            "^1 [ " ;; Red
             win-fmt
             "^1] " ;; Red
             "^5[" ;; Magenta
