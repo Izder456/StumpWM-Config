@@ -113,21 +113,6 @@ restore it's always-on-top state afterwords"
 ;; Emacs
 (load-module "swm-emacs")
 
-;; Browser
-(load-module "browse")
-(setf browse::*homepage* "http://68k.news")
-
-;; Web Searches
-(load-module "searchengines")
-(setf searchengines:*search-browser-executable* "firefox-esr")
-;; Set Search Engine Params
-(defparameter *URL-DDG* "https://duckduckgo.com/s?num=100&q=~a")
-(defparameter *URL-LIBRE* "https://search.ahwx.org/search?num=100&q=~a")
-;; Set Search Selects
-(searchengines:make-searchengine-selection "search-ddg-selection" *URL-DDG* "DuckDuckGo search" :map *top-map* :key "M-C-s")
-(searchengines:make-searchengine-prompt "search-ddg-prompt" "DuckDuckGo" *URL-DDG* "DuckDuckGo search" :map *top-map* :key "M-s")
-(searchengines:make-searchengine-selection "search-libre-selection" *URL-LIBRE* "LibreY search" :map *top-map* :key "M-C-l")
-(searchengines:make-searchengine-prompt "search-libre-prompt" "LibreY" *URL-LIBRE* "LibreY search" :map *top-map* :key "M-l")
 
 ;; load-path
 (add-to-load-path "~/.stumpwm.d/extras/scratchpad")
