@@ -182,7 +182,7 @@ restore it's always-on-top state afterwords"
 
 ;; Show the temperature
 (defun show-temp ()
-  (concatenate " " (run-shell-command-and-format "sysctl -n hw.sensors.cpu0.temp0")))
+  (run-shell-command-and-format "sysctl -n hw.sensors.cpu0.temp0"))
 
 ;; Show the window title
 (defun show-window-title ()
@@ -208,7 +208,7 @@ restore it's always-on-top state afterwords"
                     "^n" pipe ;; Default
                     " %h " pipe ;; Hostname
                     " %B " pipe ;; Battery
-                    '(:eval (show-temp)) pipe;; Cpu Temp
+                    " " '(:eval (show-temp)) pipe;; Cpu Temp
                     " %d " pipe ;; Date
                     ))
 
