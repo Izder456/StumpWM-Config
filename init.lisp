@@ -90,50 +90,51 @@
 
 ;; Init modules
 (init-load-path *module-dir*)
+(add-to-load-path "~/.stumpwm.d/extras/scratchpad")
 
-;; GAAAAAPs
-(load-module "swm-gaps")
-;; Set Gaps
+(defvar *modulenames*
+	 (list "swm-gaps"
+	       "swm-emacs"
+	       "scratchpad"
+	       "hostname"
+	       "battery-portable"
+	       "stumpwm-sndioctl"
+	       "browse"
+	       "searchengines"))
+
+(dolist (modulename *modulenames*)
+  (load-module modulename))
+
+;;
+; Module Settings
+;;
+
+;; swm-gapes
+; Set Gaps
 (setf swm-gaps:*inner-gaps-size* 8)
 (setf swm-gaps:*outer-gaps-size* 10)
-;; Turn em on
+; Turn em on
 (swm-gaps:toggle-gaps-on)
 
-;;; Moving the mouse for me
-;; Used for warping the cursor
-(load-module "beckon")
-(defmacro with-focus-lost (&body body)
-  "Make sure WIN is on the top level while the body is running and
-restore it's always-on-top state afterwords"
-  `(progn (banish)
-          ,@body
-          (when (current-window)
-            (beckon:beckon))))
-
-;; Emacs
-(load-module "swm-emacs")
-
-
-;; load-path
-(add-to-load-path "~/.stumpwm.d/extras/scratchpad")
-;; Scratchpad
-(load-module "scratchpad")
+;; scratchpad
+; define default scratchpad term
 (defcommand scratchpad-term () ()
   (scratchpad:toggle-floating-scratchpad "term" "st"
                                          :initial-gravity :center
                                          :initial-width 720
                                          :initial-height 480))
-;; Bind Scratchpad to Super+t
+; Bind Scratchpad to Super+t
 (define-key *top-map* (kbd "s-t") "scratchpad-term")
 
-;; Hostname
-(load-module "hostname")
+;;;
+;; Load in other files
+;;;
 
-;; Battery
-(load-module "battery-portable")
+;; binds
+(load "~/.stumpwm.d/bind.lisp")
 
-;; Cleaner SNDIO interface
-(load-module "stumpwm-sndioctl")
+;; jumps
+(load "~/.stumpwm.d/jumps.lisp")
 
 ;; Rename and create new groups
 (grename "Ness")
@@ -185,11 +186,10 @@ restore it's always-on-top state afterwords"
 ;;;
 
 ;; Break out modeline formatting
-
-;; Constants
+; Constants
 (defvar pipe "|")
 
-;; Format Lists
+; Format Lists
 (defvar group-fmt (list
                    "^n%g" ;; Default
                    ))
@@ -204,7 +204,7 @@ restore it's always-on-top state afterwords"
                     " %d " pipe ;; Date
                     ))
 
-;; Screen mode line format
+; Screen mode line format
 (setf *screen-mode-line-format*
       (list "^b(" ;; Yellow
             group-fmt
@@ -217,7 +217,7 @@ restore it's always-on-top state afterwords"
             "^3^b)" ;; Yellow
             ))
 
-;; Format Modeline
+; Format Modeline
 (setf *mode-line-background-color* iz-black
       *mode-line-foreground-color* iz-softyellow
       *mode-line-border-color* iz-white
@@ -228,16 +228,6 @@ restore it's always-on-top state afterwords"
 
 ;; Toggle mode line display
 (toggle-mode-line (current-screen) (current-head))
-
-;;;
-;; Load in other files
-;;;
-
-;; binds
-(load "~/.stumpwm.d/bind.lisp")
-
-;; jumps
-(load "~/.stumpwm.d/jumps.lisp")
 
 ;; cleanup/autostart
 (load "~/.stumpwm.d/autostart.lisp")

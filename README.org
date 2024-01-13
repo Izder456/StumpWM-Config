@@ -34,9 +34,10 @@
     - [[#styling][Styling]]
     - [[#environment-variables][Environment Variables]]
     - [[#modules][Modules]]
+    - [[#load-in-bindsjumps][Load in binds/jumps]]
     - [[#window-groups][Window Groups]]
     - [[#modeline-formatting][Modeline Formatting]]
-    - [[#autostarts][Autostarts]]
+    - [[#cleanup-and-autostarts][Cleanup and Autostarts]]
   - [[#bindlisp][bind.lisp]]
     - [[#set-key-prefix][Set Key Prefix]]
     - [[#define-key-macros][Define Key Macros]]
@@ -234,50 +235,55 @@ This is the first thing the WM Loads.
 
 ;; Init modules
 (init-load-path *module-dir*)
+(add-to-load-path "~/.stumpwm.d/extras/scratchpad")
 
-;; GAAAAAPs
-(load-module "swm-gaps")
-;; Set Gaps
+(defvar *modulenames*
+	 (list "swm-gaps"
+	       "swm-emacs"
+	       "scratchpad"
+	       "hostname"
+	       "battery-portable"
+	       "stumpwm-sndioctl"
+	       "browse"
+	       "searchengines"))
+
+(dolist (modulename *modulenames*)
+  (load-module modulename))
+
+;;
+; Module Settings
+;;
+
+;; swm-gapes
+; Set Gaps
 (setf swm-gaps:*inner-gaps-size* 8)
 (setf swm-gaps:*outer-gaps-size* 10)
-;; Turn em on
+; Turn em on
 (swm-gaps:toggle-gaps-on)
 
-;;; Moving the mouse for me
-;; Used for warping the cursor
-(load-module "beckon")
-(defmacro with-focus-lost (&body body)
-  "Make sure WIN is on the top level while the body is running and
-restore it's always-on-top state afterwords"
-  `(progn (banish)
-          ,@body
-          (when (current-window)
-            (beckon:beckon))))
-
-;; Emacs
-(load-module "swm-emacs")
-
-
-;; load-path
-(add-to-load-path "~/.stumpwm.d/extras/scratchpad")
-;; Scratchpad
-(load-module "scratchpad")
+;; scratchpad
+; define default scratchpad term
 (defcommand scratchpad-term () ()
   (scratchpad:toggle-floating-scratchpad "term" "st"
                                          :initial-gravity :center
                                          :initial-width 720
                                          :initial-height 480))
-;; Bind Scratchpad to Super+t
+; Bind Scratchpad to Super+t
 (define-key *top-map* (kbd "s-t") "scratchpad-term")
+#+END_SRC
 
-;; Hostname
-(load-module "hostname")
+*** Load in binds/jumps
 
-;; Battery
-(load-module "battery-portable")
+#+BEGIN_SRC lisp :tangle init.lisp
+;;;
+;; Load in other files
+;;;
 
-;; Cleaner SNDIO interface
-(load-module "stumpwm-sndioctl")
+;; binds
+(load "~/.stumpwm.d/bind.lisp")
+
+;; jumps
+(load "~/.stumpwm.d/jumps.lisp")
 #+END_SRC
 
 *** Window Groups
@@ -338,11 +344,10 @@ restore it's always-on-top state afterwords"
 ;;;
 
 ;; Break out modeline formatting
-
-;; Constants
+; Constants
 (defvar pipe "|")
 
-;; Format Lists
+; Format Lists
 (defvar group-fmt (list
                    "^n%g" ;; Default
                    ))
@@ -357,7 +362,7 @@ restore it's always-on-top state afterwords"
                     " %d " pipe ;; Date
                     ))
 
-;; Screen mode line format
+; Screen mode line format
 (setf *screen-mode-line-format*
       (list "^b(" ;; Yellow
             group-fmt
@@ -370,7 +375,7 @@ restore it's always-on-top state afterwords"
             "^3^b)" ;; Yellow
             ))
 
-;; Format Modeline
+; Format Modeline
 (setf *mode-line-background-color* iz-black
       ,*mode-line-foreground-color* iz-softyellow
       ,*mode-line-border-color* iz-white
@@ -383,19 +388,9 @@ restore it's always-on-top state afterwords"
 (toggle-mode-line (current-screen) (current-head))
 #+END_SRC
 
-*** Autostarts
+*** Cleanup and Autostarts
 
 #+BEGIN_SRC lisp :tangle init.lisp
-;;;
-;; Load in other files
-;;;
-
-;; binds
-(load "~/.stumpwm.d/bind.lisp")
-
-;; jumps
-(load "~/.stumpwm.d/jumps.lisp")
-
 ;; cleanup/autostart
 (load "~/.stumpwm.d/autostart.lisp")
 #+END_SRC
@@ -565,26 +560,35 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ; Browser
 ;;
 
-;; We need this module
-(load-module "browse")
+;; Module Settings
+; Set homepage
 (setf browse::*homepage* "http://68k.news")
 
-;; Web Searches
-(load-module "searchengines")
+; Set browser exe
 (setf searchengines:*search-browser-executable* "firefox-esr")
+
+;; Macro for search engine defines
+(defmacro define-searchengine (selection-name prompt-name url description key-selection key-prompt)
+ `(progn
+    (searchengines:make-searchengine-selection ,selection-name ,url ,description :map *top-map* :key ,key-selection)
+    (searchengines:make-searchengine-prompt ,prompt-name ,description ,url ,description :map *top-map* :key ,key-prompt)))
 
 ;; Set Search Engine Params
 (defparameter *URL-DDG* "https://duckduckgo.com/?q=~a")
 (defparameter *URL-LIBRE* "https://search.ahwx.org/search.php?q=~a")
 (defparameter *URL-PORTS* "https://openports.eu/search?q=~a")
 
+(define-searchengine "search-ddg-selection" "search-ddg-prompt" *URL-DDG* "DuckDuckGo search" "M-C-s" "M-s")
+(define-searchengine "search-libre-selection" "search-libre-prompt" *URL-LIBRE* "LibreY search" "M-C-l" "M-l")
+(define-searchengine "search-ports-selection" "search-ports-prompt" *URL-PORTS* "Ports Search" "M-C-o" "M-o")
+
 ;; Set Search Selects
-(searchengines:make-searchengine-selection "search-ddg-selection" *URL-DDG* "DuckDuckGo search" :map *top-map* :key "M-C-s")
-(searchengines:make-searchengine-prompt "search-ddg-prompt" "DuckDuckGo" *URL-DDG* "DuckDuckGo search" :map *top-map* :key "M-s")
-(searchengines:make-searchengine-selection "search-libre-selection" *URL-LIBRE* "LibreY search" :map *top-map* :key "M-C-l")
-(searchengines:make-searchengine-prompt "search-libre-prompt" "LibreY" *URL-LIBRE* "LibreY search" :map *top-map* :key "M-l")
-(searchengines:make-searchengine-selection "search-ports-selection" *URL-PORTS* "Ports Search" :map *top-map* :key "M-C-o")
-(searchengines:make-searchengine-prompt "search-ports-prompt" "Ports" *URL-PORTS* "Ports Search" :map *top-map* :key "M-o")
+;; (searchengines:make-searchengine-selection "search-ddg-selection" *URL-DDG* "DuckDuckGo search" :map *top-map* :key "M-C-s")
+;; (searchengines:make-searchengine-prompt "search-ddg-prompt" "DuckDuckGo" *URL-DDG* "DuckDuckGo search" :map *top-map* :key "M-s")
+;; (searchengines:make-searchengine-selection "search-libre-selection" *URL-LIBRE* "LibreY search" :map *top-map* :key "M-C-l")
+;; (searchengines:make-searchengine-prompt "search-libre-prompt" "LibreY" *URL-LIBRE* "LibreY search" :map *top-map* :key "M-l")
+;; (searchengines:make-searchengine-selection "search-ports-selection" *URL-PORTS* "Ports Search" :map *top-map* :key "M-C-o")
+;; (searchengines:make-searchengine-prompt "search-ports-prompt" "Ports" *URL-PORTS* "Ports Search" :map *top-map* :key "M-o")
 #+END_SRC
 
 *** Set Jump Aliases
@@ -637,14 +641,14 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 (play-startup-sound)
 
 ;; Finish Threads
-(defvar *my-thread-list*
+(defvar *bind-thread-list*
   (list *my-special-key-thread*
 	,*my-shell-key-thread*
 	,*my-app-key-thread*
 	,*my-rofi-key-thread*
 	,*my-wm-window-thread*
 	,*my-wm-module-thread*))
-(dolist (thread *my-thread-list*)
-  (sb-thread:join-thread thread))
+(dolist (threadname *bind-thread-list*)
+  (sb-thread:join-thread threadname))
 #+END_SRC
 -----

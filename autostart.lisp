@@ -15,12 +15,12 @@
 (play-startup-sound)
 
 ;; Finish Threads
-(defvar *my-thread-list*
+(defvar *bind-thread-list*
   (list *my-special-key-thread*
 	*my-shell-key-thread*
 	*my-app-key-thread*
 	*my-rofi-key-thread*
 	*my-wm-window-thread*
 	*my-wm-module-thread*))
-(dolist (thread *my-thread-list*)
-  (sb-thread:join-thread thread))
+(dolist (threadname *bind-thread-list*)
+  (sb-thread:join-thread threadname))
