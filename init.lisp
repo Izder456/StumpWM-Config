@@ -135,14 +135,6 @@ restore it's always-on-top state afterwords"
 ;; Cleaner SNDIO interface
 (load-module "stumpwm-sndioctl")
 
-;; Play Startup sound
-(defun play-startup-sound ()
-  (run-shell-command "sleep 1 && ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
-
-(defun set-default-sounds ()
-  (run-shell-command "sndioctl input.level=0.74")
-  (run-shell-command "sndioctl output.level=1.00"))
-
 ;; Rename and create new groups
 (grename "Ness")
 (gnewbg "Paula")
@@ -247,6 +239,5 @@ restore it's always-on-top state afterwords"
 ;; jumps
 (load "~/.stumpwm.d/jumps.lisp")
 
-;; Startup Sound
-(set-default-sounds)
-(play-startup-sound)
+;; cleanup/autostart
+(load "~/.stumpwm.d/autostart.lisp")

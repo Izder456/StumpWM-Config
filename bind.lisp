@@ -11,17 +11,11 @@
 
 ;; Bind shell command to a specified map (default is *root-map*)
 (defmacro bind-shell-to-key (key command &optional (map *root-map*))
- `(let ((thread (sb-thread:make-thread
-                (lambda ()
-                  (define-key ,map (kbd ,key) (concatenate 'string "run-shell-command " ,command))))))
-   (sb-thread:join-thread thread)))
+  `(define-key ,map (kbd ,key) (concatenate 'string "run-shell-command " ,command)))
 
 ;; Bind stumpwm command to a specified map (default is *root-map*)
 (defmacro bind-to-key (key command &optional (map *root-map*))
- `(let ((thread (sb-thread:make-thread
-                (lambda ()
-                  (define-key ,map (kbd ,key) ,command)))))
-   (sb-thread:join-thread thread)))
+  `(define-key ,map (kbd ,key) ,command))
 
 ;;;
 ;; Loop & Bind Macro
@@ -29,11 +23,9 @@
 
 ;; Loop through keybind lists and bind them
 (defmacro loop-and-bind (key-cmd-list bind-macro &optional (map *root-map*))
- `(dolist (key-cmd ,key-cmd-list)
-   (let ((thread (sb-thread:make-thread
-                  (lambda ()
-                    (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
-     (sb-thread:join-thread thread))))
+  `(sb-thread:make-thread
+    (lambda ()
+      (dolist (key-cmd ,key-cmd-list) (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
 
 ;; Push/Pop Current Window Into a Floating group
 (defcommand toggle-float () ()
@@ -98,19 +90,25 @@
 ;; Loop & Bind with Macros from earlier
 ;;;
 ;; Bind special keys to *top-map*
-(loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*)
+(defvar *my-special-key-thread*
+ (loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*))
 
 ;; Bind shell keys to *root-map*
-(loop-and-bind *my-shell-key-commands* bind-shell-to-key)
+(defvar *my-shell-key-thread*
+  (loop-and-bind *my-shell-key-commands* bind-shell-to-key))
 
 ;; Bind app keys to *root-map*
-(loop-and-bind *my-app-key-commands* bind-shell-to-key)
+(defvar *my-app-key-thread*
+  (loop-and-bind *my-app-key-commands* bind-shell-to-key))
 
 ;; Bind rofi keys to *root-map*
-(loop-and-bind *my-rofi-key-commands* bind-shell-to-key)
+(defvar *my-rofi-key-thread*
+  (loop-and-bind *my-rofi-key-commands* bind-shell-to-key))
 
 ;; Bind window management command keys to *root-map*
-(loop-and-bind *my-wm-window-commands* bind-to-key)
+(defvar *my-wm-window-thread*
+  (loop-and-bind *my-wm-window-commands* bind-to-key))
 
 ;; Bind module command keys to *root-map*
-(loop-and-bind *my-wm-module-commands* bind-to-key)
+(defvar *my-wm-module-thread*
+  (loop-and-bind *my-wm-module-commands* bind-to-key))

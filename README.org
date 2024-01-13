@@ -34,7 +34,6 @@
     - [[#styling][Styling]]
     - [[#environment-variables][Environment Variables]]
     - [[#modules][Modules]]
-    - [[#play-startup-sound][Play startup sound]]
     - [[#window-groups][Window Groups]]
     - [[#modeline-formatting][Modeline Formatting]]
     - [[#autostarts][Autostarts]]
@@ -49,6 +48,7 @@
     - [[#define-browser-jumps][Define Browser Jumps]]
     - [[#set-jump-aliases][Set Jump Aliases]]
     - [[#bind-jump-aliases][Bind Jump Aliases]]
+  - [[#autostartlisp][autostart.lisp]]
 
 * Binds
 
@@ -102,6 +102,8 @@
 | =NONE=   | =M-s=           | Search Duckduckgo for prompt    |
 | =NONE=   | =M-C-l=         | Search LibreY for selection     |
 | =NONE=   | =M-l=           | Search LibreY for prompt        |
+| =NONE=   | =M-C-o=       | Search Package Web for selection |
+| =NONE=   | =M-o=           | Search Package Web for prompt   |
 | =NONE=   | =M-m=           | Search Manpages                 |
 | =NONE=   | =M-M=           | Open Manpage                    |
 | =NONE=   | =M-p=           | Search Package Name             |
@@ -116,7 +118,7 @@ when a window is in floating mode,
 + you can only mark (and move) frames, so flatten any floating windows before swapping groups
 
 * Code Structure
-** [[init.lisp][init.lisp]]
+** init.lisp
 
 This is the first thing the WM Loads.
 
@@ -278,19 +280,6 @@ restore it's always-on-top state afterwords"
 (load-module "stumpwm-sndioctl")
 #+END_SRC
 
-*** Play startup sound
-
-#+BEGIN_SRC lisp :tangle init.lisp
-;; Play Startup sound
-(defun play-startup-sound ()
-  (run-shell-command "sleep 1 && ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
-
-(defun set-default-sounds ()
-  (run-shell-command "sndioctl input.level=0.74")
-  (run-shell-command "sndioctl output.level=1.00"))
-
-#+END_SRC
-
 *** Window Groups
 
 #+BEGIN_SRC lisp :tangle init.lisp
@@ -407,12 +396,11 @@ restore it's always-on-top state afterwords"
 ;; jumps
 (load "~/.stumpwm.d/jumps.lisp")
 
-;; Startup Sound
-(set-default-sounds)
-(play-startup-sound)
+;; cleanup/autostart
+(load "~/.stumpwm.d/autostart.lisp")
 #+END_SRC
 
-** [[bind.lisp][bind.lisp]]
+** bind.lisp
 
 Handling bindings
 
@@ -436,17 +424,11 @@ Handling bindings
 
 ;; Bind shell command to a specified map (default is *root-map*)
 (defmacro bind-shell-to-key (key command &optional (map *root-map*))
- `(let ((thread (sb-thread:make-thread
-                (lambda ()
-                  (define-key ,map (kbd ,key) (concatenate 'string "run-shell-command " ,command))))))
-   (sb-thread:join-thread thread)))
+  `(define-key ,map (kbd ,key) (concatenate 'string "run-shell-command " ,command)))
 
 ;; Bind stumpwm command to a specified map (default is *root-map*)
 (defmacro bind-to-key (key command &optional (map *root-map*))
- `(let ((thread (sb-thread:make-thread
-                (lambda ()
-                  (define-key ,map (kbd ,key) ,command)))))
-   (sb-thread:join-thread thread)))
+  `(define-key ,map (kbd ,key) ,command))
 
 ;;;
 ;; Loop & Bind Macro
@@ -454,11 +436,9 @@ Handling bindings
 
 ;; Loop through keybind lists and bind them
 (defmacro loop-and-bind (key-cmd-list bind-macro &optional (map *root-map*))
- `(dolist (key-cmd ,key-cmd-list)
-   (let ((thread (sb-thread:make-thread
-                  (lambda ()
-                    (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
-     (sb-thread:join-thread thread))))
+  `(sb-thread:make-thread
+    (lambda ()
+      (dolist (key-cmd ,key-cmd-list) (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
 #+END_SRC
 
 *** Define toggle-float command
@@ -535,25 +515,31 @@ Handling bindings
 ;; Loop & Bind with Macros from earlier
 ;;;
 ;; Bind special keys to *top-map*
-(loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*)
+(defvar *my-special-key-thread*
+ (loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*))
 
 ;; Bind shell keys to *root-map*
-(loop-and-bind *my-shell-key-commands* bind-shell-to-key)
+(defvar *my-shell-key-thread*
+  (loop-and-bind *my-shell-key-commands* bind-shell-to-key))
 
 ;; Bind app keys to *root-map*
-(loop-and-bind *my-app-key-commands* bind-shell-to-key)
+(defvar *my-app-key-thread*
+  (loop-and-bind *my-app-key-commands* bind-shell-to-key))
 
 ;; Bind rofi keys to *root-map*
-(loop-and-bind *my-rofi-key-commands* bind-shell-to-key)
+(defvar *my-rofi-key-thread*
+  (loop-and-bind *my-rofi-key-commands* bind-shell-to-key))
 
 ;; Bind window management command keys to *root-map*
-(loop-and-bind *my-wm-window-commands* bind-to-key)
+(defvar *my-wm-window-thread*
+  (loop-and-bind *my-wm-window-commands* bind-to-key))
 
 ;; Bind module command keys to *root-map*
-(loop-and-bind *my-wm-module-commands* bind-to-key)
+(defvar *my-wm-module-thread*
+  (loop-and-bind *my-wm-module-commands* bind-to-key))
 #+END_SRC
 
-** [[jumps.lisp][jumps.lisp]]
+** jumps.lisp
 
 These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfing
 
@@ -629,4 +615,36 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 (define-key *top-map* (kbd "M-P") "pkgloc")
 #+END_SRC
 
+
+** autostart.lisp
+
+#+BEGIN_SRC lisp :tangle autostart.lisp
+
+;; Start Slynk Server
+(ql:quickload :slynk)
+(slynk:create-server :dont-close t)
+
+;; Play Startup sound
+(defun play-startup-sound ()
+  (run-shell-command "sleep 1 && ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
+
+(defun set-default-sounds ()
+  (run-shell-command "sndioctl input.level=0.74")
+  (run-shell-command "sndioctl output.level=1.00"))
+
+;; Startup Sound
+(set-default-sounds)
+(play-startup-sound)
+
+;; Finish Threads
+(defvar *my-thread-list*
+  (list *my-special-key-thread*
+	,*my-shell-key-thread*
+	,*my-app-key-thread*
+	,*my-rofi-key-thread*
+	,*my-wm-window-thread*
+	,*my-wm-module-thread*))
+(dolist (thread *my-thread-list*)
+  (sb-thread:join-thread thread))
+#+END_SRC
 -----
