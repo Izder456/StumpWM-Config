@@ -1,5 +1,5 @@
 
-#+TITLE: Iz's StumpWM Config
+#+Title: Iz's StumpWM Config
 #+DESCRIPTION: Mainly for personal backups, but if you want 'em, use 'em.
 #+KEYWORDS: org-mode, stumpwm, readme, lisp, izder
 #+PROPERTY: header-args: :tangle ~/.stumpwm.d :mkdirp t
@@ -40,10 +40,13 @@
     - [[#cleanup-and-autostarts][Cleanup and Autostarts]]
   - [[#bindlisp][bind.lisp]]
     - [[#set-key-prefix][Set Key Prefix]]
+    - [[#remove-default-binds][Remove default binds]]
+    - [[#define-new-interactive-keymaps][Define New Interactive Keymaps]]
     - [[#define-key-macros][Define Key Macros]]
     - [[#define-toggle-float-command][Define toggle-float command]]
     - [[#define-bind-keylists][Define Bind Keylists]]
     - [[#loop-bind-keylists][Loop Bind Keylists]]
+    - [[#define-new-keymaps][Define New Keymaps]]
   - [[#jumpslisp][jumps.lisp]]
     - [[#define-jump-macros][Define Jump Macros]]
     - [[#define-browser-jumps][Define Browser Jumps]]
@@ -200,8 +203,9 @@ This is the first thing the WM Loads.
 (set-msg-border-width 4)
 (set-font "-*-spleen-*-*-*-*-12-*-*-*-*-*-*-*")
 
-;; Click-to-focus
-(setf *mouse-focus-policy* :click)
+;; MouseKeys
+(setf *mouse-focus-policy* :click
+      ,*float-window-modifier* :SUPER)
 
 ;; Welcome
 (setq *startup-message* (format nil "^B^8Welcome Izzy!")) ;; Orange
@@ -211,7 +215,6 @@ This is the first thing the WM Loads.
 (set-unfocus-color iz-gray)
 (set-float-focus-color iz-aqua)
 (set-float-unfocus-color iz-softaqua)
-
 #+END_SRC
 
 *** Environment Variables
@@ -256,8 +259,8 @@ This is the first thing the WM Loads.
 
 ;; swm-gapes
 ; Set Gaps
-(setf swm-gaps:*inner-gaps-size* 8)
-(setf swm-gaps:*outer-gaps-size* 10)
+(setf swm-gaps:*inner-gaps-size* 8
+      swm-gaps:*outer-gaps-size* 10)
 ; Turn em on
 (swm-gaps:toggle-gaps-on)
 
@@ -290,26 +293,27 @@ This is the first thing the WM Loads.
 
 #+BEGIN_SRC lisp :tangle init.lisp
 ;; Rename and create new groups
-(grename "Ness")
-(gnewbg "Paula")
-(gnewbg "Jeff")
-(gnewbg "Poo")
+(when *initializing*
+  (grename "Ness")
+  (gnewbg "Paula")
+  (gnewbg "Jeff")
+  (gnewbg "Poo"))
 
 ;; Group format
 (setf *group-format* "%n %t")
 
 ;; Window format
-(setf *window-format* (format NIL "^(:fg \"~A\")<%25t>" iz-softgreen))
-(setf *window-border-style* :tight)
-(setf *normal-border-width* 4)
+(setf *window-format* (format NIL "^(:fg \"~A\")<%25t>" iz-softgreen)
+      ,*window-border-style* :tight
+      ,*normal-border-width* 4)
 
 ;; Time format
 (setf *time-modeline-string* "%a, %b %d @%I:%M%p")
 
 ;; Message window settings
-(setf *message-window-padding* 12)
-(setf *message-window-y-padding* 10)
-(setf *message-window-gravity* :center)
+(setf *message-window-padding* 12
+      ,*message-window-y-padding* 10
+      ,*message-window-gravity* :top)
 
 ;; Input window settings
 (setf *input-window-gravity* :center)
@@ -410,6 +414,33 @@ Handling bindings
 (set-prefix-key (kbd "C-t"))
 #+END_SRC
 
+*** Remove default binds
+
+#+BEGIN_SRC lisp :tangle bind.lisp
+(define-key *root-map* (kbd "c") NIL)
+(define-key *root-map* (kbd "C-c") NIL)
+(define-key *root-map* (kbd "e") NIL)
+#+END_SRC
+
+*** Define New Interactive Keymaps
+
+#+BEGIN_SRC lisp :tangle bind.lisp
+;;;
+;; Make New Keymaps
+;;;
+(defvar *search-map*
+  (let ((map (make-sparse-keymap)))
+    map))
+(defvar *app-map*
+  (let ((map (make-sparse-keymap)))
+    map))
+
+(define-key *root-map* (kbd "M-s") *search-map*)
+(define-key *top-map* (kbd "M-s") *search-map*)
+
+(define-key *root-map* (kbd "M-a") *app-map*)
+(define-key *top-map* (kbd "M-a") *app-map*)
+#+END_SRC
 *** Define Key Macros
 
 #+BEGIN_SRC lisp :tangle bind.lisp
@@ -468,7 +499,6 @@ Handling bindings
 (defvar *my-shell-key-commands*
   '(("c" "st")
     ("C-c" "st")
-    ("x" "xkill")
     ("l" "slock")
     ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
 
@@ -487,6 +517,7 @@ Handling bindings
   '(("M-ESC" "mode-line")
     ("M-q" "quit")
     ("m" "mark")
+    ("x" "xkill")
     ("M" "gmove-marked")
     ("C-Up" "exchange-direction up")
     ("C-Down" "exchange-direction down")
@@ -509,29 +540,53 @@ Handling bindings
 ;;;
 ;; Loop & Bind with Macros from earlier
 ;;;
-;; Bind special keys to *top-map*
-(defvar *my-special-key-thread*
- (loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*))
+
+;; Bind shell keys to *app-map*
+(defvar *my-shell-key-thread*
+  (loop-and-bind *my-shell-key-commands* bind-shell-to-key *app-map*))
+
+;; Bind app keys to *app-map*
+(defvar *my-app-key-thread*
+  (loop-and-bind *my-app-key-commands* bind-shell-to-key *app-map*))
+
+;; Bind rofi keys to *app-map*
+(defvar *my-rofi-key-thread*
+  (loop-and-bind *my-rofi-key-commands* bind-shell-to-key *app-map*))
+
+;; Bind module command keys to *app-map*
+(defvar *my-wm-module-thread*
+  (loop-and-bind *my-wm-module-commands* bind-to-key *app-map*))
 
 ;; Bind shell keys to *root-map*
-(defvar *my-shell-key-thread*
-  (loop-and-bind *my-shell-key-commands* bind-shell-to-key))
+(defvar *my-shell-key-thread2*
+  (loop-and-bind *my-shell-key-commands* bind-shell-to-key *root-map*))
 
 ;; Bind app keys to *root-map*
-(defvar *my-app-key-thread*
-  (loop-and-bind *my-app-key-commands* bind-shell-to-key))
+(defvar *my-app-key-thread2*
+  (loop-and-bind *my-app-key-commands* bind-shell-to-key *root-map*))
 
 ;; Bind rofi keys to *root-map*
-(defvar *my-rofi-key-thread*
-  (loop-and-bind *my-rofi-key-commands* bind-shell-to-key))
+(defvar *my-rofi-key-thread2*
+  (loop-and-bind *my-rofi-key-commands* bind-shell-to-key *root-map*))
+
+;; Bind module command keys to *rootmap*
+(defvar *my-wm-module-thread2*
+  (loop-and-bind *my-wm-module-commands* bind-to-key *root-map*))
+
+;; Bind special keys to *top-map*
+(defvar *my-special-key-thread*
+  (loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*))
 
 ;; Bind window management command keys to *root-map*
 (defvar *my-wm-window-thread*
-  (loop-and-bind *my-wm-window-commands* bind-to-key))
+  (loop-and-bind *my-wm-window-commands* bind-to-key *root-map*))
+#+END_SRC
 
-;; Bind module command keys to *root-map*
-(defvar *my-wm-module-thread*
-  (loop-and-bind *my-wm-module-commands* bind-to-key))
+*** Define New Keymaps
+
+#+BEGIN_SRC lisp :tangle bind.lisp
+(define-key *root-map* (kbd "M-s") '*search-map*)
+(define-key *root-map* (kbd "M-a") '*app-map*)
 #+END_SRC
 
 ** jumps.lisp
@@ -570,8 +625,8 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;; Macro for search engine defines
 (defmacro define-searchengine (selection-name prompt-name url description key-selection key-prompt)
  `(progn
-    (searchengines:make-searchengine-selection ,selection-name ,url ,description :map *top-map* :key ,key-selection)
-    (searchengines:make-searchengine-prompt ,prompt-name ,description ,url ,description :map *top-map* :key ,key-prompt)))
+    (searchengines:make-searchengine-selection ,selection-name ,url ,description :map *search-map* :key ,key-selection)
+    (searchengines:make-searchengine-prompt ,prompt-name ,description ,url ,description :map *search-map* :key ,key-prompt)))
 
 ;; Set Search Engine Params
 (defparameter *URL-DDG* "https://duckduckgo.com/?q=~a")
@@ -605,12 +660,11 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;;;
 
 ;; Keybindings for Terminal Jumps
-(define-key *top-map* (kbd "M-m") "mansearch")
-(define-key *top-map* (kbd "M-M") "manpage")
-(define-key *top-map* (kbd "M-p") "pkgname")
-(define-key *top-map* (kbd "M-P") "pkgloc")
+(define-key *search-map* (kbd "M-m") "mansearch")
+(define-key *search-map* (kbd "M-M") "manpage")
+(define-key *search-map* (kbd "M-p") "pkgname")
+(define-key *search-map* (kbd "M-P") "pkgloc")
 #+END_SRC
-
 
 ** autostart.lisp
 
@@ -632,14 +686,21 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 (set-default-sounds)
 (play-startup-sound)
 
+;; which-key interactive
+(which-key-mode)
+
 ;; Finish Threads
 (defvar *bind-thread-list*
   (list *my-special-key-thread*
+	,*my-wm-window-thread*
 	,*my-shell-key-thread*
 	,*my-app-key-thread*
 	,*my-rofi-key-thread*
-	,*my-wm-window-thread*
-	,*my-wm-module-thread*))
+	,*my-wm-module-thread*
+	,*my-shell-key-thread2*
+	,*my-app-key-thread2*
+	,*my-rofi-key-thread2*
+	,*my-wm-module-thread2*))
 (dolist (threadname *bind-thread-list*)
   (sb-thread:join-thread threadname))
 #+END_SRC

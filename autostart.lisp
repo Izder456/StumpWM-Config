@@ -14,13 +14,20 @@
 (set-default-sounds)
 (play-startup-sound)
 
+;; which-key interactive
+(which-key-mode)
+
 ;; Finish Threads
 (defvar *bind-thread-list*
   (list *my-special-key-thread*
+	*my-wm-window-thread*
 	*my-shell-key-thread*
 	*my-app-key-thread*
 	*my-rofi-key-thread*
-	*my-wm-window-thread*
-	*my-wm-module-thread*))
+	*my-wm-module-thread*
+	*my-shell-key-thread2*
+	*my-app-key-thread2*
+	*my-rofi-key-thread2*
+	*my-wm-module-thread2*))
 (dolist (threadname *bind-thread-list*)
   (sb-thread:join-thread threadname))

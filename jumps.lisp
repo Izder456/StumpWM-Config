@@ -23,8 +23,8 @@
 ;; Macro for search engine defines
 (defmacro define-searchengine (selection-name prompt-name url description key-selection key-prompt)
  `(progn
-    (searchengines:make-searchengine-selection ,selection-name ,url ,description :map *top-map* :key ,key-selection)
-    (searchengines:make-searchengine-prompt ,prompt-name ,description ,url ,description :map *top-map* :key ,key-prompt)))
+    (searchengines:make-searchengine-selection ,selection-name ,url ,description :map *search-map* :key ,key-selection)
+    (searchengines:make-searchengine-prompt ,prompt-name ,description ,url ,description :map *search-map* :key ,key-prompt)))
 
 ;; Set Search Engine Params
 (defparameter *URL-DDG* "https://duckduckgo.com/?q=~a")
@@ -50,7 +50,7 @@
 ;;;
 
 ;; Keybindings for Terminal Jumps
-(define-key *top-map* (kbd "M-m") "mansearch")
-(define-key *top-map* (kbd "M-M") "manpage")
-(define-key *top-map* (kbd "M-p") "pkgname")
-(define-key *top-map* (kbd "M-P") "pkgloc")
+(define-key *search-map* (kbd "M-m") "mansearch")
+(define-key *search-map* (kbd "M-M") "manpage")
+(define-key *search-map* (kbd "M-p") "pkgname")
+(define-key *search-map* (kbd "M-P") "pkgloc")

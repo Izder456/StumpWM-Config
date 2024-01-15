@@ -64,8 +64,9 @@
 (set-msg-border-width 4)
 (set-font "-*-spleen-*-*-*-*-12-*-*-*-*-*-*-*")
 
-;; Click-to-focus
-(setf *mouse-focus-policy* :click)
+;; MouseKeys
+(setf *mouse-focus-policy* :click
+      *float-window-modifier* :SUPER)
 
 ;; Welcome
 (setq *startup-message* (format nil "^B^8Welcome Izzy!")) ;; Orange
@@ -111,8 +112,8 @@
 
 ;; swm-gapes
 ; Set Gaps
-(setf swm-gaps:*inner-gaps-size* 8)
-(setf swm-gaps:*outer-gaps-size* 10)
+(setf swm-gaps:*inner-gaps-size* 8
+      swm-gaps:*outer-gaps-size* 10)
 ; Turn em on
 (swm-gaps:toggle-gaps-on)
 
@@ -137,26 +138,27 @@
 (load "~/.stumpwm.d/jumps.lisp")
 
 ;; Rename and create new groups
-(grename "Ness")
-(gnewbg "Paula")
-(gnewbg "Jeff")
-(gnewbg "Poo")
+(when *initializing*
+  (grename "Ness")
+  (gnewbg "Paula")
+  (gnewbg "Jeff")
+  (gnewbg "Poo"))
 
 ;; Group format
 (setf *group-format* "%n %t")
 
 ;; Window format
-(setf *window-format* (format NIL "^(:fg \"~A\")<%25t>" iz-softgreen))
-(setf *window-border-style* :tight)
-(setf *normal-border-width* 4)
+(setf *window-format* (format NIL "^(:fg \"~A\")<%25t>" iz-softgreen)
+      *window-border-style* :tight
+      *normal-border-width* 4)
 
 ;; Time format
 (setf *time-modeline-string* "%a, %b %d @%I:%M%p")
 
 ;; Message window settings
-(setf *message-window-padding* 12)
-(setf *message-window-y-padding* 10)
-(setf *message-window-gravity* :center)
+(setf *message-window-padding* 12
+      *message-window-y-padding* 10
+      *message-window-gravity* :top)
 
 ;; Input window settings
 (setf *input-window-gravity* :center)

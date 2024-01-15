@@ -5,6 +5,26 @@
 ;; Set prefix key
 (set-prefix-key (kbd "C-t"))
 
+(define-key *root-map* (kbd "c") NIL)
+(define-key *root-map* (kbd "C-c") NIL)
+(define-key *root-map* (kbd "e") NIL)
+
+;;;
+;; Make New Keymaps
+;;;
+(defvar *search-map*
+  (let ((map (make-sparse-keymap)))
+    map))
+(defvar *app-map*
+  (let ((map (make-sparse-keymap)))
+    map))
+
+(define-key *root-map* (kbd "M-s") *search-map*)
+(define-key *top-map* (kbd "M-s") *search-map*)
+
+(define-key *root-map* (kbd "M-a") *app-map*)
+(define-key *top-map* (kbd "M-a") *app-map*)
+
 ;;;
 ;; Bind Macro
 ;;;
@@ -52,7 +72,6 @@
 (defvar *my-shell-key-commands*
   '(("c" "st")
     ("C-c" "st")
-    ("x" "xkill")
     ("l" "slock")
     ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
 
@@ -71,6 +90,7 @@
   '(("M-ESC" "mode-line")
     ("M-q" "quit")
     ("m" "mark")
+    ("x" "xkill")
     ("M" "gmove-marked")
     ("C-Up" "exchange-direction up")
     ("C-Down" "exchange-direction down")
@@ -89,26 +109,46 @@
 ;;;
 ;; Loop & Bind with Macros from earlier
 ;;;
-;; Bind special keys to *top-map*
-(defvar *my-special-key-thread*
- (loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*))
+
+;; Bind shell keys to *app-map*
+(defvar *my-shell-key-thread*
+  (loop-and-bind *my-shell-key-commands* bind-shell-to-key *app-map*))
+
+;; Bind app keys to *app-map*
+(defvar *my-app-key-thread*
+  (loop-and-bind *my-app-key-commands* bind-shell-to-key *app-map*))
+
+;; Bind rofi keys to *app-map*
+(defvar *my-rofi-key-thread*
+  (loop-and-bind *my-rofi-key-commands* bind-shell-to-key *app-map*))
+
+;; Bind module command keys to *app-map*
+(defvar *my-wm-module-thread*
+  (loop-and-bind *my-wm-module-commands* bind-to-key *app-map*))
 
 ;; Bind shell keys to *root-map*
-(defvar *my-shell-key-thread*
-  (loop-and-bind *my-shell-key-commands* bind-shell-to-key))
+(defvar *my-shell-key-thread2*
+  (loop-and-bind *my-shell-key-commands* bind-shell-to-key *root-map*))
 
 ;; Bind app keys to *root-map*
-(defvar *my-app-key-thread*
-  (loop-and-bind *my-app-key-commands* bind-shell-to-key))
+(defvar *my-app-key-thread2*
+  (loop-and-bind *my-app-key-commands* bind-shell-to-key *root-map*))
 
 ;; Bind rofi keys to *root-map*
-(defvar *my-rofi-key-thread*
-  (loop-and-bind *my-rofi-key-commands* bind-shell-to-key))
+(defvar *my-rofi-key-thread2*
+  (loop-and-bind *my-rofi-key-commands* bind-shell-to-key *root-map*))
+
+;; Bind module command keys to *rootmap*
+(defvar *my-wm-module-thread2*
+  (loop-and-bind *my-wm-module-commands* bind-to-key *root-map*))
+
+;; Bind special keys to *top-map*
+(defvar *my-special-key-thread*
+  (loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*))
 
 ;; Bind window management command keys to *root-map*
 (defvar *my-wm-window-thread*
-  (loop-and-bind *my-wm-window-commands* bind-to-key))
+  (loop-and-bind *my-wm-window-commands* bind-to-key *root-map*))
 
-;; Bind module command keys to *root-map*
-(defvar *my-wm-module-thread*
-  (loop-and-bind *my-wm-module-commands* bind-to-key))
+(define-key *root-map* (kbd "M-s") '*search-map*)
+(define-key *root-map* (kbd "M-a") '*app-map*)
