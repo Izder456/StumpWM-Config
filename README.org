@@ -26,6 +26,7 @@
   - [[#apps][Apps]]
   - [[#window-management][Window Management]]
   - [[#misc][Misc]]
+  - [[#search--termjumps][Search & Termjumps]]
     - [[#note][/Note/]]
 - [[#code-structure][Code Structure]]
   - [[#initlisp][init.lisp]]
@@ -60,33 +61,40 @@
 
 ** Apps
 
-| Prefix | Bind     | Function                                |
-|--------+----------+-----------------------------------------|
-| =C-t=    | =c= /OR/ =C-c= | open suckless term                      |
-| =C-t=    | =f=        | open firefox                            |
-| =C-t=    | =F=        | open pcmanfm                            |
-| =C-t=    | =x=        | open xkill (like force-quit on macOS X) |
-| =C-t=    | =E=        | open claws-mail                         |
-| =C-t=    | =e= /OR/ =C-e= | open emacs daemon /OR/ open client        |
-| =C-t=    | =s-e=      | force kill emacs daemon                 |
+| Prefix       | Bind     | Function                         |
+|--------------+----------+----------------------------------|
+| =C-t= /OR/ =M-a=   | =c= /OR/ =C-c= | open suckless term               |
+| =C-t= /OR/ =M-a=   | =f=        | open firefox                     |
+| =C-t= /OR/ =M-a=   | =F=        | open pcmanfm                     |
+| =C-t= /OR/ =M-a=   | =E=        | open claws-mail                  |
+| =C-t= /OR/ =M-a=   | =e= /OR/ =C-e= | open emacs daemon /OR/ open client |
+| =C-t= /OR/ =M-a=   | =s-e=      | force kill emacs daemon          |
+| =C-t= /OR/ =M-a=   | =Space=    | rofi drun menu                   |
+| =C-t= /OR/ =M-a=   | =Return=   | rofi window select menu          |
+| =C-t= /OR/ =M-a=   | =M-b=      | shuffle background               |
+| =C-t= /OR/ =M-a=   | =l=        | lock screen with slock           |
 
 ** Window Management
 
-| Prefix | Bind                       | Function                                |
-|--------+----------------------------+-----------------------------------------|
-| =C-t=    | =s=                          | vertical split                          |
-| =C-t=    | =S=                          | horizontal split                        |
-| =C-t=    | =Q=                          | maximize frame                          |
-| =C-t=    | =<Direction-Key>= /OR/ =<Click>= | select frame to focus                   |
-| =C-t=    | =C-<Direction-Key>=          | swap frame in direction                 |
-| =C-t=    | =k=                          | kill active frame                       |
-| =C-t=    | =m=                          | select frame for bulk move              |
-| =C-t=    | =M=                          | move bulk select to group               |
-| =C-t=    | =FnKey=                      | switch to group                         |
-| =C-t=    | =n=                          | rotate frame                            |
-| =C-t=    | =R=                          | resize mode                             |
+| Prefix | Bind                       | Function                                     |
+|--------+----------------------------+----------------------------------------------|
+| =C-t=    | =s=                          | vertical split                               |
+| =C-t=    | =S=                          | horizontal split                             |
+| =C-t=    | =Q=                          | maximize frame                               |
+| =C-t=    | =<Direction-Key>= /OR/ =<Click>= | select frame to focus                        |
+| =C-t=    | =C-<Direction-Key>=          | swap frame in direction                      |
+| =C-t=    | =k=                          | kill active frame                            |
+| =C-t=    | =m=                          | select frame for bulk move                   |
+| =C-t=    | =M=                          | move bulk select to group                    |
+| =C-t=    | =FnKey=                      | switch to group                              |
+| =C-t=    | =n=                          | rotate frame                                 |
+| =C-t=    | =R=                          | resize mode                                  |
+| =C-t=    | =x=                          | open xkill (like force-quit on macOS X)      |
 | =C-t=    | =p=                          | toggle push/pop frame to/from floating group |
-| =C-t=    | =M-p=                        | "flatten" all floating windows to frame |
+| =C-t=    | =M-p=                        | "flatten" all floating windows to frame      |
+| =C-t=    | =q=                          | Prompt to exit session                       |
+| =C-t=    | =M-q=                        | Quick exit session                           |
+| =NONE=   | =M-Escape=                   | Toggle Modeline                              |
 
 ** Misc
 
@@ -95,23 +103,21 @@
 | =NONE=   | =PrintScreen=   | screenshot full                 |
 | =NONE=   | =M-PrintScreen= | screenshot interactive select   |
 | =NONE=   | =s-PrintScreen= | screenshot active frame/window  |
-| =C-t=    | =q=             | Prompt to exit session          |
-| =C-t=    | =M-q=           | Quick exit session              |
-| =C-t=    | =Space=         | rofi drun menu                  |
-| =C-t=    | =Return=        | rofi window select menu         |
-| =C-t=    | =M-b=           | shuffle background              |
-| =C-t=    | =l=             | lock screen with slock          |
-| =NONE=   | =M-Escape=      | Toggle Modeline                 |
-| =NONE=   | =M-C-s=         | Search Duckduckgo for selection |
-| =NONE=   | =M-s=           | Search Duckduckgo for prompt    |
-| =NONE=   | =M-C-l=         | Search LibreY for selection     |
-| =NONE=   | =M-l=           | Search LibreY for prompt        |
-| =NONE=   | =M-C-o=       | Search Package Web for selection |
-| =NONE=   | =M-o=           | Search Package Web for prompt   |
-| =NONE=   | =M-m=           | Search Manpages                 |
-| =NONE=   | =M-M=           | Open Manpage                    |
-| =NONE=   | =M-p=           | Search Package Name             |
-| =NONE=   | =M-P=           | Search Package File             |
+
+** Search & Termjumps
+
+| Prefix | Bind  | Function                         |
+|--------+-------+----------------------------------|
+| =M-s=    | =M-C-s= | Search Duckduckgo for selection  |
+| =M-s=    | =M-s=   | Search Duckduckgo for prompt     |
+| =M-s=    | =M-C-l= | Search LibreY for selection      |
+| =M-s=    | =M-l=   | Search LibreY for prompt         |
+| =M-s=    | =M-C-o= | Search Package Web for selection |
+| =M-s=    | =M-o=   | Search Package Web for prompt    |
+| =M-s=    | =M-m=   | Search Manpages                  |
+| =M-s=    | =M-M=   | Open Manpage                     |
+| =M-s=    | =M-p=   | Search Package Name              |
+| =M-s=    | =M-P=   | Search Package File              |
 
 *** /Note/
 
