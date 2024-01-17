@@ -24,10 +24,6 @@
 	*my-shell-key-thread*
 	*my-app-key-thread*
 	*my-rofi-key-thread*
-	*my-wm-module-thread*
-	*my-shell-key-thread2*
-	*my-app-key-thread2*
-	*my-rofi-key-thread2*
-	*my-wm-module-thread2*))
+	*my-wm-module-thread*))
 (dolist (threadname *bind-thread-list*)
   (sb-thread:join-thread threadname))
