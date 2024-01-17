@@ -24,6 +24,7 @@
 - [[#disclaimer][DISCLAIMER]]
 - [[#binds][Binds]]
   - [[#apps][Apps]]
+  - [[#player-commands][Player Commands]]
   - [[#window-management][Window Management]]
   - [[#misc][Misc]]
   - [[#search--termjumps][Search & Termjumps]]
@@ -67,12 +68,22 @@
 | =M-a=    | =f=        | open firefox                     |
 | =M-a=    | =F=        | open pcmanfm                     |
 | =M-a=    | =E=        | open claws-mail                  |
-| =M-a=  | =e= /OR/ =C-e= | open emacs daemon /OR/ open client |
+| =M-a=    | =e= /OR/ =C-e= | open emacs daemon /OR/ open client |
 | =M-a=    | =s-e=      | force kill emacs daemon          |
 | =M-a=    | =Space=    | rofi drun menu                   |
 | =M-a=    | =Return=   | rofi window select menu          |
 | =M-a=    | =M-b=      | shuffle background               |
 | =M-a=    | =l=        | lock screen with slock           |
+
+** Player Commands
+
+| Prefix | Bind | Function       |
+|--------+------+----------------|
+| =M-m=    | =p=    | play/pause     |
+| =M-m=    | =s=    | stop           |
+| =M-m=    | =n=    | next           |
+| =M-m=    | =b=    | previous       |
+| =M-m=    | =z=    | toggle shuffle |
 
 ** Window Management
 
@@ -94,7 +105,7 @@
 | =C-t=    | =M-p=                        | "flatten" all floating windows to frame      |
 | =C-t=    | =q=                          | Prompt to exit session                       |
 | =C-t=    | =M-q=                        | Quick exit session                           |
-| =NONE=   | =M-Escape=                   | Toggle Modeline                              |
+| =C-t=    | =M-Escape=                   | Toggle Modeline                              |
 
 ** Misc
 
@@ -106,18 +117,18 @@
 
 ** Search & Termjumps
 
-| Prefix | Bind  | Function                         |
-|--------+-------+----------------------------------|
-| =M-s=    | =M-C-s= | Search Duckduckgo for selection  |
-| =M-s=    | =M-s=   | Search Duckduckgo for prompt     |
-| =M-s=    | =M-C-l= | Search LibreY for selection      |
-| =M-s=    | =M-l=   | Search LibreY for prompt         |
-| =M-s=    | =M-C-o= | Search Package Web for selection |
-| =M-s=    | =M-o=   | Search Package Web for prompt    |
-| =M-s=    | =M-m=   | Search Manpages                  |
-| =M-s=    | =M-M=   | Open Manpage                     |
-| =M-s=    | =M-p=   | Search Package Name              |
-| =M-s=    | =M-P=   | Search Package File              |
+| Prefix | Bind | Function                         |
+|--------+------+----------------------------------|
+| =M-s=    | =C-s=  | Search Duckduckgo for selection  |
+| =M-s=    | =s=    | Search Duckduckgo for prompt     |
+| =M-s=    | =C-l=  | Search LibreY for selection      |
+| =M-s=    | =l=    | Search LibreY for prompt         |
+| =M-s=    | =C-o=  | Search Package Web for selection |
+| =M-s=    | =o=    | Search Package Web for prompt    |
+| =M-s=    | =m=    | Search Manpages                  |
+| =M-s=    | =M=    | Open Manpage                     |
+| =M-s=    | =p=    | Search Package Name              |
+| =M-s=    | =P=    | Search Package File              |
 
 *** /Note/
 
@@ -535,6 +546,16 @@ Handling bindings
   '(("SPC" "rofi -i -show-icons -show drun")
     ("RET" "rofi -i -show-icons -show window")))
 
+;; Set Playerctl Keys
+(defvar *my-media-key-commands*
+  '(("p" "playerctl play-pause")
+    ("s" "playerctl stop")
+    ("b" "playerctl previous")
+    ("n" "playerctl next")
+    ("z" "playerctl shuffle toggle")
+    ("XF86AudioRaiseVolume" "playerctl volume 0.05+")
+    ("XF86AudioLowerVolume" "playerctl volume 0.05-")))
+
 ;; Raw StumpWM Window-managing Commands
 (defvar *my-wm-window-commands*
   '(("M-ESC" "mode-line")
@@ -578,6 +599,9 @@ Handling bindings
 ;; Bind special keys to *top-map*
 (defvar *my-special-key-thread*
   (loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*))
+;; Bind Playerctl Commands
+(defvar *my-media-key-thread*
+  (loop-and-bind *my-media-key-commands* bind-shell-to-key *media-map*))
 ;; Bind window management command keys to *root-map*
 (defvar *my-wm-window-thread*
   (loop-and-bind *my-wm-window-commands* bind-to-key *root-map*))
@@ -634,9 +658,9 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 (defparameter *URL-LIBRE* "https://search.ahwx.org/search.php?q=~a")
 (defparameter *URL-PORTS* "https://openports.eu/search?q=~a")
 
-(define-searchengine "search-ddg-selection" "search-ddg-prompt" *URL-DDG* "DuckDuckGo search" "M-C-s" "M-s")
-(define-searchengine "search-libre-selection" "search-libre-prompt" *URL-LIBRE* "LibreY search" "M-C-l" "M-l")
-(define-searchengine "search-ports-selection" "search-ports-prompt" *URL-PORTS* "Ports Search" "M-C-o" "M-o")
+(define-searchengine "search-ddg-selection" "search-ddg-prompt" *URL-DDG* "DuckDuckGo search" "C-s" "s")
+(define-searchengine "search-libre-selection" "search-libre-prompt" *URL-LIBRE* "LibreY search" "C-l" "l")
+(define-searchengine "search-ports-selection" "search-ports-prompt" *URL-PORTS* "Ports Search" "C-o" "o")
 #+END_SRC
 
 *** Set Jump Aliases
@@ -661,34 +685,32 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;;;
 
 ;; Keybindings for Terminal Jumps
-(define-key *search-map* (kbd "M-m") "mansearch")
-(define-key *search-map* (kbd "M-M") "manpage")
-(define-key *search-map* (kbd "M-p") "pkgname")
-(define-key *search-map* (kbd "M-P") "pkgloc")
+(define-key *search-map* (kbd "m") "mansearch")
+(define-key *search-map* (kbd "M") "manpage")
+(define-key *search-map* (kbd "p") "pkgname")
+(define-key *search-map* (kbd "P") "pkgloc")
 #+END_SRC
 
 ** autostart.lisp
 
 #+BEGIN_SRC lisp :tangle autostart.lisp
-
-;; Start Slynk Server
+;; Load Slynk Package
 (ql:quickload :slynk)
-(slynk:create-server :dont-close t)
-
 ;; Play Startup sound
 (defun play-startup-sound ()
   (run-shell-command "sleep 1 && ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
-
 (defun set-default-sounds ()
   (run-shell-command "sndioctl input.level=0.74")
   (run-shell-command "sndioctl output.level=1.00"))
 
-;; Startup Sound
-(set-default-sounds)
-(play-startup-sound)
-
-;; which-key interactive
-(which-key-mode)
+(when *initializing*
+  ;; Start Slynk Server
+  (slynk:create-server :dont-close t)
+  ;; Startup Sound
+  (set-default-sounds)
+  (play-startup-sound)
+  ;; which-key interactive
+  (which-key-mode))
 
 ;; Finish Threads
 (defvar *bind-thread-list*
@@ -697,6 +719,7 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 	,*my-shell-key-thread*
 	,*my-app-key-thread*
 	,*my-rofi-key-thread*
+	,*my-media-key-thread*
 	,*my-wm-module-thread*))
 (dolist (threadname *bind-thread-list*)
   (sb-thread:join-thread threadname))

@@ -31,9 +31,9 @@
 (defparameter *URL-LIBRE* "https://search.ahwx.org/search.php?q=~a")
 (defparameter *URL-PORTS* "https://openports.eu/search?q=~a")
 
-(define-searchengine "search-ddg-selection" "search-ddg-prompt" *URL-DDG* "DuckDuckGo search" "M-C-s" "M-s")
-(define-searchengine "search-libre-selection" "search-libre-prompt" *URL-LIBRE* "LibreY search" "M-C-l" "M-l")
-(define-searchengine "search-ports-selection" "search-ports-prompt" *URL-PORTS* "Ports Search" "M-C-o" "M-o")
+(define-searchengine "search-ddg-selection" "search-ddg-prompt" *URL-DDG* "DuckDuckGo search" "C-s" "s")
+(define-searchengine "search-libre-selection" "search-libre-prompt" *URL-LIBRE* "LibreY search" "C-l" "l")
+(define-searchengine "search-ports-selection" "search-ports-prompt" *URL-PORTS* "Ports Search" "C-o" "o")
 
 ;;;
 ;; Define Jumps
@@ -50,7 +50,7 @@
 ;;;
 
 ;; Keybindings for Terminal Jumps
-(define-key *search-map* (kbd "M-m") "mansearch")
-(define-key *search-map* (kbd "M-M") "manpage")
-(define-key *search-map* (kbd "M-p") "pkgname")
-(define-key *search-map* (kbd "M-P") "pkgloc")
+(define-key *search-map* (kbd "m") "mansearch")
+(define-key *search-map* (kbd "M") "manpage")
+(define-key *search-map* (kbd "p") "pkgname")
+(define-key *search-map* (kbd "P") "pkgloc")

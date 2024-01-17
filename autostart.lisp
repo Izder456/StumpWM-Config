@@ -1,21 +1,20 @@
-;; Start Slynk Server
+;; Load Slynk Package
 (ql:quickload :slynk)
-(slynk:create-server :dont-close t)
-
 ;; Play Startup sound
 (defun play-startup-sound ()
   (run-shell-command "sleep 1 && ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
-
 (defun set-default-sounds ()
   (run-shell-command "sndioctl input.level=0.74")
   (run-shell-command "sndioctl output.level=1.00"))
 
-;; Startup Sound
-(set-default-sounds)
-(play-startup-sound)
-
-;; which-key interactive
-(which-key-mode)
+(when *initializing*
+  ;; Start Slynk Server
+  (slynk:create-server :dont-close t)
+  ;; Startup Sound
+  (set-default-sounds)
+  (play-startup-sound)
+  ;; which-key interactive
+  (which-key-mode))
 
 ;; Finish Threads
 (defvar *bind-thread-list*
@@ -24,6 +23,7 @@
 	*my-shell-key-thread*
 	*my-app-key-thread*
 	*my-rofi-key-thread*
+	*my-media-key-thread*
 	*my-wm-module-thread*))
 (dolist (threadname *bind-thread-list*)
   (sb-thread:join-thread threadname))

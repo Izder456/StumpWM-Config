@@ -102,6 +102,16 @@
   '(("SPC" "rofi -i -show-icons -show drun")
     ("RET" "rofi -i -show-icons -show window")))
 
+;; Set Playerctl Keys
+(defvar *my-media-key-commands*
+  '(("p" "playerctl play-pause")
+    ("s" "playerctl stop")
+    ("b" "playerctl previous")
+    ("n" "playerctl next")
+    ("z" "playerctl shuffle toggle")
+    ("XF86AudioRaiseVolume" "playerctl volume 0.05+")
+    ("XF86AudioLowerVolume" "playerctl volume 0.05-")))
+
 ;; Raw StumpWM Window-managing Commands
 (defvar *my-wm-window-commands*
   '(("M-ESC" "mode-line")
@@ -141,6 +151,9 @@
 ;; Bind special keys to *top-map*
 (defvar *my-special-key-thread*
   (loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*))
+;; Bind Playerctl Commands
+(defvar *my-media-key-thread*
+  (loop-and-bind *my-media-key-commands* bind-shell-to-key *media-map*))
 ;; Bind window management command keys to *root-map*
 (defvar *my-wm-window-thread*
   (loop-and-bind *my-wm-window-commands* bind-to-key *root-map*))
