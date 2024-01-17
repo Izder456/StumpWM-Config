@@ -61,18 +61,18 @@
 
 ** Apps
 
-| Prefix       | Bind     | Function                         |
-|--------------+----------+----------------------------------|
-| =C-t= /OR/ =M-a=   | =c= /OR/ =C-c= | open suckless term               |
-| =C-t= /OR/ =M-a=   | =f=        | open firefox                     |
-| =C-t= /OR/ =M-a=   | =F=        | open pcmanfm                     |
-| =C-t= /OR/ =M-a=   | =E=        | open claws-mail                  |
-| =C-t= /OR/ =M-a=   | =e= /OR/ =C-e= | open emacs daemon /OR/ open client |
-| =C-t= /OR/ =M-a=   | =s-e=      | force kill emacs daemon          |
-| =C-t= /OR/ =M-a=   | =Space=    | rofi drun menu                   |
-| =C-t= /OR/ =M-a=   | =Return=   | rofi window select menu          |
-| =C-t= /OR/ =M-a=   | =M-b=      | shuffle background               |
-| =C-t= /OR/ =M-a=   | =l=        | lock screen with slock           |
+| Prefix | Bind     | Function                         |
+|--------+----------+----------------------------------|
+| =M-a=    | =c= /OR/ =C-c= | open suckless term               |
+| =M-a=    | =f=        | open firefox                     |
+| =M-a=    | =F=        | open pcmanfm                     |
+| =M-a=    | =E=        | open claws-mail                  |
+| =M-a=  | =e= /OR/ =C-e= | open emacs daemon /OR/ open client |
+| =M-a=    | =s-e=      | force kill emacs daemon          |
+| =M-a=    | =Space=    | rofi drun menu                   |
+| =M-a=    | =Return=   | rofi window select menu          |
+| =M-a=    | =M-b=      | shuffle background               |
+| =M-a=    | =l=        | lock screen with slock           |
 
 ** Window Management
 
