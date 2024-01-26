@@ -4,11 +4,18 @@
 #+KEYWORDS: org-mode, stumpwm, readme, lisp, izder
 #+PROPERTY: header-args: :tangle ~/.stumpwm.d :mkdirp t
 
+#+BEGIN_HTML
+<div align="left">
+ <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/izder456/StumpWM-Config?style=plastic">
+  <img alt="Lines of code" src="https://tokei.rs/b1/github/izder456/StumpWM-Config?category=code&style=plastic">
+</div>
+#+END_HTML
+
+
 + Mainly for personal backups, but if you want 'em, use 'em!
 
 + /I won't provide support for any issues on your machine, as this is a pet project./
 
------
 
 * DISCLAIMER
 
@@ -18,7 +25,6 @@
 
 - /Use with *caution*/
 
------
 
 * Table of Contents :TOC_4:
 - [[#disclaimer][DISCLAIMER]]
@@ -724,4 +730,3 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 (dolist (threadname *bind-thread-list*)
   (sb-thread:join-thread threadname))
 #+END_SRC
------
