@@ -94,37 +94,37 @@
 (add-to-load-path "~/.stumpwm.d/extras/scratchpad")
 
 (defvar *modulenames*
-	 (list "swm-gaps"
-	       "swm-emacs"
-	       "scratchpad"
-	       "hostname"
-	       "battery-portable"
-	       "stumpwm-sndioctl"
-	       "browse"
-	       "searchengines"))
+  (list "swm-gaps"
+        "swm-emacs"
+        "scratchpad"
+        "hostname"
+        "battery-portable"
+        "stumpwm-sndioctl"
+        "browse"
+        "searchengines"))
 
 (dolist (modulename *modulenames*)
   (load-module modulename))
 
 ;;
-; Module Settings
+;; Module Settings
 ;;
 
 ;; swm-gapes
-; Set Gaps
+;; Set Gaps
 (setf swm-gaps:*inner-gaps-size* 8
       swm-gaps:*outer-gaps-size* 10)
-; Turn em on
+;; Turn em on
 (swm-gaps:toggle-gaps-on)
 
 ;; scratchpad
-; define default scratchpad term
+;; define default scratchpad term
 (defcommand scratchpad-term () ()
-  (scratchpad:toggle-floating-scratchpad "term" "st"
-                                         :initial-gravity :center
-                                         :initial-width 720
-                                         :initial-height 480))
-; Bind Scratchpad to Super+t
+            (scratchpad:toggle-floating-scratchpad "term" "st"
+                                                   :initial-gravity :center
+                                                   :initial-width 720
+                                                   :initial-height 480))
+;; Bind Scratchpad to Super+t
 (define-key *top-map* (kbd "s-t") "scratchpad-term")
 
 ;;;
@@ -188,10 +188,10 @@
 ;;;
 
 ;; Break out modeline formatting
-; Constants
+;; Constants
 (defvar pipe "|")
 
-; Format Lists
+;; Format Lists
 (defvar group-fmt (list
                    "^n%g" ;; Default
                    ))
@@ -206,7 +206,7 @@
                     " %d " pipe ;; Date
                     ))
 
-; Screen mode line format
+;; Screen mode line format
 (setf *screen-mode-line-format*
       (list "^b(" ;; Yellow
             group-fmt
@@ -219,7 +219,7 @@
             "^3^b)" ;; Yellow
             ))
 
-; Format Modeline
+;; Format Modeline
 (setf *mode-line-background-color* iz-black
       *mode-line-foreground-color* iz-softyellow
       *mode-line-border-color* iz-white

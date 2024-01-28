@@ -6,8 +6,8 @@
 
 #+BEGIN_HTML
 <div align="left">
- <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/izder456/StumpWM-Config?style=plastic">
-  <img alt="Lines of code" src="https://tokei.rs/b1/github/izder456/StumpWM-Config?category=code&style=plastic">
+<img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/izder456/StumpWM-Config?style=plastic">
+<img alt="Lines of code" src="https://tokei.rs/b1/github/izder456/StumpWM-Config?category=code&style=plastic">
 </div>
 #+END_HTML
 
@@ -28,6 +28,8 @@
 
 * Table of Contents :TOC_4:
 - [[#disclaimer][DISCLAIMER]]
+- [[#meta][Meta]]
+  - [[#editorconfig][Editorconfig]]
 - [[#binds][Binds]]
   - [[#apps][Apps]]
   - [[#player-commands][Player Commands]]
@@ -61,6 +63,15 @@
     - [[#set-jump-aliases][Set Jump Aliases]]
     - [[#bind-jump-aliases][Bind Jump Aliases]]
   - [[#autostartlisp][autostart.lisp]]
+
+* Meta
+** Editorconfig
+
+#+BEGIN_SRC toml :tangle .editorconfig
+[*]
+indent_style = space
+indent_size = 2
+#+END_SRC
 
 * Binds
 
@@ -264,37 +275,37 @@ This is the first thing the WM Loads.
 (add-to-load-path "~/.stumpwm.d/extras/scratchpad")
 
 (defvar *modulenames*
-	 (list "swm-gaps"
-	       "swm-emacs"
-	       "scratchpad"
-	       "hostname"
-	       "battery-portable"
-	       "stumpwm-sndioctl"
-	       "browse"
-	       "searchengines"))
+  (list "swm-gaps"
+        "swm-emacs"
+        "scratchpad"
+        "hostname"
+        "battery-portable"
+        "stumpwm-sndioctl"
+        "browse"
+        "searchengines"))
 
 (dolist (modulename *modulenames*)
   (load-module modulename))
 
 ;;
-; Module Settings
+;; Module Settings
 ;;
 
 ;; swm-gapes
-; Set Gaps
+;; Set Gaps
 (setf swm-gaps:*inner-gaps-size* 8
       swm-gaps:*outer-gaps-size* 10)
-; Turn em on
+;; Turn em on
 (swm-gaps:toggle-gaps-on)
 
 ;; scratchpad
-; define default scratchpad term
+;; define default scratchpad term
 (defcommand scratchpad-term () ()
-  (scratchpad:toggle-floating-scratchpad "term" "st"
-                                         :initial-gravity :center
-                                         :initial-width 720
-                                         :initial-height 480))
-; Bind Scratchpad to Super+t
+            (scratchpad:toggle-floating-scratchpad "term" "st"
+                                                   :initial-gravity :center
+                                                   :initial-width 720
+                                                   :initial-height 480))
+;; Bind Scratchpad to Super+t
 (define-key *top-map* (kbd "s-t") "scratchpad-term")
 #+END_SRC
 
@@ -371,10 +382,10 @@ This is the first thing the WM Loads.
 ;;;
 
 ;; Break out modeline formatting
-; Constants
+;; Constants
 (defvar pipe "|")
 
-; Format Lists
+;; Format Lists
 (defvar group-fmt (list
                    "^n%g" ;; Default
                    ))
@@ -389,7 +400,7 @@ This is the first thing the WM Loads.
                     " %d " pipe ;; Date
                     ))
 
-; Screen mode line format
+;; Screen mode line format
 (setf *screen-mode-line-format*
       (list "^b(" ;; Yellow
             group-fmt
@@ -402,7 +413,7 @@ This is the first thing the WM Loads.
             "^3^b)" ;; Yellow
             ))
 
-; Format Modeline
+;; Format Modeline
 (setf *mode-line-background-color* iz-black
       ,*mode-line-foreground-color* iz-softyellow
       ,*mode-line-border-color* iz-white
@@ -440,18 +451,18 @@ Handling bindings
 *** Remove default binds
 
 #+BEGIN_SRC lisp :tangle bind.lisp
-; gross binds
+;; gross binds
 (defvar *gross-default-binds*
   (list "c" "C-c" "e" "C-e" "d" "C-d" "SPC"
-	      "i" "f" "C-k" "w" "C-w" "a" "C-a"
-	      "C-t" "R" "o" "TAB" "F" "C-h" "v"
-	      "#" "m" "C-m" "l" "C-l" "G" "C-N"
-	      "A" "X" "C-SPC" "I" "r" "W" "+"
-	      "RET" "C-RET" "C-0" "C-1" "C-2"
-	      "C-3" "C-4" "C-5" "C-6" "C-7"
-	      "C-8" "C-9" "0" "1" "2" "3" "4"
-	      "5" "6" "7" "8" "9"))
-; yuck!
+        "i" "f" "C-k" "w" "C-w" "a" "C-a"
+        "C-t" "R" "o" "TAB" "F" "C-h" "v"
+        "#" "m" "C-m" "l" "C-l" "G" "C-N"
+        "A" "X" "C-SPC" "I" "r" "W" "+"
+        "RET" "C-RET" "C-0" "C-1" "C-2"
+        "C-3" "C-4" "C-5" "C-6" "C-7"
+        "C-8" "C-9" "0" "1" "2" "3" "4"
+        "5" "6" "7" "8" "9"))
+;; yuck!
 (dolist (bind *gross-default-binds*)
   (define-key *root-map* (kbd bind) NIL))
 #+END_SRC
@@ -512,11 +523,11 @@ Handling bindings
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Push/Pop Current Window Into a Floating group
 (defcommand toggle-float () ()
-  (sb-thread:make-thread
-   (lambda ()
-     (if (float-window-p (current-window))
-         (unfloat-this)
-         (float-this)))))
+            (sb-thread:make-thread
+             (lambda ()
+               (if (float-window-p (current-window))
+                   (unfloat-this)
+                 (float-this)))))
 #+END_SRC
 
 *** Define Bind Keylists
@@ -633,31 +644,31 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 
 ;; Term Jump commands
 (defmacro make-term-jump (name command term)
- `(defcommand ,(intern name) (search)
-    ((:rest ,(concatenate 'string name " termsearch: ")))
-    (nsubstitute #\+ #\Space search)
-    (run-shell-command (format nil "~a -e sh -c '~a ~a | most'" ,term ,command search))))
+  `(defcommand ,(intern name) (search)
+               ((:rest ,(concatenate 'string name " termsearch: ")))
+               (nsubstitute #\+ #\Space search)
+               (run-shell-command (format nil "~a -e sh -c '~a ~a | most'" ,term ,command search))))
 #+END_SRC
 
 *** Define Browser Jumps
 
 #+BEGIN_SRC lisp :tangle jumps.lisp
 ;;
-; Browser
+;; Browser
 ;;
 
 ;; Module Settings
-; Set homepage
+;; Set homepage
 (setf browse::*homepage* "http://68k.news")
 
-; Set browser exe
+;; Set browser exe
 (setf searchengines:*search-browser-executable* "firefox-esr")
 
 ;; Macro for search engine defines
 (defmacro define-searchengine (selection-name prompt-name url description key-selection key-prompt)
- `(progn
-    (searchengines:make-searchengine-selection ,selection-name ,url ,description :map *search-map* :key ,key-selection)
-    (searchengines:make-searchengine-prompt ,prompt-name ,description ,url ,description :map *search-map* :key ,key-prompt)))
+  `(progn
+     (searchengines:make-searchengine-selection ,selection-name ,url ,description :map *search-map* :key ,key-selection)
+     (searchengines:make-searchengine-prompt ,prompt-name ,description ,url ,description :map *search-map* :key ,key-prompt)))
 
 ;; Set Search Engine Params
 (defparameter *URL-DDG* "https://duckduckgo.com/?q=~a")
@@ -721,12 +732,12 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;; Finish Threads
 (defvar *bind-thread-list*
   (list *my-special-key-thread*
-	,*my-wm-window-thread*
-	,*my-shell-key-thread*
-	,*my-app-key-thread*
-	,*my-rofi-key-thread*
-	,*my-media-key-thread*
-	,*my-wm-module-thread*))
+        ,*my-wm-window-thread*
+        ,*my-shell-key-thread*
+        ,*my-app-key-thread*
+        ,*my-rofi-key-thread*
+        ,*my-media-key-thread*
+        ,*my-wm-module-thread*))
 (dolist (threadname *bind-thread-list*)
   (sb-thread:join-thread threadname))
 #+END_SRC

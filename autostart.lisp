@@ -19,11 +19,11 @@
 ;; Finish Threads
 (defvar *bind-thread-list*
   (list *my-special-key-thread*
-	*my-wm-window-thread*
-	*my-shell-key-thread*
-	*my-app-key-thread*
-	*my-rofi-key-thread*
-	*my-media-key-thread*
-	*my-wm-module-thread*))
+        *my-wm-window-thread*
+        *my-shell-key-thread*
+        *my-app-key-thread*
+        *my-rofi-key-thread*
+        *my-media-key-thread*
+        *my-wm-module-thread*))
 (dolist (threadname *bind-thread-list*)
   (sb-thread:join-thread threadname))

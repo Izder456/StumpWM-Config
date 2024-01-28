@@ -3,4 +3,4 @@
 	url = https://github.com/stumpwm/stumpwm-contrib
 [submodule "extras/scratchpad"]
 	path = extras/scratchpad
-	url = https://github.com/podiki/scratchpad.git
+	url = https://github.com/podiki/scratchpad
