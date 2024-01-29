@@ -28,8 +28,6 @@
 
 * Table of Contents :TOC_4:
 - [[#disclaimer][DISCLAIMER]]
-- [[#meta][Meta]]
-  - [[#editorconfig][Editorconfig]]
 - [[#binds][Binds]]
   - [[#apps][Apps]]
   - [[#player-commands][Player Commands]]
@@ -63,15 +61,6 @@
     - [[#set-jump-aliases][Set Jump Aliases]]
     - [[#bind-jump-aliases][Bind Jump Aliases]]
   - [[#autostartlisp][autostart.lisp]]
-
-* Meta
-** Editorconfig
-
-#+BEGIN_SRC toml :tangle .editorconfig
-[*]
-indent_style = space
-indent_size = 2
-#+END_SRC
 
 * Binds
 
