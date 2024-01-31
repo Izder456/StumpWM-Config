@@ -162,12 +162,22 @@ This is the first thing the WM Loads.
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
+;; no style-warns
+(declaim #+sbcl(sb-ext:muffle-conditions style-warning))
+
 ;; this automatically prefixes 'stumpwm:' to commands that need it
 (in-package :stumpwm)
 (setf *default-package* :stumpwm)
 
 ;; Set Modules
 (set-module-dir "~/.stumpwm.d/modules")
+
+;; Load Slynk Package
+(ql:quickload :slynk)
+
+(when *initializing*
+  ;; Start Slynk Server
+  (slynk:create-server :dont-close t))
 #+END_SRC
 
 *** Colors
@@ -657,7 +667,7 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
      (run-shell-command (string ,browser-name))))
 
 ;; Set browser exe
-(setf *my-browser* firefox-esr)
+(setf *my-browser* 'firefox-esr)
 (setf searchengines:*search-browser-executable* (string *my-browser*))
 (my-browser-hack *my-browser*)
 
@@ -708,8 +718,6 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ** autostart.lisp
 
 #+BEGIN_SRC lisp :tangle autostart.lisp
-;; Load Slynk Package
-(ql:quickload :slynk)
 ;; Play Startup sound
 (defun play-startup-sound ()
   (run-shell-command "sleep 1 && ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
@@ -718,8 +726,6 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
   (run-shell-command "sndioctl output.level=1.00"))
 
 (when *initializing*
-  ;; Start Slynk Server
-  (slynk:create-server :dont-close t)
   ;; Startup Sound
   (set-default-sounds)
   (play-startup-sound)

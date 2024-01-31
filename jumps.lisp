@@ -24,7 +24,7 @@
      (run-shell-command (string ,browser-name))))
 
 ;; Set browser exe
-(setf *my-browser* firefox-esr)
+(setf *my-browser* 'firefox-esr)
 (setf searchengines:*search-browser-executable* (string *my-browser*))
 (my-browser-hack *my-browser*)
 

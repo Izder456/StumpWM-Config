@@ -8,12 +8,22 @@
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
+;; no style-warns
+(declaim #+sbcl(sb-ext:muffle-conditions style-warning))
+
 ;; this automatically prefixes 'stumpwm:' to commands that need it
 (in-package :stumpwm)
 (setf *default-package* :stumpwm)
 
 ;; Set Modules
 (set-module-dir "~/.stumpwm.d/modules")
+
+;; Load Slynk Package
+(ql:quickload :slynk)
+
+(when *initializing*
+  ;; Start Slynk Server
+  (slynk:create-server :dont-close t))
 
 ;;;
 ;; Colors

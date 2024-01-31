@@ -1,5 +1,3 @@
-;; Load Slynk Package
-(ql:quickload :slynk)
 ;; Play Startup sound
 (defun play-startup-sound ()
   (run-shell-command "sleep 1 && ffplay -autoexit -nodisp ~/.local/sfx/okdesuka.wav"))
@@ -8,8 +6,6 @@
   (run-shell-command "sndioctl output.level=1.00"))
 
 (when *initializing*
-  ;; Start Slynk Server
-  (slynk:create-server :dont-close t)
   ;; Startup Sound
   (set-default-sounds)
   (play-startup-sound)
