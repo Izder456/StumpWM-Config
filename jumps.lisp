@@ -17,16 +17,9 @@
 ;; Set homepage
 (setf browse::*homepage* "http://68k.news")
 
-
-;; fix for the weird browse module behavior when (in-package :stumpwm)
-(defmacro my-browser-hack (browser-name)
-  `(defun ,browser-name ()
-     (run-shell-command (string ,browser-name))))
-
 ;; Set browser exe
 (setf *my-browser* 'firefox-esr)
 (setf searchengines:*search-browser-executable* (string *my-browser*))
-(my-browser-hack *my-browser*)
 
 ;; Macro for search engine defines
 (defmacro define-searchengine (selection-name prompt-name url description key-selection key-prompt)
