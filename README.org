@@ -54,10 +54,9 @@
     - [[#define-toggle-float-command][Define toggle-float command]]
     - [[#define-bind-keylists][Define Bind Keylists]]
     - [[#loop-bind-keylists][Loop Bind Keylists]]
-    - [[#define-new-keymaps][Define New Keymaps]]
   - [[#jumpslisp][jumps.lisp]]
     - [[#define-jump-macros][Define Jump Macros]]
-    - [[#define-browser-jumps][Define Browser Jumps]]
+    - [[#define-browse-jumps][Define Browse Jumps]]
     - [[#set-jump-aliases][Set Jump Aliases]]
     - [[#bind-jump-aliases][Bind Jump Aliases]]
   - [[#autostartlisp][autostart.lisp]]
@@ -90,6 +89,8 @@
 | =M-m=    | =n=    | next           |
 | =M-m=    | =b=    | previous       |
 | =M-m=    | =z=    | toggle shuffle |
+| =M-m= | =XF86AudioRaiseVolume= | player volume up 5% |
+| =M-m= | =XF86AudioLowereVolume= | player volume down 5% |
 
 ** Window Management
 
@@ -174,10 +175,6 @@ This is the first thing the WM Loads.
 
 ;; Load Slynk Package
 (ql:quickload :slynk)
-
-(when *initializing*
-  ;; Start Slynk Server
-  (slynk:create-server :dont-close t))
 #+END_SRC
 
 *** Colors
@@ -208,14 +205,14 @@ This is the first thing the WM Loads.
 
 ;; Color list for `^` formatting
 (setf *colors* (list iz-black ;; ^0
-                     iz-red ;; ^1
-                     iz-green ;; ^2
+                     iz-softred ;; ^1
+                     iz-softgreen ;; ^2
                      iz-yellow ;; ^3
-                     iz-blue ;; ^4
-                     iz-purple ;; ^5
-                     iz-aqua ;; ^6
+                     iz-softblue ;; ^4
+                     iz-softpurple ;; ^5
+                     iz-softaqua ;; ^6
                      iz-white ;; ^7
-                     iz-orange ;; ^8
+                     iz-softorange ;; ^8
                      iz-gray ;; ^9
                      ))
 ;; Set those colors
@@ -259,7 +256,7 @@ This is the first thing the WM Loads.
 
 ;; Set env vars
 (setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin")
-(setf (getenv "PAGER") "most")
+(setf (getenv "PAGER") "less -R")
 #+END_SRC
 
 *** Modules
@@ -275,13 +272,13 @@ This is the first thing the WM Loads.
 
 (defvar *modulenames*
   (list "swm-gaps"
-        "swm-emacs"
-        "scratchpad"
-        "hostname"
-        "battery-portable"
-        "stumpwm-sndioctl"
-        "browse"
-        "searchengines"))
+	"swm-emacs"
+	"scratchpad"
+	"hostname"
+	"battery-portable"
+	"stumpwm-sndioctl"
+	"browse"
+	"searchengines"))
 
 (dolist (modulename *modulenames*)
   (load-module modulename))
@@ -289,7 +286,6 @@ This is the first thing the WM Loads.
 ;;
 ;; Module Settings
 ;;
-
 ;; swm-gapes
 ;; Set Gaps
 (setf swm-gaps:*inner-gaps-size* 8
@@ -372,6 +368,12 @@ This is the first thing the WM Loads.
 (defun show-temp ()
   (run-shell-command-and-format "sysctl -n hw.sensors.cpu0.temp0"))
 
+;; Show Volume
+(defun show-output-vol ()
+  (run-shell-command-and-format "sndioctl -n output.level"))
+(defun show-input-vol ()
+  (run-shell-command-and-format "sndioctl -n input.level"))
+  
 ;; Show the window title
 (defun show-window-title ()
   (substitute #\Space #\Newline (window-title (current-window))))
@@ -386,31 +388,39 @@ This is the first thing the WM Loads.
 
 ;; Format Lists
 (defvar group-fmt (list
-                   "^n%g" ;; Default
-                   ))
+		   "^n%g" ;; Default
+		   ))
 (defvar win-fmt (list
-                 "^n%v ^>^7" ;; Default -> Right Allign
-                 ))
+		 "^n%v ^>^7" ;; Default -> Right Allign
+		 ))
+(defvar audio-fmt (list
+		   " " '(:eval (show-output-vol))
+		   "/"
+		   " " '(:eval (show-input-vol))
+		   ))
 (defvar status-fmt (list
-                    "^n" pipe ;; Default
-                    " %h " pipe ;; Hostname
-                    " %B " pipe ;; Battery
-                    " " '(:eval (show-temp)) pipe;; Cpu Temp
-                    " %d " pipe ;; Date
-                    ))
+		    "^n" pipe ;; Default
+		    " %h " pipe ;; Hostname
+		    " %B " pipe ;; Battery
+		    " " '(:eval (show-temp)) pipe ;; Cpu Temp
+		    " %d " ;; Date
+		    ))
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
-      (list "^b(" ;; Yellow
-            group-fmt
-            "^1 [ " ;; Red
-            win-fmt
-            "^1] " ;; Red
-            "^5[" ;; Magenta
-            status-fmt
-            "^5]" ;; Magenta
-            "^3^b)" ;; Yellow
-            ))
+      (list "(" ;; Yellow
+	    group-fmt
+	    "^1 [ " ;; Red
+	    win-fmt
+	    "^1] " ;; Red
+	    "^6{" ;; Aqua
+	    audio-fmt
+	    "^6} " ;; Aqua
+	    "^5[" ;; Magenta
+	    status-fmt
+	    "^5]" ;; Magenta
+	    "^3)" ;; Yellow
+	    ))
 
 ;; Format Modeline
 (setf *mode-line-background-color* iz-black
@@ -472,24 +482,19 @@ Handling bindings
 ;;;
 ;; Make New Keymaps
 ;;;
-(defvar *search-map*
-  (let ((map (make-sparse-keymap)))
-    map))
-(defvar *media-map*
-  (let ((map (make-sparse-keymap)))
-    map))
-(defvar *app-map*
-  (let ((map (make-sparse-keymap)))
-    map))
+(defmacro make-keymap (map-name key-binding &optional root top)
+  `(progn
+     (defvar ,map-name
+       (let ((map (make-sparse-keymap)))
+	 map))
+     (when ,root
+       (define-key *root-map* (kbd ,key-binding) ,map-name))
+     (when ,top
+       (define-key *top-map* (kbd ,key-binding) ,map-name))))
 
-(define-key *root-map* (kbd "M-s") *search-map*)
-(define-key *top-map* (kbd "M-s") *search-map*)
-
-(define-key *root-map* (kbd "M-m") *media-map*)
-(define-key *top-map* (kbd "M-m") *media-map*)
-
-(define-key *root-map* (kbd "M-a") *app-map*)
-(define-key *top-map* (kbd "M-a") *app-map*)
+(make-keymap *search-map* "M-s" t t)
+(make-keymap *media-map* "M-m" t t)
+(make-keymap *app-map* "M-a" t t)
 #+END_SRC
 *** Define Key Macros
 
@@ -600,34 +605,21 @@ Handling bindings
 ;;;
 ;; Loop & Bind with Macros from earlier
 ;;;
-;; Bind shell keys to *app-map*
-(defvar *my-shell-key-thread*
-  (loop-and-bind *my-shell-key-commands* bind-shell-to-key *app-map*))
-;; Bind app keys to *app-map*
-(defvar *my-app-key-thread*
-  (loop-and-bind *my-app-key-commands* bind-shell-to-key *app-map*))
-;; Bind rofi keys to *app-map*
-(defvar *my-rofi-key-thread*
-  (loop-and-bind *my-rofi-key-commands* bind-shell-to-key *app-map*))
-;; Bind module command keys to *app-map*
-(defvar *my-wm-module-thread*
-  (loop-and-bind *my-wm-module-commands* bind-to-key *app-map*))
-;; Bind special keys to *top-map*
-(defvar *my-special-key-thread*
-  (loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*))
-;; Bind Playerctl Commands
-(defvar *my-media-key-thread*
-  (loop-and-bind *my-media-key-commands* bind-shell-to-key *media-map*))
-;; Bind window management command keys to *root-map*
-(defvar *my-wm-window-thread*
-  (loop-and-bind *my-wm-window-commands* bind-to-key *root-map*))
-#+END_SRC
+;; List of binds
+(defparameter *key-bindings*
+  '((*my-shell-key-thread* *my-shell-key-commands* bind-shell-to-key *app-map*)
+    (*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
+    (*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
+    (*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
+    (*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)
+    (*my-media-key-thread* *my-media-key-commands* bind-shell-to-key *media-map*)
+    (*my-wm-window-thread* *my-wm-window-commands* bind-to-key *root-map*)))
 
-*** Define New Keymaps
-
-#+BEGIN_SRC lisp :tangle bind.lisp
-(define-key *root-map* (kbd "M-s") '*search-map*)
-(define-key *root-map* (kbd "M-a") '*app-map*)
+;; Loop over list
+(dolist (binding *key-bindings*)
+  (destructuring-bind (name commands binding-fn map) binding
+    (eval `(defvar ,name
+             (loop-and-bind ,commands ,binding-fn ,map)))))
 #+END_SRC
 
 ** jumps.lisp
@@ -646,10 +638,10 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
   `(defcommand ,(intern name) (search)
                ((:rest ,(concatenate 'string name " termsearch: ")))
                (nsubstitute #\+ #\Space search)
-               (run-shell-command (format nil "~a -e sh -c '~a ~a | most'" ,term ,command search))))
+               (run-shell-command (format nil "~a -e sh -c '~a ~a | less -R'" ,term ,command search))))
 #+END_SRC
 
-*** Define Browser Jumps
+*** Define Browse Jumps
 
 #+BEGIN_SRC lisp :tangle jumps.lisp
 ;;
@@ -661,8 +653,7 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 (setf browse::*homepage* "http://68k.news")
 
 ;; Set browser exe
-(setf *my-browser* 'firefox-esr)
-(setf searchengines:*search-browser-executable* (string *my-browser*))
+(setf searchengines:*search-browser-executable* "firefox-esr")
 
 ;; Macro for search engine defines
 (defmacro define-searchengine (selection-name prompt-name url description key-selection key-prompt)
@@ -700,7 +691,6 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;;;
 ;; Bind Jump Defines from Earlier
 ;;;
-
 ;; Keybindings for Terminal Jumps
 (define-key *search-map* (kbd "m") "mansearch")
 (define-key *search-map* (kbd "M") "manpage")
@@ -723,7 +713,10 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
   (set-default-sounds)
   (play-startup-sound)
   ;; which-key interactive
-  (which-key-mode))
+  (which-key-mode)
+  ;; start slynk server
+  (slynk:create-server
+   :dont-close t))
 
 ;; Finish Threads
 (defvar *bind-thread-list*

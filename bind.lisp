@@ -23,24 +23,19 @@
 ;;;
 ;; Make New Keymaps
 ;;;
-(defvar *search-map*
-  (let ((map (make-sparse-keymap)))
-    map))
-(defvar *media-map*
-  (let ((map (make-sparse-keymap)))
-    map))
-(defvar *app-map*
-  (let ((map (make-sparse-keymap)))
-    map))
+(defmacro make-keymap (map-name key-binding &optional root top)
+  `(progn
+     (defvar ,map-name
+       (let ((map (make-sparse-keymap)))
+	 map))
+     (when ,root
+       (define-key *root-map* (kbd ,key-binding) ,map-name))
+     (when ,top
+       (define-key *top-map* (kbd ,key-binding) ,map-name))))
 
-(define-key *root-map* (kbd "M-s") *search-map*)
-(define-key *top-map* (kbd "M-s") *search-map*)
-
-(define-key *root-map* (kbd "M-m") *media-map*)
-(define-key *top-map* (kbd "M-m") *media-map*)
-
-(define-key *root-map* (kbd "M-a") *app-map*)
-(define-key *top-map* (kbd "M-a") *app-map*)
+(make-keymap *search-map* "M-s" t t)
+(make-keymap *media-map* "M-m" t t)
+(make-keymap *app-map* "M-a" t t)
 
 ;;;
 ;; Bind Macro
@@ -136,27 +131,18 @@
 ;;;
 ;; Loop & Bind with Macros from earlier
 ;;;
-;; Bind shell keys to *app-map*
-(defvar *my-shell-key-thread*
-  (loop-and-bind *my-shell-key-commands* bind-shell-to-key *app-map*))
-;; Bind app keys to *app-map*
-(defvar *my-app-key-thread*
-  (loop-and-bind *my-app-key-commands* bind-shell-to-key *app-map*))
-;; Bind rofi keys to *app-map*
-(defvar *my-rofi-key-thread*
-  (loop-and-bind *my-rofi-key-commands* bind-shell-to-key *app-map*))
-;; Bind module command keys to *app-map*
-(defvar *my-wm-module-thread*
-  (loop-and-bind *my-wm-module-commands* bind-to-key *app-map*))
-;; Bind special keys to *top-map*
-(defvar *my-special-key-thread*
-  (loop-and-bind *my-special-key-commands* bind-shell-to-key *top-map*))
-;; Bind Playerctl Commands
-(defvar *my-media-key-thread*
-  (loop-and-bind *my-media-key-commands* bind-shell-to-key *media-map*))
-;; Bind window management command keys to *root-map*
-(defvar *my-wm-window-thread*
-  (loop-and-bind *my-wm-window-commands* bind-to-key *root-map*))
+;; List of binds
+(defparameter *key-bindings*
+  '((*my-shell-key-thread* *my-shell-key-commands* bind-shell-to-key *app-map*)
+    (*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
+    (*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
+    (*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
+    (*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)
+    (*my-media-key-thread* *my-media-key-commands* bind-shell-to-key *media-map*)
+    (*my-wm-window-thread* *my-wm-window-commands* bind-to-key *root-map*)))
 
-(define-key *root-map* (kbd "M-s") '*search-map*)
-(define-key *root-map* (kbd "M-a") '*app-map*)
+;; Loop over list
+(dolist (binding *key-bindings*)
+  (destructuring-bind (name commands binding-fn map) binding
+    (eval `(defvar ,name
+             (loop-and-bind ,commands ,binding-fn ,map)))))

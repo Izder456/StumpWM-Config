@@ -21,10 +21,6 @@
 ;; Load Slynk Package
 (ql:quickload :slynk)
 
-(when *initializing*
-  ;; Start Slynk Server
-  (slynk:create-server :dont-close t))
-
 ;;;
 ;; Colors
 ;;;
@@ -50,14 +46,14 @@
 
 ;; Color list for `^` formatting
 (setf *colors* (list iz-black ;; ^0
-                     iz-red ;; ^1
-                     iz-green ;; ^2
+                     iz-softred ;; ^1
+                     iz-softgreen ;; ^2
                      iz-yellow ;; ^3
-                     iz-blue ;; ^4
-                     iz-purple ;; ^5
-                     iz-aqua ;; ^6
+                     iz-softblue ;; ^4
+                     iz-softpurple ;; ^5
+                     iz-softaqua ;; ^6
                      iz-white ;; ^7
-                     iz-orange ;; ^8
+                     iz-softorange ;; ^8
                      iz-gray ;; ^9
                      ))
 ;; Set those colors
@@ -93,7 +89,7 @@
 
 ;; Set env vars
 (setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin")
-(setf (getenv "PAGER") "most")
+(setf (getenv "PAGER") "less -R")
 
 ;;;
 ;; Modules & their config
@@ -105,13 +101,13 @@
 
 (defvar *modulenames*
   (list "swm-gaps"
-        "swm-emacs"
-        "scratchpad"
-        "hostname"
-        "battery-portable"
-        "stumpwm-sndioctl"
-        "browse"
-        "searchengines"))
+	"swm-emacs"
+	"scratchpad"
+	"hostname"
+	"battery-portable"
+	"stumpwm-sndioctl"
+	"browse"
+	"searchengines"))
 
 (dolist (modulename *modulenames*)
   (load-module modulename))
@@ -119,7 +115,6 @@
 ;;
 ;; Module Settings
 ;;
-
 ;; swm-gapes
 ;; Set Gaps
 (setf swm-gaps:*inner-gaps-size* 8
@@ -189,6 +184,12 @@
 (defun show-temp ()
   (run-shell-command-and-format "sysctl -n hw.sensors.cpu0.temp0"))
 
+;; Show Volume
+(defun show-output-vol ()
+  (run-shell-command-and-format "sndioctl -n output.level"))
+(defun show-input-vol ()
+  (run-shell-command-and-format "sndioctl -n input.level"))
+  
 ;; Show the window title
 (defun show-window-title ()
   (substitute #\Space #\Newline (window-title (current-window))))
@@ -203,31 +204,39 @@
 
 ;; Format Lists
 (defvar group-fmt (list
-                   "^n%g" ;; Default
-                   ))
+		   "^n%g" ;; Default
+		   ))
 (defvar win-fmt (list
-                 "^n%v ^>^7" ;; Default -> Right Allign
-                 ))
+		 "^n%v ^>^7" ;; Default -> Right Allign
+		 ))
+(defvar audio-fmt (list
+		   " " '(:eval (show-output-vol))
+		   "/"
+		   " " '(:eval (show-input-vol))
+		   ))
 (defvar status-fmt (list
-                    "^n" pipe ;; Default
-                    " %h " pipe ;; Hostname
-                    " %B " pipe ;; Battery
-                    " " '(:eval (show-temp)) pipe;; Cpu Temp
-                    " %d " pipe ;; Date
-                    ))
+		    "^n" pipe ;; Default
+		    " %h " pipe ;; Hostname
+		    " %B " pipe ;; Battery
+		    " " '(:eval (show-temp)) pipe ;; Cpu Temp
+		    " %d " ;; Date
+		    ))
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
-      (list "^b(" ;; Yellow
-            group-fmt
-            "^1 [ " ;; Red
-            win-fmt
-            "^1] " ;; Red
-            "^5[" ;; Magenta
-            status-fmt
-            "^5]" ;; Magenta
-            "^3^b)" ;; Yellow
-            ))
+      (list "(" ;; Yellow
+	    group-fmt
+	    "^1 [ " ;; Red
+	    win-fmt
+	    "^1] " ;; Red
+	    "^6{" ;; Aqua
+	    audio-fmt
+	    "^6} " ;; Aqua
+	    "^5[" ;; Magenta
+	    status-fmt
+	    "^5]" ;; Magenta
+	    "^3)" ;; Yellow
+	    ))
 
 ;; Format Modeline
 (setf *mode-line-background-color* iz-black

@@ -7,7 +7,7 @@
   `(defcommand ,(intern name) (search)
                ((:rest ,(concatenate 'string name " termsearch: ")))
                (nsubstitute #\+ #\Space search)
-               (run-shell-command (format nil "~a -e sh -c '~a ~a | most'" ,term ,command search))))
+               (run-shell-command (format nil "~a -e sh -c '~a ~a | less -R'" ,term ,command search))))
 
 ;;
 ;; Browser
@@ -18,8 +18,7 @@
 (setf browse::*homepage* "http://68k.news")
 
 ;; Set browser exe
-(setf *my-browser* 'firefox-esr)
-(setf searchengines:*search-browser-executable* (string *my-browser*))
+(setf searchengines:*search-browser-executable* "firefox-esr")
 
 ;; Macro for search engine defines
 (defmacro define-searchengine (selection-name prompt-name url description key-selection key-prompt)
@@ -49,7 +48,6 @@
 ;;;
 ;; Bind Jump Defines from Earlier
 ;;;
-
 ;; Keybindings for Terminal Jumps
 (define-key *search-map* (kbd "m") "mansearch")
 (define-key *search-map* (kbd "M") "manpage")

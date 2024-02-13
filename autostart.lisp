@@ -10,7 +10,10 @@
   (set-default-sounds)
   (play-startup-sound)
   ;; which-key interactive
-  (which-key-mode))
+  (which-key-mode)
+  ;; start slynk server
+  (slynk:create-server
+   :dont-close t))
 
 ;; Finish Threads
 (defvar *bind-thread-list*
