@@ -94,8 +94,7 @@
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
-  '(("SPC" "rofi -i -show-icons -show drun")
-    ("RET" "rofi -i -show-icons -show window")))
+  '(("SPC" "rofi -i -show-icons -matching fuzzy -show drun")))
 
 ;; Set Playerctl Keys
 (defvar *my-media-key-commands*
@@ -116,6 +115,7 @@
     ("x" "xkill")
     ("B" "beckon")
     ("C-b" "banish")
+    ("RET" "expose")
     ("C-Up" "exchange-direction up")
     ("C-Down" "exchange-direction down")
     ("C-Left" "exchange-direction left")

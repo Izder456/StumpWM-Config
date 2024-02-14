@@ -77,21 +77,21 @@
 | =M-a=    | =/=        | open ssh menu                    |
 | =M-a=    | =s-e=      | force kill emacs daemon          |
 | =M-a=    | =Space=    | rofi drun menu                   |
-| =M-a=    | =Return=   | rofi window select menu          |
+| =M-a=    | =Return=   | stumpwm window select menu       |
 | =M-a=    | =M-b=      | shuffle background               |
 | =M-a=    | =l=        | lock screen with slock           |
 
 ** Player Commands
 
-| Prefix | Bind | Function       |
-|--------+------+----------------|
-| =M-m=    | =p=    | play/pause     |
-| =M-m=    | =s=    | stop           |
-| =M-m=    | =n=    | next           |
-| =M-m=    | =b=    | previous       |
-| =M-m=    | =z=    | toggle shuffle |
-| =M-m= | =XF86AudioRaiseVolume= | player volume up 5% |
-| =M-m= | =XF86AudioLowereVolume= | player volume down 5% |
+| Prefix | Bind                  | Function              |
+|--------+-----------------------+-----------------------|
+| =M-m=    | =p=                     | play/pause            |
+| =M-m=    | =s=                     | stop                  |
+| =M-m=    | =n=                     | next                  |
+| =M-m=    | =b=                     | previous              |
+| =M-m=    | =z=                     | toggle shuffle        |
+| =M-m=    | =XF86AudioRaiseVolume=  | player volume up 5%   |
+| =M-m=    | =XF86AudioLowereVolume= | player volume down 5% |
 
 ** Window Management
 
@@ -588,8 +588,7 @@ Handling bindings
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
-  '(("SPC" "rofi -i -show-icons -show drun")
-    ("RET" "rofi -i -show-icons -show window")))
+  '(("SPC" "rofi -i -show-icons -matching fuzzy -show drun")))
 
 ;; Set Playerctl Keys
 (defvar *my-media-key-commands*
@@ -610,6 +609,7 @@ Handling bindings
     ("x" "xkill")
     ("B" "beckon")
     ("C-b" "banish")
+    ("RET" "expose")
     ("C-Up" "exchange-direction up")
     ("C-Down" "exchange-direction down")
     ("C-Left" "exchange-direction left")
