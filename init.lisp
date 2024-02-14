@@ -8,6 +8,16 @@
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
+;; Load Quicklisp Packages
+(ql:quickload '("clx"
+		"cl-ppcre"
+		"alexandria"
+		"cl-fad"
+		"xembed"
+		"anaphora"
+		"drakma"
+		"slynk"))
+
 ;; no style-warns
 (declaim #+sbcl(sb-ext:muffle-conditions style-warning))
 
@@ -17,9 +27,6 @@
 
 ;; Set Modules
 (set-module-dir "~/.stumpwm.d/modules")
-
-;; Load Slynk Package
-(ql:quickload :slynk)
 
 ;;;
 ;; Colors
@@ -48,7 +55,7 @@
 (setf *colors* (list iz-black ;; ^0
                      iz-softred ;; ^1
                      iz-softgreen ;; ^2
-                     iz-yellow ;; ^3
+                     iz-softyellow ;; ^3
                      iz-softblue ;; ^4
                      iz-softpurple ;; ^5
                      iz-softaqua ;; ^6
@@ -72,16 +79,16 @@
 
 ;; MouseKeys
 (setf *mouse-focus-policy* :click
-      *float-window-modifier* :SUPER)
+      *float-window-modifier* :super)
 
 ;; Welcome
-(setq *startup-message* (format nil "^B^8Welcome Izzy!")) ;; Orange
+(setq *startup-message* (format nil "^b^8Welcome Izzy!")) ;; Orange
 
 ;; Set focus and unfocus colors
 (set-focus-color iz-white)
 (set-unfocus-color iz-gray)
-(set-float-focus-color iz-aqua)
-(set-float-unfocus-color iz-softaqua)
+(set-float-focus-color iz-softaqua)
+(set-float-unfocus-color iz-aqua)
 
 ;;;
 ;; Env Vars
@@ -100,18 +107,23 @@
 (add-to-load-path "~/.stumpwm.d/extras/scratchpad")
 
 (defvar *modulenames*
-  (list "swm-gaps"
-	"swm-emacs"
-	"scratchpad"
-	"hostname"
-	"battery-portable"
-	"stumpwm-sndioctl"
-	"browse"
-	"searchengines"))
+  (list
+   "swm-gaps" ;; gaps
+   "swm-emacs" ;; emacs
+   "swm-ssh" ;; ssh
+   "scratchpad" ;; floating scratchterm
+   "hostname" ;; native hostname
+   "battery-portable" ;; battery level
+   "stumpwm-sndioctl" ;; sound
+   "browse" ;; browser
+   "searchengines" ;; search macros
+   "beckon" ;; yank mouse cursor focus
+   "globalwindows" ;; navigate windows in all spacs
+   "urgentwindows" ;; get urgent windows
+   ))
 
 (dolist (modulename *modulenames*)
   (load-module modulename))
-
 ;;
 ;; Module Settings
 ;;
@@ -121,14 +133,19 @@
       swm-gaps:*outer-gaps-size* 10)
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
+;; SSH
+(setq swm-ssh:*swm-ssh-default-term* "st")
+
+;; urgent window
+(setf urgentwindows:*urgent-window-message* "Application ~a has just finished!")
 
 ;; scratchpad
 ;; define default scratchpad term
 (defcommand scratchpad-term () ()
-            (scratchpad:toggle-floating-scratchpad "term" "st"
-                                                   :initial-gravity :center
-                                                   :initial-width 720
-                                                   :initial-height 480))
+	    (scratchpad:toggle-floating-scratchpad "term" "st"
+						   :initial-gravity :center
+						   :initial-width 720
+						   :initial-height 480))
 ;; Bind Scratchpad to Super+t
 (define-key *top-map* (kbd "s-t") "scratchpad-term")
 
@@ -149,13 +166,17 @@
   (gnewbg "Jeff")
   (gnewbg "Poo"))
 
+;; Clear rules
+(clear-window-placement-rules)
+
 ;; Group format
 (setf *group-format* "%n %t")
 
 ;; Window format
 (setf *window-format* (format NIL "^(:fg \"~A\")<%25t>" iz-softgreen)
       *window-border-style* :tight
-      *normal-border-width* 4)
+      *normal-border-width* 4
+      *hidden-window-color* "^**")
 
 ;; Time format
 (setf *time-modeline-string* "%a, %b %d @%I:%M%p")
@@ -219,7 +240,7 @@
 		    " %h " pipe ;; Hostname
 		    " %B " pipe ;; Battery
 		    " " '(:eval (show-temp)) pipe ;; Cpu Temp
-		    " %d " ;; Date
+		    " %d " pipe ;; Date
 		    ))
 
 ;; Screen mode line format

@@ -74,6 +74,7 @@
 | =M-a=    | =F=        | open pcmanfm                     |
 | =M-a=    | =E=        | open claws-mail                  |
 | =M-a=    | =e= /OR/ =C-e= | open emacs daemon /OR/ open client |
+| =M-a=    | =/=        | open ssh menu                    |
 | =M-a=    | =s-e=      | force kill emacs daemon          |
 | =M-a=    | =Space=    | rofi drun menu                   |
 | =M-a=    | =Return=   | rofi window select menu          |
@@ -113,6 +114,8 @@
 | =C-t=    | =q=                          | Prompt to exit session                       |
 | =C-t=    | =M-q=                        | Quick exit session                           |
 | =C-t=    | =M-Escape=                   | Toggle Modeline                              |
+| =C-t=    | =B=                          | Yank mouse focus to current window           |
+| =C-t=    | =C-b=                        | Hide mouse cursor                            |
 
 ** Misc
 
@@ -163,6 +166,16 @@ This is the first thing the WM Loads.
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
+;; Load Quicklisp Packages
+(ql:quickload '("clx"
+		"cl-ppcre"
+		"alexandria"
+		"cl-fad"
+		"xembed"
+		"anaphora"
+		"drakma"
+		"slynk"))
+
 ;; no style-warns
 (declaim #+sbcl(sb-ext:muffle-conditions style-warning))
 
@@ -172,9 +185,6 @@ This is the first thing the WM Loads.
 
 ;; Set Modules
 (set-module-dir "~/.stumpwm.d/modules")
-
-;; Load Slynk Package
-(ql:quickload :slynk)
 #+END_SRC
 
 *** Colors
@@ -207,7 +217,7 @@ This is the first thing the WM Loads.
 (setf *colors* (list iz-black ;; ^0
                      iz-softred ;; ^1
                      iz-softgreen ;; ^2
-                     iz-yellow ;; ^3
+                     iz-softyellow ;; ^3
                      iz-softblue ;; ^4
                      iz-softpurple ;; ^5
                      iz-softaqua ;; ^6
@@ -235,16 +245,16 @@ This is the first thing the WM Loads.
 
 ;; MouseKeys
 (setf *mouse-focus-policy* :click
-      ,*float-window-modifier* :SUPER)
+      ,*float-window-modifier* :super)
 
 ;; Welcome
-(setq *startup-message* (format nil "^B^8Welcome Izzy!")) ;; Orange
+(setq *startup-message* (format nil "^b^8Welcome Izzy!")) ;; Orange
 
 ;; Set focus and unfocus colors
 (set-focus-color iz-white)
 (set-unfocus-color iz-gray)
-(set-float-focus-color iz-aqua)
-(set-float-unfocus-color iz-softaqua)
+(set-float-focus-color iz-softaqua)
+(set-float-unfocus-color iz-aqua)
 #+END_SRC
 
 *** Environment Variables
@@ -271,18 +281,23 @@ This is the first thing the WM Loads.
 (add-to-load-path "~/.stumpwm.d/extras/scratchpad")
 
 (defvar *modulenames*
-  (list "swm-gaps"
-	"swm-emacs"
-	"scratchpad"
-	"hostname"
-	"battery-portable"
-	"stumpwm-sndioctl"
-	"browse"
-	"searchengines"))
+  (list
+   "swm-gaps" ;; gaps
+   "swm-emacs" ;; emacs
+   "swm-ssh" ;; ssh
+   "scratchpad" ;; floating scratchterm
+   "hostname" ;; native hostname
+   "battery-portable" ;; battery level
+   "stumpwm-sndioctl" ;; sound
+   "browse" ;; browser
+   "searchengines" ;; search macros
+   "beckon" ;; yank mouse cursor focus
+   "globalwindows" ;; navigate windows in all spacs
+   "urgentwindows" ;; get urgent windows
+   ))
 
 (dolist (modulename *modulenames*)
   (load-module modulename))
-
 ;;
 ;; Module Settings
 ;;
@@ -292,14 +307,19 @@ This is the first thing the WM Loads.
       swm-gaps:*outer-gaps-size* 10)
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
+;; SSH
+(setq swm-ssh:*swm-ssh-default-term* "st")
+
+;; urgent window
+(setf urgentwindows:*urgent-window-message* "Application ~a has just finished!")
 
 ;; scratchpad
 ;; define default scratchpad term
 (defcommand scratchpad-term () ()
-            (scratchpad:toggle-floating-scratchpad "term" "st"
-                                                   :initial-gravity :center
-                                                   :initial-width 720
-                                                   :initial-height 480))
+	    (scratchpad:toggle-floating-scratchpad "term" "st"
+						   :initial-gravity :center
+						   :initial-width 720
+						   :initial-height 480))
 ;; Bind Scratchpad to Super+t
 (define-key *top-map* (kbd "s-t") "scratchpad-term")
 #+END_SRC
@@ -328,13 +348,17 @@ This is the first thing the WM Loads.
   (gnewbg "Jeff")
   (gnewbg "Poo"))
 
+;; Clear rules
+(clear-window-placement-rules)
+
 ;; Group format
 (setf *group-format* "%n %t")
 
 ;; Window format
 (setf *window-format* (format NIL "^(:fg \"~A\")<%25t>" iz-softgreen)
       ,*window-border-style* :tight
-      ,*normal-border-width* 4)
+      ,*normal-border-width* 4
+      ,*hidden-window-color* "^**")
 
 ;; Time format
 (setf *time-modeline-string* "%a, %b %d @%I:%M%p")
@@ -403,7 +427,7 @@ This is the first thing the WM Loads.
 		    " %h " pipe ;; Hostname
 		    " %B " pipe ;; Battery
 		    " " '(:eval (show-temp)) pipe ;; Cpu Temp
-		    " %d " ;; Date
+		    " %d " pipe ;; Date
 		    ))
 
 ;; Screen mode line format
@@ -527,11 +551,11 @@ Handling bindings
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Push/Pop Current Window Into a Floating group
 (defcommand toggle-float () ()
-            (sb-thread:make-thread
-             (lambda ()
-               (if (float-window-p (current-window))
-                   (unfloat-this)
-                 (float-this)))))
+	    (sb-thread:make-thread
+	     (lambda ()
+	       (if (float-window-p (current-window))
+		   (unfloat-this)
+		 (float-this)))))
 #+END_SRC
 
 *** Define Bind Keylists
@@ -582,8 +606,10 @@ Handling bindings
   '(("M-ESC" "mode-line")
     ("M-q" "quit")
     ("m" "mark")
-    ("x" "xkill")
     ("M" "gmove-marked")
+    ("x" "xkill")
+    ("B" "beckon")
+    ("C-b" "banish")
     ("C-Up" "exchange-direction up")
     ("C-Down" "exchange-direction down")
     ("C-Left" "exchange-direction left")
@@ -594,6 +620,7 @@ Handling bindings
 ;; Raw StumpWM Module Commands
 (defvar *my-wm-module-commands*
   '(("f" "browse")
+    ("/" "swm-ssh-menu")
     ("s-e" "emacs-daemon-kill-force")
     ("e" "swm-emacs")
     ("C-e" "swm-emacs")))
@@ -607,19 +634,19 @@ Handling bindings
 ;;;
 ;; List of binds
 (defparameter *key-bindings*
-  '((*my-shell-key-thread* *my-shell-key-commands* bind-shell-to-key *app-map*)
-    (*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
-    (*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
-    (*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
-    (*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)
-    (*my-media-key-thread* *my-media-key-commands* bind-shell-to-key *media-map*)
-    (*my-wm-window-thread* *my-wm-window-commands* bind-to-key *root-map*)))
+	      '((*my-shell-key-thread* *my-shell-key-commands* bind-shell-to-key *app-map*)
+		(*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
+		(*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
+		(*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
+		(*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)
+		(*my-media-key-thread* *my-media-key-commands* bind-shell-to-key *media-map*)
+		(*my-wm-window-thread* *my-wm-window-commands* bind-to-key *root-map*)))
 
 ;; Loop over list
 (dolist (binding *key-bindings*)
   (destructuring-bind (name commands binding-fn map) binding
-    (eval `(defvar ,name
-             (loop-and-bind ,commands ,binding-fn ,map)))))
+		      (eval `(defvar ,name
+			       (loop-and-bind ,commands ,binding-fn ,map)))))
 #+END_SRC
 
 ** jumps.lisp
@@ -636,9 +663,10 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;; Term Jump commands
 (defmacro make-term-jump (name command term)
   `(defcommand ,(intern name) (search)
-               ((:rest ,(concatenate 'string name " termsearch: ")))
-               (nsubstitute #\+ #\Space search)
-               (run-shell-command (format nil "~a -e sh -c '~a ~a | less -R'" ,term ,command search))))
+	       ((:rest ,(concatenate 'string name " termsearch: ")))
+	       (nsubstitute #\+ #\Space search)
+	       (run-shell-command
+		(format nil "~a -e sh -c '~a ~a | less -R'" ,term ,command search))))
 #+END_SRC
 
 *** Define Browse Jumps
@@ -647,6 +675,11 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;;
 ;; Browser
 ;;
+
+;; run-or-raise ESR
+(defcommand firefox-esr () ()
+  "Run or raise Firefox ESR."
+  (sb-thread:make-thread (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
 
 ;; Module Settings
 ;; Set homepage
@@ -714,19 +747,20 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
   (play-startup-sound)
   ;; which-key interactive
   (which-key-mode)
-  ;; start slynk server
+  ;; re/start slynk server
   (slynk:create-server
    :dont-close t))
 
 ;; Finish Threads
 (defvar *bind-thread-list*
-  (list *my-special-key-thread*
-        ,*my-wm-window-thread*
-        ,*my-shell-key-thread*
-        ,*my-app-key-thread*
-        ,*my-rofi-key-thread*
-        ,*my-media-key-thread*
-        ,*my-wm-module-thread*))
+  (list
+   ,*my-special-key-thread*
+   ,*my-wm-window-thread*
+   ,*my-shell-key-thread*
+   ,*my-app-key-thread*
+   ,*my-rofi-key-thread*
+   ,*my-media-key-thread*
+   ,*my-wm-module-thread*))
 (dolist (threadname *bind-thread-list*)
   (sb-thread:join-thread threadname))
 #+END_SRC
