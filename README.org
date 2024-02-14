@@ -77,7 +77,7 @@
 | =M-a=    | =/=        | open ssh menu                    |
 | =M-a=    | =s-e=      | force kill emacs daemon          |
 | =M-a=    | =Space=    | rofi drun menu                   |
-| =M-a=    | =Return=   | stumpwm window select menu   |
+| =M-a=    | =Return=   | stumpwm window select menu       |
 | =M-a=    | =M-b=      | shuffle background               |
 | =M-a=    | =l=        | lock screen with slock           |
 
