@@ -175,12 +175,8 @@
 ;; Window format
 (setf *window-format* (format NIL "^(:fg \"~A\")<%25t>" iz-softgreen)
       *window-border-style* :tight
-<<<<<<< HEAD
-      *normal-border-width* 3)
-=======
-      *normal-border-width* 4
+      *normal-border-width* 3
       *hidden-window-color* "^**")
->>>>>>> origin
 
 ;; Time format
 (setf *time-modeline-string* "%a, %b %d @%I:%M%p")
