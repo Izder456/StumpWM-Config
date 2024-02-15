@@ -61,11 +61,11 @@
 
 ;; Push/Pop Current Window Into a Floating group
 (defcommand toggle-float () ()
-            (sb-thread:make-thread
-             (lambda ()
-               (if (float-window-p (current-window))
-                   (unfloat-this)
-                 (float-this)))))
+	    (sb-thread:make-thread
+	     (lambda ()
+	       (if (float-window-p (current-window))
+		   (unfloat-this)
+		 (float-this)))))
 
 ;;;
 ;; Bind Key Lists
@@ -94,8 +94,7 @@
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
-  '(("SPC" "rofi -i -show-icons -show drun")
-    ("RET" "rofi -i -show-icons -show window")))
+  '(("SPC" "rofi -i -show-icons -matching fuzzy -show drun")))
 
 ;; Set Playerctl Keys
 (defvar *my-media-key-commands*
@@ -112,8 +111,11 @@
   '(("M-ESC" "mode-line")
     ("M-q" "quit")
     ("m" "mark")
-    ("x" "xkill")
     ("M" "gmove-marked")
+    ("x" "xkill")
+    ("B" "beckon")
+    ("C-b" "banish")
+    ("RET" "expose")
     ("C-Up" "exchange-direction up")
     ("C-Down" "exchange-direction down")
     ("C-Left" "exchange-direction left")
@@ -124,6 +126,7 @@
 ;; Raw StumpWM Module Commands
 (defvar *my-wm-module-commands*
   '(("f" "browse")
+    ("/" "swm-ssh-menu")
     ("s-e" "emacs-daemon-kill-force")
     ("e" "swm-emacs")
     ("C-e" "swm-emacs")))
@@ -133,16 +136,16 @@
 ;;;
 ;; List of binds
 (defparameter *key-bindings*
-  '((*my-shell-key-thread* *my-shell-key-commands* bind-shell-to-key *app-map*)
-    (*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
-    (*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
-    (*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
-    (*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)
-    (*my-media-key-thread* *my-media-key-commands* bind-shell-to-key *media-map*)
-    (*my-wm-window-thread* *my-wm-window-commands* bind-to-key *root-map*)))
+	      '((*my-shell-key-thread* *my-shell-key-commands* bind-shell-to-key *app-map*)
+		(*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
+		(*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
+		(*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
+		(*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)
+		(*my-media-key-thread* *my-media-key-commands* bind-shell-to-key *media-map*)
+		(*my-wm-window-thread* *my-wm-window-commands* bind-to-key *root-map*)))
 
 ;; Loop over list
 (dolist (binding *key-bindings*)
   (destructuring-bind (name commands binding-fn map) binding
-    (eval `(defvar ,name
-             (loop-and-bind ,commands ,binding-fn ,map)))))
+		      (eval `(defvar ,name
+			       (loop-and-bind ,commands ,binding-fn ,map)))))

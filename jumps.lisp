@@ -5,13 +5,19 @@
 ;; Term Jump commands
 (defmacro make-term-jump (name command term)
   `(defcommand ,(intern name) (search)
-               ((:rest ,(concatenate 'string name " termsearch: ")))
-               (nsubstitute #\+ #\Space search)
-               (run-shell-command (format nil "~a -e sh -c '~a ~a | less -R'" ,term ,command search))))
+	       ((:rest ,(concatenate 'string name " termsearch: ")))
+	       (nsubstitute #\+ #\Space search)
+	       (run-shell-command
+		(format nil "~a -e sh -c '~a ~a | less -R'" ,term ,command search))))
 
 ;;
 ;; Browser
 ;;
+
+;; run-or-raise ESR
+(defcommand firefox-esr () ()
+  "Run or raise Firefox ESR."
+  (sb-thread:make-thread (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
 
 ;; Module Settings
 ;; Set homepage
