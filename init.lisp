@@ -67,8 +67,8 @@
 (set-fg-color iz-white)
 (set-bg-color iz-black)
 (set-border-color iz-white)
-(set-msg-border-width 4)
-(set-font "-*-spleen-*-*-*-*-12-*-*-*-*-*-*-*")
+(set-msg-border-width 3)
+(set-font "-*-spleen-*-*-*-*-16-*-*-*-*-*-*-*")
 
 ;; MouseKeys
 (setf *mouse-focus-policy* :click
@@ -117,8 +117,8 @@
 ;;
 ;; swm-gapes
 ;; Set Gaps
-(setf swm-gaps:*inner-gaps-size* 8
-      swm-gaps:*outer-gaps-size* 10)
+(setf swm-gaps:*inner-gaps-size* 6
+      swm-gaps:*outer-gaps-size* 6)
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
 
@@ -155,15 +155,15 @@
 ;; Window format
 (setf *window-format* (format NIL "^(:fg \"~A\")<%25t>" iz-softgreen)
       *window-border-style* :tight
-      *normal-border-width* 4)
+      *normal-border-width* 3)
 
 ;; Time format
 (setf *time-modeline-string* "%a, %b %d @%I:%M%p")
 
 ;; Message window settings
-(setf *message-window-padding* 12
-      *message-window-y-padding* 10
-      *message-window-gravity* :top)
+(setf *message-window-padding* 6
+      *message-window-y-padding* 6
+      *message-window-gravity* :bottom)
 
 ;; Input window settings
 (setf *input-window-gravity* :center)
@@ -189,7 +189,12 @@
   (run-shell-command-and-format "sndioctl -n output.level"))
 (defun show-input-vol ()
   (run-shell-command-and-format "sndioctl -n input.level"))
-  
+
+;; Player Stuffs
+(defun show-current-track ()
+  (run-shell-command-and-format
+   "playerctl metadata --format '|{{truncate(uc(status), 1)}}: [{{duration(position)}}] V@{{trunc(volume, 5)}}|'"))
+
 ;; Show the window title
 (defun show-window-title ()
   (substitute #\Space #\Newline (window-title (current-window))))
@@ -210,16 +215,16 @@
 		 "^n%v ^>^7" ;; Default -> Right Allign
 		 ))
 (defvar audio-fmt (list
-		   " " '(:eval (show-output-vol))
-		   "/"
 		   " " '(:eval (show-input-vol))
+		   "/"
+		   " " '(:eval (show-output-vol))
+		   '(:eval (show-current-track))
 		   ))
 (defvar status-fmt (list
 		    "^n" pipe ;; Default
-		    " %h " pipe ;; Hostname
 		    " %B " pipe ;; Battery
 		    " " '(:eval (show-temp)) pipe ;; Cpu Temp
-		    " %d " ;; Date
+		    " %d " pipe ;; Date
 		    ))
 
 ;; Screen mode line format
@@ -242,10 +247,10 @@
 (setf *mode-line-background-color* iz-black
       *mode-line-foreground-color* iz-softyellow
       *mode-line-border-color* iz-white
-      *mode-line-border-width* 4
-      *mode-line-pad-x* 12
-      *mode-line-pad-y* 10
-      *mode-line-timeout* 5)
+      *mode-line-border-width* 3
+      *mode-line-pad-x* 6
+      *mode-line-pad-y* 6
+      *mode-line-timeout* 1)
 
 ;; Toggle mode line display
 (toggle-mode-line (current-screen) (current-head))
