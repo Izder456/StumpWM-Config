@@ -323,15 +323,15 @@ This is the first thing the WM Loads.
 ;; Rename and create new groups
 (when *initializing*
   (grename "Ness")
-  (gnewbg "Paula")
   (gnewbg "Jeff")
+  (gnewbg "Paula")
   (gnewbg "Poo"))
 
 ;; Clear rules
 (clear-window-placement-rules)
 
 ;; Group format
-(setf *group-format* "%n %t")
+(setf *group-format* "%n")
 
 ;; Window format
 (setf *window-format* (format NIL "^(:fg \"~A\")<%25t>" iz-softgreen)
@@ -379,7 +379,7 @@ This is the first thing the WM Loads.
 ;; Player Stuffs
 (defun show-current-track ()
   (run-shell-command-and-format
-   "playerctl metadata --format '|{{truncate(uc(status), 1)}}: [{{duration(position)}}] V@{{trunc(volume, 5)}}|'"))
+   "playerctl metadata --format '| [{{duration(position)}}] @{{trunc(volume, 5)}}|'"))
 
 ;; Show the window title
 (defun show-window-title ()
