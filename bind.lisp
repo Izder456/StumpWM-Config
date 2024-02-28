@@ -55,17 +55,16 @@
 
 ;; Loop through keybind lists and bind them
 (defmacro loop-and-bind (key-cmd-list bind-macro &optional (map *root-map*))
-  `(sb-thread:make-thread
+  `(bt:make-thread
     (lambda ()
-      (dolist (key-cmd ,key-cmd-list) (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
+      (dolist (key-cmd ,key-cmd-list)
+              (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
 
 ;; Push/Pop Current Window Into a Floating group
 (defcommand toggle-float () ()
-	    (sb-thread:make-thread
-	     (lambda ()
-	       (if (float-window-p (current-window))
-		   (unfloat-this)
-		 (float-this)))))
+    (if (float-window-p (current-window))
+        (unfloat-this)
+        (float-this)))
 
 ;;;
 ;; Bind Key Lists

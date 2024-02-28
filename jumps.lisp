@@ -17,7 +17,7 @@
 ;; run-or-raise ESR
 (defcommand firefox-esr () ()
   "Run or raise Firefox ESR."
-  (sb-thread:make-thread (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
+  (bt:make-thread (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
 
 ;; Module Settings
 ;; Set homepage
@@ -37,6 +37,7 @@
 (defparameter *URL-LIBRE* "https://search.ahwx.org/search.php?q=~a")
 (defparameter *URL-PORTS* "https://openports.eu/search?q=~a")
 
+;; Create threads
 (define-searchengine "search-ddg-selection" "search-ddg-prompt" *URL-DDG* "DuckDuckGo search" "C-s" "s")
 (define-searchengine "search-libre-selection" "search-libre-prompt" *URL-LIBRE* "LibreY search" "C-l" "l")
 (define-searchengine "search-ports-selection" "search-ports-prompt" *URL-PORTS* "Ports Search" "C-o" "o")

@@ -2,6 +2,7 @@
 ;; StumpWM Boilerplate
 ;;;
 
+
 ;; Quicklisp Setup
 (let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp"
                                        (user-homedir-pathname))))
@@ -20,6 +21,9 @@
 
 ;; no style-warns
 (declaim #+sbcl(sb-ext:muffle-conditions style-warning))
+
+;; Optimize
+(declaim (optimize (speed 3) (safety 0) (debug 0) (space 0)))
 
 ;; this automatically prefixes 'stumpwm:' to commands that need it
 (in-package :stumpwm)

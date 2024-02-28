@@ -26,4 +26,4 @@
    *my-media-key-thread*
    *my-wm-module-thread*))
 (dolist (threadname *bind-thread-list*)
-  (sb-thread:join-thread threadname))
+  (bt:join-thread threadname))
