@@ -64,6 +64,7 @@
                      iz-softorange ;; ^8
                      iz-gray ;; ^9
                      ))
+
 ;; Set those colors
 (update-color-map (current-screen))
 
@@ -154,6 +155,9 @@
 ;; Load in other files
 ;;;
 
+;; pre-binds
+(load "~/.stumpwm.d/pre-bind.lisp")
+ 
 ;; binds
 (load "~/.stumpwm.d/bind.lisp")
 

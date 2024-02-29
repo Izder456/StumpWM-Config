@@ -35,9 +35,11 @@
     - [[#window-groups][Window Groups]]
     - [[#modeline-formatting][Modeline Formatting]]
     - [[#cleanup-and-autostarts][Cleanup and Autostarts]]
-  - [[#bindlisp][bind.lisp]]
+  - [[#pre-bindlisp][pre-bind.lisp]]
     - [[#set-key-prefix][Set Key Prefix]]
     - [[#remove-default-binds][Remove default binds]]
+    - [[#set-bare-essential-binds][Set bare essential binds]]
+  - [[#bindlisp][bind.lisp]]
     - [[#define-new-interactive-keymaps][Define New Interactive Keymaps]]
     - [[#define-key-macros][Define Key Macros]]
     - [[#define-toggle-float-command][Define toggle-float command]]
@@ -215,6 +217,7 @@ This is the first thing the WM Loads.
                      iz-softorange ;; ^8
                      iz-gray ;; ^9
                      ))
+
 ;; Set those colors
 (update-color-map (current-screen))
 #+END_SRC
@@ -321,6 +324,9 @@ This is the first thing the WM Loads.
 ;; Load in other files
 ;;;
 
+;; pre-binds
+(load "~/.stumpwm.d/pre-bind.lisp")
+ 
 ;; binds
 (load "~/.stumpwm.d/bind.lisp")
 
@@ -460,15 +466,15 @@ This is the first thing the WM Loads.
 (load "~/.stumpwm.d/autostart.lisp")
 #+END_SRC
 
-** bind.lisp
+** pre-bind.lisp
 
-Handling bindings
+Handling basic bind boilerplate that I +will definitely+ /never/ touch.
 
 *** Set Key Prefix
 
-#+BEGIN_SRC lisp :tangle bind.lisp
+#+BEGIN_SRC lisp :tangle pre-bind.lisp
 ;;;
-;; Bindings
+;; Pre-Bindings
 ;;;
 
 ;; Set prefix key
@@ -477,7 +483,7 @@ Handling bindings
 
 *** Remove default binds
 
-#+BEGIN_SRC lisp :tangle bind.lisp
+#+BEGIN_SRC lisp :tangle pre-bind.lisp
 ;; gross binds
 (defvar *gross-default-binds*
   (list "c" "C-c" "e" "C-e" "d" "C-d" "SPC"
@@ -493,6 +499,25 @@ Handling bindings
 (dolist (bind *gross-default-binds*)
   (define-key *root-map* (kbd bind) NIL))
 #+END_SRC
+
+*** Set bare essential binds
+
+#+BEGIN_SRC lisp :tangle pre-bind.lisp
+;;;
+;; Bare essential binds
+;;;
+
+; Terminal
+(define-key *root-map* (kbd "c") (run-shell-command "st"))
+
+; Editor
+(dolist (key '("e" "C-e"))
+	     (define-key *root-map* (kbd key) "swm-emacs"))
+#+END_SRC
+
+** bind.lisp
+
+Handling bindings
 
 *** Define New Interactive Keymaps
 
