@@ -27,6 +27,7 @@
 ; Terminal
 (define-key *root-map* (kbd "c") (run-shell-command "st"))
 
+
 ; Editor
 (dolist (key '("e" "C-e"))
 	     (define-key *root-map* (kbd key) "swm-emacs"))

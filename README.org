@@ -510,6 +510,7 @@ Handling basic bind boilerplate that I +will definitely+ /never/ touch.
 ; Terminal
 (define-key *root-map* (kbd "c") (run-shell-command "st"))
 
+
 ; Editor
 (dolist (key '("e" "C-e"))
 	     (define-key *root-map* (kbd key) "swm-emacs"))
@@ -602,7 +603,7 @@ Handling bindings
 ;; Set App Keys
 (defvar *my-app-key-commands*
   '(("E" "claws-mail")
-    ("F" "pcmanfm")))
+    ("F" "xfe")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*

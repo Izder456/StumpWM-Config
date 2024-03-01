@@ -67,7 +67,7 @@
 ;; Set App Keys
 (defvar *my-app-key-commands*
   '(("E" "claws-mail")
-    ("F" "pcmanfm")))
+    ("F" "xfe")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
