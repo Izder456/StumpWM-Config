@@ -38,7 +38,6 @@
   - [[#pre-bindlisp][pre-bind.lisp]]
     - [[#set-key-prefix][Set Key Prefix]]
     - [[#remove-default-binds][Remove default binds]]
-    - [[#set-bare-essential-binds][Set bare essential binds]]
   - [[#bindlisp][bind.lisp]]
     - [[#define-new-interactive-keymaps][Define New Interactive Keymaps]]
     - [[#define-key-macros][Define Key Macros]]
@@ -306,6 +305,18 @@ This is the first thing the WM Loads.
 ;; urgent window
 (setf urgentwindows:*urgent-window-message* "Application ~a has just finished!")
 
+;; Oneko command
+(defcommand oneko () ()
+  "Oneko Start Command"
+  (bt:make-thread
+   (lambda ()
+     (run-shell-command "oneko -tora -tofocus -name 'neko'"))))
+(defcommand kill-oneko () ()
+  "Oneko Stop Command"
+  (bt:make-thread
+   (lambda ()
+     (run-shell-command "pkill -9 oneko"))))
+
 ;; scratchpad
 ;; define default scratchpad term
 (defcommand scratchpad-term () ()
@@ -500,22 +511,6 @@ Handling basic bind boilerplate that I +will definitely+ /never/ touch.
   (define-key *root-map* (kbd bind) NIL))
 #+END_SRC
 
-*** Set bare essential binds
-
-#+BEGIN_SRC lisp :tangle pre-bind.lisp
-;;;
-;; Bare essential binds
-;;;
-
-; Terminal
-(define-key *root-map* (kbd "c") (run-shell-command "st"))
-
-
-; Editor
-(dolist (key '("e" "C-e"))
-	     (define-key *root-map* (kbd key) "swm-emacs"))
-#+END_SRC
-
 ** bind.lisp
 
 Handling bindings
@@ -598,7 +593,7 @@ Handling bindings
   '(("c" "st")
     ("C-c" "st")
     ("l" "slock")
-    ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
+    ("M-b" "feh --bg-fill --randomize /usr/local/share/backgrounds")))
 
 ;; Set App Keys
 (defvar *my-app-key-commands*
@@ -698,7 +693,8 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;; run-or-raise ESR
 (defcommand firefox-esr () ()
   "Run or raise Firefox ESR."
-  (bt:make-thread (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
+  (bt:make-thread
+   (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
 
 ;; Module Settings
 ;; Set homepage
@@ -761,6 +757,8 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
   (run-shell-command "sndioctl input.level=0.74")
   (run-shell-command "sndioctl output.level=1.00"))
 
+
+;; Start
 (when *initializing*
   ;; Startup Sound
   (set-default-sounds)
@@ -770,6 +768,11 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
   ;; re/start slynk server
   (slynk:create-server
    :dont-close t))
+
+;; Quit
+(when *quit-hook*
+  ;; Kill emacs
+  (swm-emacs:emacs-daemon-kill-force))
 
 ;; Finish Threads
 (defvar *bind-thread-list*

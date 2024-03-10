@@ -141,6 +141,18 @@
 ;; urgent window
 (setf urgentwindows:*urgent-window-message* "Application ~a has just finished!")
 
+;; Oneko command
+(defcommand oneko () ()
+  "Oneko Start Command"
+  (bt:make-thread
+   (lambda ()
+     (run-shell-command "oneko -tora -tofocus -name 'neko'"))))
+(defcommand kill-oneko () ()
+  "Oneko Stop Command"
+  (bt:make-thread
+   (lambda ()
+     (run-shell-command "pkill -9 oneko"))))
+
 ;; scratchpad
 ;; define default scratchpad term
 (defcommand scratchpad-term () ()

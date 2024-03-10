@@ -62,7 +62,7 @@
   '(("c" "st")
     ("C-c" "st")
     ("l" "slock")
-    ("M-b" "feh --bg-fill $(shuf -n1 -e /usr/local/share/backgrounds/*)")))
+    ("M-b" "feh --bg-fill --randomize /usr/local/share/backgrounds")))
 
 ;; Set App Keys
 (defvar *my-app-key-commands*

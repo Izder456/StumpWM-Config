@@ -17,7 +17,8 @@
 ;; run-or-raise ESR
 (defcommand firefox-esr () ()
   "Run or raise Firefox ESR."
-  (bt:make-thread (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
+  (bt:make-thread
+   (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
 
 ;; Module Settings
 ;; Set homepage

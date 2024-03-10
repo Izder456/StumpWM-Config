@@ -5,6 +5,8 @@
   (run-shell-command "sndioctl input.level=0.74")
   (run-shell-command "sndioctl output.level=1.00"))
 
+
+;; Start
 (when *initializing*
   ;; Startup Sound
   (set-default-sounds)
@@ -14,6 +16,11 @@
   ;; re/start slynk server
   (slynk:create-server
    :dont-close t))
+
+;; Quit
+(when *quit-hook*
+  ;; Kill emacs
+  (swm-emacs:emacs-daemon-kill-force))
 
 ;; Finish Threads
 (defvar *bind-thread-list*
