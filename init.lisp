@@ -117,7 +117,6 @@
    "hostname" ;; native hostname
    "battery-portable" ;; battery level
    "stumpwm-sndioctl" ;; sound
-   "browse" ;; browser
    "searchengines" ;; search macros
    "beckon" ;; yank mouse cursor focus
    "globalwindows" ;; navigate windows in all spacs

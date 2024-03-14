@@ -67,7 +67,9 @@
 ;; Set App Keys
 (defvar *my-app-key-commands*
   '(("E" "claws-mail")
-    ("F" "xfe")))
+    ("d" "deadbeef")
+    ("F" "xfe")
+    ("f" "firefox-esr")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
@@ -102,8 +104,7 @@
 
 ;; Raw StumpWM Module Commands
 (defvar *my-wm-module-commands*
-  '(("f" "browse")
-    ("/" "swm-ssh-menu")
+  '(("/" "swm-ssh-menu")
     ("s-e" "emacs-daemon-kill-force")
     ("e" "swm-emacs")
     ("C-e" "swm-emacs")))
@@ -114,7 +115,7 @@
 ;; List of binds
 (defparameter *key-bindings*
 	      '((*my-shell-key-thread* *my-shell-key-commands* bind-shell-to-key *app-map*)
-		(*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
+		(*my-app-key-thread* *my-app-key-commands* bind-to-key *app-map*)
 		(*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
 		(*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
 		(*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)

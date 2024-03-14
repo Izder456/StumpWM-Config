@@ -10,19 +10,9 @@
 	       (run-shell-command
 		(format nil "~a -e sh -c '~a ~a | less -R'" ,term ,command search))))
 
-;;
-;; Browser
-;;
-
-;; run-or-raise ESR
-(defcommand firefox-esr () ()
-  "Run or raise Firefox ESR."
-  (bt:make-thread
-   (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
-
+;;;
 ;; Module Settings
-;; Set homepage
-(setf browse::*homepage* "http://68k.news")
+;;;
 
 ;; Set browser exe
 (setf searchengines:*search-browser-executable* "firefox-esr")

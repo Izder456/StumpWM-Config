@@ -5,6 +5,30 @@
 ;; Set prefix key
 (set-prefix-key (kbd "C-t"))
 
+;; run-or-raise Firefox-ESR
+(defcommand firefox-esr () ()
+  "Run or raise Firefox ESR."
+  (bt:make-thread
+   (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
+
+;; eMail Client
+(defcommand claws-mail () ()
+  "Run or raise claws email client."
+  (bt:make-thread
+   (lambda () (run-or-raise "claws-mail" '(:class "claws-mail") t nil))))
+
+;; File-Browser
+(defcommand xfe () ()
+  "Run or raise xfe."
+  (bt:make-thread
+   (lambda () (run-or-raise "xfe" '(:class "xfe") t nil))))
+
+;; DeadBeeF
+(defcommand deadbeef () ()
+  "Run or raise DeadBeeF music player."
+  (bt:make-thread
+   (lambda () (run-or-raise "deadbeef" '(:class "deadbeef") t nil))))
+
 ;; gross binds
 (defvar *gross-default-binds*
   (list "c" "C-c" "e" "C-e" "d" "C-d" "SPC"

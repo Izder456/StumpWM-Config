@@ -37,6 +37,7 @@
     - [[#cleanup-and-autostarts][Cleanup and Autostarts]]
   - [[#pre-bindlisp][pre-bind.lisp]]
     - [[#set-key-prefix][Set Key Prefix]]
+    - [[#setup-run-or-raise-programs][Setup run-or-raise programs]]
     - [[#remove-default-binds][Remove default binds]]
   - [[#bindlisp][bind.lisp]]
     - [[#define-new-interactive-keymaps][Define New Interactive Keymaps]]
@@ -281,7 +282,6 @@ This is the first thing the WM Loads.
    "hostname" ;; native hostname
    "battery-portable" ;; battery level
    "stumpwm-sndioctl" ;; sound
-   "browse" ;; browser
    "searchengines" ;; search macros
    "beckon" ;; yank mouse cursor focus
    "globalwindows" ;; navigate windows in all spacs
@@ -492,6 +492,34 @@ Handling basic bind boilerplate that I +will definitely+ /never/ touch.
 (set-prefix-key (kbd "C-t"))
 #+END_SRC
 
+*** Setup run-or-raise programs
+
+#+BEGIN_SRC lisp :tangle pre-bind.lisp
+;; run-or-raise Firefox-ESR
+(defcommand firefox-esr () ()
+  "Run or raise Firefox ESR."
+  (bt:make-thread
+   (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
+
+;; eMail Client
+(defcommand claws-mail () ()
+  "Run or raise claws email client."
+  (bt:make-thread
+   (lambda () (run-or-raise "claws-mail" '(:class "claws-mail") t nil))))
+
+;; File-Browser
+(defcommand xfe () ()
+  "Run or raise xfe."
+  (bt:make-thread
+   (lambda () (run-or-raise "xfe" '(:class "xfe") t nil))))
+
+;; DeadBeeF
+(defcommand deadbeef () ()
+  "Run or raise DeadBeeF music player."
+  (bt:make-thread
+   (lambda () (run-or-raise "deadbeef" '(:class "deadbeef") t nil))))
+#+END_SRC
+
 *** Remove default binds
 
 #+BEGIN_SRC lisp :tangle pre-bind.lisp
@@ -598,7 +626,9 @@ Handling bindings
 ;; Set App Keys
 (defvar *my-app-key-commands*
   '(("E" "claws-mail")
-    ("F" "xfe")))
+    ("d" "deadbeef")
+    ("F" "xfe")
+    ("f" "firefox-esr")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
@@ -633,8 +663,7 @@ Handling bindings
 
 ;; Raw StumpWM Module Commands
 (defvar *my-wm-module-commands*
-  '(("f" "browse")
-    ("/" "swm-ssh-menu")
+  '(("/" "swm-ssh-menu")
     ("s-e" "emacs-daemon-kill-force")
     ("e" "swm-emacs")
     ("C-e" "swm-emacs")))
@@ -649,7 +678,7 @@ Handling bindings
 ;; List of binds
 (defparameter *key-bindings*
 	      '((*my-shell-key-thread* *my-shell-key-commands* bind-shell-to-key *app-map*)
-		(*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
+		(*my-app-key-thread* *my-app-key-commands* bind-to-key *app-map*)
 		(*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
 		(*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
 		(*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)
@@ -686,19 +715,9 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 *** Define Browse Jumps
 
 #+BEGIN_SRC lisp :tangle jumps.lisp
-;;
-;; Browser
-;;
-
-;; run-or-raise ESR
-(defcommand firefox-esr () ()
-  "Run or raise Firefox ESR."
-  (bt:make-thread
-   (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
-
+;;;
 ;; Module Settings
-;; Set homepage
-(setf browse::*homepage* "http://68k.news")
+;;;
 
 ;; Set browser exe
 (setf searchengines:*search-browser-executable* "firefox-esr")
