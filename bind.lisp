@@ -115,7 +115,7 @@
 ;; List of binds
 (defparameter *key-bindings*
 	      '((*my-shell-key-thread* *my-shell-key-commands* bind-shell-to-key *app-map*)
-		(*my-app-key-thread* *my-app-key-commands* bind-to-key *app-map*)
+		(*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
 		(*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
 		(*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
 		(*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)

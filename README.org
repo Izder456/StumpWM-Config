@@ -37,7 +37,7 @@
     - [[#cleanup-and-autostarts][Cleanup and Autostarts]]
   - [[#pre-bindlisp][pre-bind.lisp]]
     - [[#set-key-prefix][Set Key Prefix]]
-    - [[#setup-run-or-raise-programs][Setup run-or-raise programs]]
+    - [[#setup-browser-notices][Setup browser notices]]
     - [[#remove-default-binds][Remove default binds]]
   - [[#bindlisp][bind.lisp]]
     - [[#define-new-interactive-keymaps][Define New Interactive Keymaps]]
@@ -491,32 +491,20 @@ Handling basic bind boilerplate that I +will definitely+ /never/ touch.
 (set-prefix-key (kbd "C-t"))
 #+END_SRC
 
-*** Setup run-or-raise programs
+*** Setup browser notices
 
 #+BEGIN_SRC lisp :tangle pre-bind.lisp
 ;; run-or-raise Firefox-ESR
 (defcommand firefox-esr () ()
-  "Run or raise Firefox ESR."
+  "Set notice to Firefox ESR Opening"
   (bt:make-thread
-   (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
+   (lambda () (message "Opening Firefox ESR"))))
 
-;; eMail Client
-(defcommand claws-mail () ()
-  "Run or raise claws email client."
+;; surf
+(defcommand surf () ()
+  "Set notice to Suckless SURF Opening"
   (bt:make-thread
-   (lambda () (run-or-raise "claws-mail" '(:class "claws-mail") t nil))))
-
-;; File-Browser
-(defcommand xfe () ()
-  "Run or raise xfe."
-  (bt:make-thread
-   (lambda () (run-or-raise "xfe" '(:class "xfe") t nil))))
-
-;; DeadBeeF
-(defcommand deadbeef () ()
-  "Run or raise DeadBeeF music player."
-  (bt:make-thread
-   (lambda () (run-or-raise "deadbeef" '(:class "deadbeef") t nil))))
+   (lambda () (message "Opening Suckless SURF"))))
 #+END_SRC
 
 *** Remove default binds
@@ -677,7 +665,7 @@ Handling bindings
 ;; List of binds
 (defparameter *key-bindings*
 	      '((*my-shell-key-thread* *my-shell-key-commands* bind-shell-to-key *app-map*)
-		(*my-app-key-thread* *my-app-key-commands* bind-to-key *app-map*)
+		(*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
 		(*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
 		(*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
 		(*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)
@@ -719,7 +707,7 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;;;
 
 ;; Set browser exe
-(setf searchengines:*search-browser-executable* "firefox-esr")
+(setf searchengines:*search-browser-executable* "surf")
 
 ;; Macro for search engine defines
 (defmacro define-searchengine (selection-name prompt-name url description key-selection key-prompt)
@@ -728,11 +716,15 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
      (searchengines:make-searchengine-prompt ,prompt-name ,description ,url ,description :map *search-map* :key ,key-prompt)))
 
 ;; Set Search Engine Params
-(defparameter *URL-DDG* "https://duckduckgo.com/?q=~a")
+(defparameter *URL-DDG* "https://html.duckduckgo.com/html/?q=~a")
 (defparameter *URL-LIBRE* "https://search.ahwx.org/search.php?q=~a")
 (defparameter *URL-PORTS* "https://openports.eu/search?q=~a")
+(defparameter *URL-WIKIPEDIA* "https://en.wikipedia.org/w/index.php?title=Special:Search&search=~a")
+(defparameter *URL-WIKIONARY* "https://en.wiktioary.org/w/index.php?title=Special:Search&search=~a")
 
 ;; Create threads
+(define-searchengine "search-wikipedia-selection" "search-wikipedia-prompt" *URL-WIKIPEDIA* "Wikipedia search" "C-w" "w")
+(define-searchengine "search-wiktionary-selection" "search-wiktionary-prompt" *URL-WIKIPEDIA* "Wiktionary search" "C-d" "d")
 (define-searchengine "search-ddg-selection" "search-ddg-prompt" *URL-DDG* "DuckDuckGo search" "C-s" "s")
 (define-searchengine "search-libre-selection" "search-libre-prompt" *URL-LIBRE* "LibreY search" "C-l" "l")
 (define-searchengine "search-ports-selection" "search-ports-prompt" *URL-PORTS* "Ports Search" "C-o" "o")

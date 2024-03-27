@@ -7,27 +7,15 @@
 
 ;; run-or-raise Firefox-ESR
 (defcommand firefox-esr () ()
-  "Run or raise Firefox ESR."
+  "Set notice to Firefox ESR Opening"
   (bt:make-thread
-   (lambda () (run-or-raise "firefox-esr" '(:class "firefox-esr") t nil))))
+   (lambda () (message "Opening Firefox ESR"))))
 
-;; eMail Client
-(defcommand claws-mail () ()
-  "Run or raise claws email client."
+;; surf
+(defcommand surf () ()
+  "Set notice to Suckless SURF Opening"
   (bt:make-thread
-   (lambda () (run-or-raise "claws-mail" '(:class "claws-mail") t nil))))
-
-;; File-Browser
-(defcommand xfe () ()
-  "Run or raise xfe."
-  (bt:make-thread
-   (lambda () (run-or-raise "xfe" '(:class "xfe") t nil))))
-
-;; DeadBeeF
-(defcommand deadbeef () ()
-  "Run or raise DeadBeeF music player."
-  (bt:make-thread
-   (lambda () (run-or-raise "deadbeef" '(:class "deadbeef") t nil))))
+   (lambda () (message "Opening Suckless SURF"))))
 
 ;; gross binds
 (defvar *gross-default-binds*
