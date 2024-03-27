@@ -212,32 +212,32 @@
 
 ;; Run a shell command and format the output
 (defun run-shell-command-and-format (command)
- (substitute #\Space #\Newline (run-shell-command command t)))
+  (substitute #\Space #\Newline (run-shell-command command t)))
 
 ;; Show system information
 (defun show-system-info (command)
- (run-shell-command-and-format command))
+  (run-shell-command-and-format command))
 
 ;; Show the kernel version
 (defun show-kernel ()
- (show-system-info "uname -r"))
+  (show-system-info "uname -r"))
 
 ;; Show the temperature
 (defun show-temp ()
- (show-system-info "sysctl -n hw.sensors.cpu0.temp0"))
+  (show-system-info "sysctl -n hw.sensors.cpu0.temp0"))
 
 ;; Show Volume
 (defun show-volume (type)
- (run-shell-command-and-format (format nil "sndioctl -n ~a.level" type)))
+  (run-shell-command-and-format (format nil "sndioctl -n ~a.level" type)))
 
 ;; Show the current track
 (defun show-current-track ()
- (run-shell-command-and-format
+  (run-shell-command-and-format
    "playerctl metadata --format '| [{{duration(position)}}] @{{trunc(volume, 5)}}|'"))
 
 ;; Show the window title
 (defun show-window-title ()
- (substitute #\Space #\Newline (window-title (current-window))))
+  (substitute #\Space #\Newline (window-title (current-window))))
 
 ;;;
 ;; Formatting
@@ -251,17 +251,17 @@
 (defvar group-fmt "^n%g") ;; Default
 (defvar win-fmt "^n%v ^>^7") ;; Default -> Right Align
 (defvar audio-fmt (list
-                   " " '(:eval (show-volume "output"))
-                   "/"
-                   " " '(:eval (show-volume "input"))
-                   '(:eval (show-current-track))
-                   ))
+		   " " '(:eval (show-volume "output"))
+		   "/"
+		   " " '(:eval (show-volume "input"))
+		   '(:eval (show-current-track))
+		   ))
 (defvar status-fmt (list
-                    "^n" pipe ;; Default
-                    " %B " pipe ;; Battery
-                    " " '(:eval (show-temp)) pipe ;; Cpu Temp
-                    " %d " pipe ;; Date
-                    ))
+		    "^n" pipe ;; Default
+		    " %B " pipe ;; Battery
+		    " " '(:eval (show-temp)) pipe ;; Cpu Temp
+		    " %d " pipe ;; Date
+		    ))
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
