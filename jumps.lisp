@@ -24,15 +24,15 @@
      (searchengines:make-searchengine-prompt ,prompt-name ,description ,url ,description :map *search-map* :key ,key-prompt)))
 
 ;; Set Search Engine Params
-(defparameter *URL-DDG* "https://html.duckduckgo.com/html/?q=~a")
+(defparameter *URL-DDG* "https://html.duckduckgo.com/html?q=~a")
 (defparameter *URL-LIBRE* "https://search.ahwx.org/search.php?q=~a")
 (defparameter *URL-PORTS* "https://openports.eu/search?q=~a")
 (defparameter *URL-WIKIPEDIA* "https://en.wikipedia.org/w/index.php?title=Special:Search&search=~a")
-(defparameter *URL-WIKIONARY* "https://en.wiktionary.org/w/index.php?title=Special:Search&search=~a")
+(defparameter *URL-WIKTIONARY* "https://en.wiktionary.org/w/index.php?title=Special:Search&search=~a")
 
 ;; Create threads
 (define-searchengine "search-wikipedia-selection" "search-wikipedia-prompt" *URL-WIKIPEDIA* "Wikipedia search" "C-w" "w")
-(define-searchengine "search-wiktionary-selection" "search-wiktionary-prompt" *URL-WIKIPEDIA* "Wiktionary search" "C-d" "d")
+(define-searchengine "search-wiktionary-selection" "search-wiktionary-prompt" *URL-WIKTIONARY* "Wiktionary search" "C-d" "d")
 (define-searchengine "search-ddg-selection" "search-ddg-prompt" *URL-DDG* "DuckDuckGo search" "C-s" "s")
 (define-searchengine "search-libre-selection" "search-libre-prompt" *URL-LIBRE* "LibreY search" "C-l" "l")
 (define-searchengine "search-ports-selection" "search-ports-prompt" *URL-PORTS* "Ports Search" "C-o" "o")
