@@ -720,7 +720,7 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 (defparameter *URL-LIBRE* "https://search.ahwx.org/search.php?q=~a")
 (defparameter *URL-PORTS* "https://openports.eu/search?q=~a")
 (defparameter *URL-WIKIPEDIA* "https://en.wikipedia.org/w/index.php?title=Special:Search&search=~a")
-(defparameter *URL-WIKIONARY* "https://en.wiktioary.org/w/index.php?title=Special:Search&search=~a")
+(defparameter *URL-WIKIONARY* "https://en.wiktionary.org/w/index.php?title=Special:Search&search=~a")
 
 ;; Create threads
 (define-searchengine "search-wikipedia-selection" "search-wikipedia-prompt" *URL-WIKIPEDIA* "Wikipedia search" "C-w" "w")
