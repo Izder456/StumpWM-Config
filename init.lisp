@@ -212,30 +212,32 @@
 
 ;; Run a shell command and format the output
 (defun run-shell-command-and-format (command)
-  (substitute #\Space #\Newline (run-shell-command command t)))
+ (substitute #\Space #\Newline (run-shell-command command t)))
+
+;; Show system information
+(defun show-system-info (command)
+ (run-shell-command-and-format command))
 
 ;; Show the kernel version
 (defun show-kernel ()
-  (run-shell-command-and-format "uname -r"))
+ (show-system-info "uname -r"))
 
 ;; Show the temperature
 (defun show-temp ()
-  (run-shell-command-and-format "sysctl -n hw.sensors.cpu0.temp0"))
+ (show-system-info "sysctl -n hw.sensors.cpu0.temp0"))
 
 ;; Show Volume
-(defun show-output-vol ()
-  (run-shell-command-and-format "sndioctl -n output.level"))
-(defun show-input-vol ()
-  (run-shell-command-and-format "sndioctl -n input.level"))
+(defun show-volume (type)
+ (run-shell-command-and-format (format nil "sndioctl -n ~a.level" type)))
 
-;; Player Stuffs
+;; Show the current track
 (defun show-current-track ()
-  (run-shell-command-and-format
+ (run-shell-command-and-format
    "playerctl metadata --format '| [{{duration(position)}}] @{{trunc(volume, 5)}}|'"))
 
 ;; Show the window title
 (defun show-window-title ()
-  (substitute #\Space #\Newline (window-title (current-window))))
+ (substitute #\Space #\Newline (window-title (current-window))))
 
 ;;;
 ;; Formatting
@@ -246,40 +248,36 @@
 (defvar pipe "|")
 
 ;; Format Lists
-(defvar group-fmt (list
-		   "^n%g" ;; Default
-		   ))
-(defvar win-fmt (list
-		 "^n%v ^>^7" ;; Default -> Right Allign
-		 ))
+(defvar group-fmt "^n%g") ;; Default
+(defvar win-fmt "^n%v ^>^7") ;; Default -> Right Align
 (defvar audio-fmt (list
-		   " " '(:eval (show-input-vol))
-		   "/"
-		   " " '(:eval (show-output-vol))
-		   '(:eval (show-current-track))
-		   ))
+                   " " '(:eval (show-volume "output"))
+                   "/"
+                   " " '(:eval (show-volume "input"))
+                   '(:eval (show-current-track))
+                   ))
 (defvar status-fmt (list
-		    "^n" pipe ;; Default
-		    " %B " pipe ;; Battery
-		    " " '(:eval (show-temp)) pipe ;; Cpu Temp
-		    " %d " pipe ;; Date
-		    ))
+                    "^n" pipe ;; Default
+                    " %B " pipe ;; Battery
+                    " " '(:eval (show-temp)) pipe ;; Cpu Temp
+                    " %d " pipe ;; Date
+                    ))
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
       (list "(" ;; Yellow
-	    group-fmt
-	    "^1 [ " ;; Red
-	    win-fmt
-	    "^1] " ;; Red
-	    "^6{" ;; Aqua
-	    audio-fmt
-	    "^6} " ;; Aqua
-	    "^5[" ;; Magenta
-	    status-fmt
-	    "^5]" ;; Magenta
-	    "^3)" ;; Yellow
-	    ))
+            group-fmt
+            "^1 [ " ;; Red
+            win-fmt
+            "^1] " ;; Red
+            "^6{" ;; Aqua
+            audio-fmt
+            "^6} " ;; Aqua
+            "^5[" ;; Magenta
+            status-fmt
+            "^5]" ;; Magenta
+            "^3)" ;; Yellow
+            ))
 
 ;; Format Modeline
 (setf *mode-line-background-color* iz-black
