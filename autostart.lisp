@@ -31,6 +31,7 @@
    *my-app-key-thread*
    *my-rofi-key-thread*
    *my-media-key-thread*
-   *my-wm-module-thread*))
+   *my-wm-module-thread*
+   *my-unprefixed-module-thread*))
 (dolist (threadname *bind-thread-list*)
   (bt:join-thread threadname))

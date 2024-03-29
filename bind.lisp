@@ -52,10 +52,7 @@
 (defvar *my-special-key-commands*
   '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
     ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png")
-    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")
-    ("XF86AudioRaiseVolume" "volume-up")
-    ("XF86AudioLowerVolume" "volume-down")
-    ("XF86AudioMute" "toggle-mute")))
+    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")))
 
 ;; Set Shell Keys
 (defvar *my-shell-key-commands*
@@ -109,6 +106,14 @@
     ("e" "swm-emacs")
     ("C-e" "swm-emacs")))
 
+;; Unprefixed Module Commands
+(defvar *my-unprefixed-module-commands*
+  '(("M-Tab" "select-previous-window")
+    ("s-Tab" "windowlist-last")
+    ("XF86AudioRaiseVolume" "volume-up")
+    ("XF86AudioLowerVolume" "volume-down")
+    ("XF86AudioMute" "toggle-mute")))
+
 ;;;
 ;; Loop & Bind with Macros from earlier
 ;;;
@@ -118,6 +123,7 @@
 		(*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
 		(*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
 		(*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
+		(*my-unprefixed-module-thread* *my-unprefixed-module-commands* bind-to-key *top-map*)
 		(*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)
 		(*my-media-key-thread* *my-media-key-commands* bind-shell-to-key *media-map*)
 		(*my-wm-window-thread* *my-wm-window-commands* bind-to-key *root-map*)))

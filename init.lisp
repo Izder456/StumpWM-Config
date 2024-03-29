@@ -10,7 +10,8 @@
     (load quicklisp-init)))
 
 ;; Load Quicklisp Packages
-(ql:quickload '("clx"
+(ql:quickload '("stumpwm"
+		"clx"
 		"cl-ppcre"
 		"alexandria"
 		"cl-fad"
@@ -24,9 +25,9 @@
 
 ;; this automatically prefixes 'stumpwm:' to commands that need it
 (in-package :stumpwm)
-(setf *default-package* :stumpwm)
 
 ;; Set Modules
+; (set-contrib-dir) is deprecated, this is the method now
 (set-module-dir "~/.stumpwm.d/modules")
 
 ;;;
@@ -77,7 +78,7 @@
 (set-bg-color iz-black)
 (set-border-color iz-white)
 (set-msg-border-width 3)
-(set-font "-*-spleen-*-*-*-*-16-*-*-*-*-*-*-*")
+(set-font "-misc-spleen-medium-r-normal--16-160-72-72-c-80-iso10646-1")
 
 ;; MouseKeys
 (setf *mouse-focus-policy* :click
@@ -97,7 +98,7 @@
 ;;;
 
 ;; Set env vars
-(setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin")
+(setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/usr/local/jdk-17/bin:/bin:/home/izder456/.go/bin:/home/izder456/.gems/bin:/home/izder456/bin")
 (setf (getenv "PAGER") "less -R")
 (setf (getenv "BROWSER") "firefox-esr")
 
@@ -106,8 +107,11 @@
 ;;;
 
 ;; Init modules
-(init-load-path *module-dir*)
 (add-to-load-path "~/.stumpwm.d/extras/scratchpad")
+(add-to-load-path "~/.stumpwm.d/extras/stumpwm-window-switch")
+
+;; Load that module shizz in
+(init-load-path *module-dir*)
 
 (defvar *modulenames*
   (list
@@ -115,6 +119,7 @@
    "swm-emacs" ;; emacs
    "swm-ssh" ;; ssh
    "scratchpad" ;; floating scratchterm
+   "window-switch" ;; switch windows 
    "hostname" ;; native hostname
    "battery-portable" ;; battery level
    "stumpwm-sndioctl" ;; sound

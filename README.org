@@ -107,6 +107,8 @@
 | =C-t=    | =M-Escape=                   | Toggle Modeline                              |
 | =C-t=    | =B=                          | Yank mouse focus to current window           |
 | =C-t=    | =C-b=                        | Hide mouse cursor                            |
+| =NONE=   | =M-Tab=                      | Switch to previous frame                     |
+| =NONE=   | =s-Tab=                      | list last open window in windowlist          |
 
 ** Misc
 
@@ -159,7 +161,8 @@ This is the first thing the WM Loads.
     (load quicklisp-init)))
 
 ;; Load Quicklisp Packages
-(ql:quickload '("clx"
+(ql:quickload '("stumpwm"
+		"clx"
 		"cl-ppcre"
 		"alexandria"
 		"cl-fad"
@@ -173,9 +176,9 @@ This is the first thing the WM Loads.
 
 ;; this automatically prefixes 'stumpwm:' to commands that need it
 (in-package :stumpwm)
-(setf *default-package* :stumpwm)
 
 ;; Set Modules
+; (set-contrib-dir) is deprecated, this is the method now
 (set-module-dir "~/.stumpwm.d/modules")
 #+END_SRC
 
@@ -234,7 +237,7 @@ This is the first thing the WM Loads.
 (set-bg-color iz-black)
 (set-border-color iz-white)
 (set-msg-border-width 3)
-(set-font "-*-spleen-*-*-*-*-16-*-*-*-*-*-*-*")
+(set-font "-misc-spleen-medium-r-normal--16-160-72-72-c-80-iso10646-1")
 
 ;; MouseKeys
 (setf *mouse-focus-policy* :click
@@ -258,7 +261,7 @@ This is the first thing the WM Loads.
 ;;;
 
 ;; Set env vars
-(setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin")
+(setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/usr/local/jdk-17/bin:/bin:/home/izder456/.go/bin:/home/izder456/.gems/bin:/home/izder456/bin")
 (setf (getenv "PAGER") "less -R")
 (setf (getenv "BROWSER") "firefox-esr")
 #+END_SRC
@@ -271,8 +274,11 @@ This is the first thing the WM Loads.
 ;;;
 
 ;; Init modules
-(init-load-path *module-dir*)
 (add-to-load-path "~/.stumpwm.d/extras/scratchpad")
+(add-to-load-path "~/.stumpwm.d/extras/stumpwm-window-switch")
+
+;; Load that module shizz in
+(init-load-path *module-dir*)
 
 (defvar *modulenames*
   (list
@@ -280,6 +286,7 @@ This is the first thing the WM Loads.
    "swm-emacs" ;; emacs
    "swm-ssh" ;; ssh
    "scratchpad" ;; floating scratchterm
+   "window-switch" ;; switch windows 
    "hostname" ;; native hostname
    "battery-portable" ;; battery level
    "stumpwm-sndioctl" ;; sound
@@ -598,10 +605,7 @@ Handling bindings
 (defvar *my-special-key-commands*
   '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
     ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png")
-    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")
-    ("XF86AudioRaiseVolume" "volume-up")
-    ("XF86AudioLowerVolume" "volume-down")
-    ("XF86AudioMute" "toggle-mute")))
+    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")))
 
 ;; Set Shell Keys
 (defvar *my-shell-key-commands*
@@ -654,6 +658,15 @@ Handling bindings
     ("s-e" "emacs-daemon-kill-force")
     ("e" "swm-emacs")
     ("C-e" "swm-emacs")))
+
+;; Unprefixed Module Commands
+(defvar *my-unprefixed-module-commands*
+  '(("M-Tab" "select-previous-window")
+    ("s-Tab" "windowlist-last")
+    ("XF86AudioRaiseVolume" "volume-up")
+    ("XF86AudioLowerVolume" "volume-down")
+    ("XF86AudioMute" "toggle-mute")))
+
 #+END_SRC
 
 *** Loop Bind Keylists
@@ -668,6 +681,7 @@ Handling bindings
 		(*my-app-key-thread* *my-app-key-commands* bind-shell-to-key *app-map*)
 		(*my-rofi-key-thread* *my-rofi-key-commands* bind-shell-to-key *app-map*)
 		(*my-wm-module-thread* *my-wm-module-commands* bind-to-key *app-map*)
+		(*my-unprefixed-module-thread* *my-unprefixed-module-commands* bind-to-key *top-map*)
 		(*my-special-key-thread* *my-special-key-commands* bind-shell-to-key *top-map*)
 		(*my-media-key-thread* *my-media-key-commands* bind-shell-to-key *media-map*)
 		(*my-wm-window-thread* *my-wm-window-commands* bind-to-key *root-map*)))
@@ -793,7 +807,8 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
    ,*my-app-key-thread*
    ,*my-rofi-key-thread*
    ,*my-media-key-thread*
-   ,*my-wm-module-thread*))
+   ,*my-wm-module-thread*
+   ,*my-unprefixed-module-thread*))
 (dolist (threadname *bind-thread-list*)
   (bt:join-thread threadname))
 #+END_SRC

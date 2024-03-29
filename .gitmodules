@@ -4,3 +4,6 @@
 [submodule "extras/scratchpad"]
 	path = extras/scratchpad
 	url = https://github.com/podiki/scratchpad
+[submodule "extras/stumpwm-window-switch"]
+	path = extras/stumpwm-window-switch
+	url = https://github.com/Junker/stumpwm-window-switch
