@@ -128,10 +128,16 @@
 | =M-s=    | =l=    | Search LibreY for prompt         |
 | =M-s=    | =C-o=  | Search Package Web for selection |
 | =M-s=    | =o=    | Search Package Web for prompt    |
+| =M-s=    | =C-w=  | Search Wikipedia for selection   |
+| =M-s=    | =w=    | Search Wikipedia for prompt      |
+| =M-s=    | =C-d=  | Search Witionary for selection   |
+| =M-s=    | =d=    | Search Wiktionary for prompt     |
+| =M-s=    | =o=    | Search Package Web for prompt    |
 | =M-s=    | =m=    | Search Manpages                  |
 | =M-s=    | =M=    | Open Manpage                     |
 | =M-s=    | =p=    | Search Package Name              |
 | =M-s=    | =P=    | Search Package File              |
+
 
 *** /Note/
 
