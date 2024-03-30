@@ -118,6 +118,7 @@
    "swm-gaps" ;; gaps
    "swm-emacs" ;; emacs
    "swm-ssh" ;; ssh
+   "stumptray" ;; tray icons
    "scratchpad" ;; floating scratchterm
    "window-switch" ;; switch windows 
    "hostname" ;; native hostname
@@ -201,7 +202,7 @@
       *hidden-window-color* "^**")
 
 ;; Time format
-(setf *time-modeline-string* "%a, %b %d @%I:%M%p")
+(setf *time-modeline-string* "%m/%d %I:%M%p")
 
 ;; Message window settings
 (setf *message-window-padding* 6
@@ -253,36 +254,30 @@
 (defvar pipe "|")
 
 ;; Format Lists
-(defvar group-fmt "^n%g") ;; Default
-(defvar win-fmt "^n%v ^>^7") ;; Default -> Right Align
-(defvar audio-fmt (list
-		   " " '(:eval (show-volume "output"))
-		   "/"
-		   " " '(:eval (show-volume "input"))
-		   '(:eval (show-current-track))
-		   ))
+(defvar group-fmt "^6%g") ;; Default (softaqua)
+(defvar win-fmt "^n%v") ;; Default (green)
 (defvar status-fmt (list
-		    "^n" pipe ;; Default
+		    "^n" ;; Default
 		    " %B " pipe ;; Battery
 		    " " '(:eval (show-temp)) pipe ;; Cpu Temp
-		    " %d " pipe ;; Date
+		    " %d " ;; Date
 		    ))
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
-      (list "(" ;; Yellow
-            group-fmt
-            "^1 [ " ;; Red
-            win-fmt
-            "^1] " ;; Red
-            "^6{" ;; Aqua
-            audio-fmt
-            "^6} " ;; Aqua
-            "^5[" ;; Magenta
-            status-fmt
-            "^5]" ;; Magenta
-            "^3)" ;; Yellow
-            ))
+      (list
+	    "^8[" ;; Soft Orange
+	    group-fmt
+	    "^8] " ;; Soft Orange
+	    "^n" pipe
+	    "^5 [" ;; Magenta
+	    status-fmt
+	    "^5] "
+	    "^n" pipe
+	    "^1 [" ;; Red
+	    win-fmt
+	    "^1]" ;; Red
+	    ))
 
 ;; Format Modeline
 (setf *mode-line-background-color* iz-black
@@ -293,8 +288,11 @@
       *mode-line-pad-y* 6
       *mode-line-timeout* 1)
 
-;; Toggle mode line display
-(toggle-mode-line (current-screen) (current-head))
+;; mode line
+(mode-line)
+
+;; Open Stumptray (AFTER modeline)
+(stumptray:stumptray)
 
 ;; cleanup/autostart
 (load "~/.stumpwm.d/autostart.lisp")
