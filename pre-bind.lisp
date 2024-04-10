@@ -17,6 +17,22 @@
   (bt:make-thread
    (lambda () (message "Opening Suckless SURF"))))
 
+;; Code by Male Display the keysequence in progress
+(defun key-press-hook (key key-seq cmd)
+  (declare (ignore key))
+  (unless (eq *top-map* *resize-map*)
+    (let ((*message-window-gravity* :bottom-right))
+      (message-no-timeout "Key sequence: ~A"
+               (print-key-seq (reverse key-seq))))
+    (when (stringp cmd) ;; Give 'em time to read it.
+        (sleep 0.05))))
+
+(defmacro replace-hook (hook fn)
+  `(remove-hook ,hook ,fn)
+  `(add-hook ,hook ,fn))
+
+(replace-hook *key-press-hook* 'key-press-hook)
+
 ;; gross binds
 (defvar *gross-default-binds*
   (list "c" "C-c" "e" "C-e" "d" "C-d" "SPC"

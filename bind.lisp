@@ -65,7 +65,7 @@
 (defvar *my-app-key-commands*
   '(("E" "claws-mail")
     ("d" "deadbeef")
-    ("F" "xfe")
+    ("F" "pcmanfm")
     ("f" "firefox-esr")))
 
 ;; Set Rofi Keys
