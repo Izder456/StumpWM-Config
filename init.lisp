@@ -202,7 +202,7 @@
       *hidden-window-color* "^**")
 
 ;; Time format
-(setf *time-modeline-string* "%m/%d %I:%M%p")
+(setf *time-modeline-string* "%I:%M%p")
 
 ;; Message window settings
 (setf *message-window-padding* 6
@@ -239,7 +239,7 @@
 ;; Show the current track
 (defun show-current-track ()
   (run-shell-command-and-format
-   "playerctl metadata --format '| [{{duration(position)}}] @{{trunc(volume, 5)}}|'"))
+   "playerctl metadata --format '|[{{duration(position)}}] @{{trunc(volume, 5)}}|'"))
 
 ;; Show the window title
 (defun show-window-title ()
@@ -262,19 +262,26 @@
 		    " " '(:eval (show-temp)) pipe ;; Cpu Temp
 		    " %d " ;; Date
 		    ))
+(defvar audio-fmt (list
+		   "^2 " '(:eval (show-volume "output")) ;; Soft Green
+		   "^7/" ;; White
+		   "^2 " '(:eval (show-volume "input")) ;; Soft Green
+		   "^4" '(:eval (show-current-track)) ;; Soft Blue
+		   ))
 
 ;; Screen mode line format
 (setf *screen-mode-line-format*
       (list
 	    "^8[" ;; Soft Orange
 	    group-fmt
-	    "^8] " ;; Soft Orange
-	    "^n" pipe
-	    "^5 [" ;; Magenta
+	    "^8]" ;; Soft Orange
+	    "^9[" ;; Gray
+	    audio-fmt
+	    "^9]" ;; Gray
+	    "^5[" ;; Magenta
 	    status-fmt
-	    "^5] "
-	    "^n" pipe
-	    "^1 [" ;; Red
+	    "^5]"
+	    "^1[" ;; Red
 	    win-fmt
 	    "^1]" ;; Red
 	    ))
