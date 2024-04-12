@@ -11,8 +11,6 @@
   ;; Startup Sound
   (set-default-sounds)
   (play-startup-sound)
-  ;; which-key interactive
-  (which-key-mode)
   ;; re/start slynk server
   (slynk:create-server
    :dont-close t))
