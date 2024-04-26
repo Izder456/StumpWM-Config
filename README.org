@@ -617,9 +617,9 @@ Handling bindings
 
 ;; Set Special keys
 (defvar *my-special-key-commands*
-  '(("Print" "scrot -F ~/Pictures/screenshot-`date +%F`.png")
-    ("M-Print" "scrot -s -F ~/Pictures/screenshot-split-`date +%F`.png")
-    ("s-Print" "scrot -u -F ~/Pictures/screenshot-activewin-`date +%F`.png")))
+  '(("Print" "scrot -z -Z 0 -q 100 -e 'oxipng $f' -F ~/Pictures/screenshot-`date +%F`.png")
+    ("M-Print" "scrot -s -z -Z 0 -q 100 -f -e 'oxipng $f' -F ~/Pictures/screenshot-split-`date +%F`.png")
+    ("s-Print" "scrot -z -Z 0 -q 100 -u -b -e 'oxipng $f' -F ~/Pictures/screenshot-activewin-`date +%F`.png")))
 
 ;; Set Shell Keys
 (defvar *my-shell-key-commands*
