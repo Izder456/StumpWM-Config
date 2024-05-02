@@ -80,7 +80,7 @@
 (set-fg-color "#EBDBB2")
 (set-bg-color "#282828")
 (set-border-color "#EBDBB2")
-(set-msg-border-width 3)
+(set-msg-border-width 1)
 (set-font "-misc-spleen-medium-r-normal--16-160-72-72-c-80-iso10646-1")
 
 ;; MouseKeys
@@ -140,8 +140,8 @@
 ;;
 ;; swm-gapes
 ;; Set Gaps
-(setf swm-gaps:*inner-gaps-size* 6
-      swm-gaps:*outer-gaps-size* 6)
+(setf swm-gaps:*inner-gaps-size* 2
+      swm-gaps:*outer-gaps-size* 4)
 ;; Turn em on
 (swm-gaps:toggle-gaps-on)
 ;; SSH
@@ -201,15 +201,15 @@
 ;; Window format
 (setf *window-format* (format NIL "^(:fg \"~A\")<%25t>" "#B8BB26")
       *window-border-style* :tight
-      *normal-border-width* 3
+      *normal-border-width* 1
       *hidden-window-color* "^**")
 
 ;; Time format
 (setf *time-modeline-string* "%I:%M%p")
 
 ;; Message window settings
-(setf *message-window-padding* 6
-      *message-window-y-padding* 6
+(setf *message-window-padding* 2
+      *message-window-y-padding* 2
       *message-window-gravity* :bottom)
 
 ;; Input window settings
@@ -293,7 +293,7 @@
 (setf *mode-line-background-color* "#282828"
       *mode-line-foreground-color* "#FABD2F"
       *mode-line-border-color* "#EBDBB2"
-      *mode-line-border-width* 3
+      *mode-line-border-width* 1
       *mode-line-pad-x* 6
       *mode-line-pad-y* 6
       *mode-line-timeout* 1)
