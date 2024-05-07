@@ -270,7 +270,6 @@ This is the first thing the WM Loads.
 ;;;
 
 ;; Set env vars
-(setf (getenv "PATH") "/home/izder456/.npm-global/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/home/izder456/.emacs.d/bin:/home/izder456/.local/share/pkg/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/local/jdk-17/bin:/home/izder456/.cargo/bin:/home/izder456/.local/bin:/usr/local/jdk-17/bin:/bin:/home/izder456/.go/bin:/home/izder456/.gems/bin:/home/izder456/bin")
 (setf (getenv "PAGER") "less -R")
 (setf (getenv "BROWSER") "firefox-esr")
 #+END_SRC
