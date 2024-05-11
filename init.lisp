@@ -220,7 +220,10 @@
 
 ;; Run a shell command and format the output
 (defun run-shell-command-and-format (command)
-  (substitute #\Space #\Newline (run-shell-command command t)))
+  (let ((output (run-shell-command command t)))
+    (if (string= output "")
+	"^bnil^B"
+	(substitute #\Space #\Newline output))))
 
 ;; Show system information
 (defun show-system-info (command)
@@ -265,10 +268,12 @@
 		    " %d " ;; Date
 		    ))
 (defvar audio-fmt (list
+		   "^B" ;; Bright
 		   "^2 " '(:eval (show-volume "output")) ;; Soft Green
 		   "^7/" ;; White
 		   "^2 " '(:eval (show-volume "input")) ;; Soft Green
-		   "^4" '(:eval (show-current-track)) ;; Soft Blue
+		   " ^4" '(:eval (show-current-track)) ;; Soft Blue
+		   "^b" ;; Dim
 		   ))
 
 ;; Screen mode line format
