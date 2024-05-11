@@ -223,7 +223,7 @@
   (let ((output (run-shell-command command t)))
     (if (string= output "")
 	"^bnil^B"
-	(substitute #\Space #\Newline output))))
+	(remove-if #'(lambda (x) (member x '(#\Newline #\Return))) output))))
 
 ;; Show system information
 (defun show-system-info (command)
@@ -264,13 +264,13 @@
 (defvar status-fmt (list
 		    "^n" ;; Default
 		    " %B " pipe ;; Battery
-		    " " '(:eval (show-temp)) pipe ;; Cpu Temp
+		    " " '(:eval (show-temp)) " " pipe ;; Cpu Temp
 		    " %d " ;; Date
 		    ))
 (defvar audio-fmt (list
 		   "^B" ;; Bright
 		   "^2 " '(:eval (show-volume "output")) ;; Soft Green
-		   "^7/" ;; White
+		   " ^7/" ;; White
 		   "^2 " '(:eval (show-volume "input")) ;; Soft Green
 		   " ^4" '(:eval (show-current-track)) ;; Soft Blue
 		   "^b" ;; Dim
