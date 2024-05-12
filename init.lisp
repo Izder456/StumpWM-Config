@@ -226,12 +226,8 @@
 (defun run-shell-command-and-format (command)
   (let ((output (run-shell-command command t)))
     (if (string= output "")
-	"^bnil^B"
+	"^Rnil^r"
 	(normalize-string output))))
-
-;; Show the kernel version
-(defun show-kernel ()
-  (run-shell-command-and-format "uname -r"))
 
 ;; Show the temperature
 (defun show-temp ()
@@ -254,48 +250,43 @@
 ;; Formatting
 ;;;
 
-;; Break out modeline formatting
 ;; Constants
-(defvar pipe "|")
+(defparameter pipe " | ")
+(defparameter group-bracket-color "^8") ;; Soft Orange
+(defparameter group-content-color "^6") ;; Soft Aqua
+(defparameter audio-bracket-color "^9") ;; Gray
+(defparameter audio-content-color "^B^2*^b") ;; Soft Green
+(defparameter status-bracket-color "^5") ;; Soft Magenta
+(defparameter status-content-color "^3*") ;; Soft Yellow
+(defparameter win-bracket-color "^1") ;; Soft Red
+(defparameter win-content-color "^2" ) ;; Soft Green
 
-;; Format Lists
-(defvar group-fmt "^6%g") ;; Default (softaqua)
-(defvar win-fmt "^n%v") ;; Default (green)
-(defvar status-fmt (list
-		    "^n" ;; Default
-		    " %B " pipe ;; Battery
-		    " " '(:eval (show-temp)) " " pipe ;; Cpu Temp
-		    " %d " ;; Date
-		    ))
-(defvar audio-fmt (list
-		   "^B" ;; Bright
-		   "^2 " '(:eval (show-volume "output")) ;; Soft Green
-		   " ^7/" ;; White
-		   "^2 " '(:eval (show-volume "input")) ;; Soft Green
-		   "^4 " '(:eval (show-current-track)) ;; Soft Blue
-		   "^b" ;; Dim
+;; Components
+(defvar group-fmt "%g")
+(defvar win-fmt "%v")
+(defvar status-fmt (list "%B" pipe ;; Battery
+		   '(:eval (show-temp)) pipe ;; Cpu Temp
+		   "%d" ;; Date
 		   ))
+(defvar audio-fmt (list '(:eval (show-volume "output"))
+			" / "
+			'(:eval (show-volume "input"))
+			" "
+			'(:eval (show-current-track))))
 
-;; Screen mode line format
+;; Generate a Component of a given color
+(defun generate-mode-line-component (out-color in-color component)
+  (list out-color "[" in-color component out-color "]"))
+
 (setf *screen-mode-line-format*
-      (list
-	    "^8[" ;; Soft Orange
-	    group-fmt
-	    "^8]" ;; Soft Orange
-	    "^9[" ;; Gray
-	    audio-fmt
-	    "^9]" ;; Gray
-	    "^5[" ;; Magenta
-	    status-fmt
-	    "^5]"
-	    "^1[" ;; Red
-	    win-fmt
-	    "^1]" ;; Red
-	    ))
+	   (list
+	    (generate-mode-line-component group-bracket-color group-content-color group-fmt)
+	    (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt)
+	    (generate-mode-line-component status-bracket-color status-content-color status-fmt)
+	    (generate-mode-line-component win-bracket-color win-content-color win-fmt)))
 
 ;; Format Modeline
 (setf *mode-line-background-color* "#282828"
-      *mode-line-foreground-color* "#FABD2F"
       *mode-line-border-color* "#EBDBB2"
       *mode-line-border-width* 1
       *mode-line-pad-x* 6
