@@ -25,6 +25,7 @@
 
 ;; this automatically prefixes 'stumpwm:' to commands that need it
 (in-package :stumpwm)
+(setf *default-package* :stumpwm)
 
 ;; Set Modules
 ; (set-contrib-dir) is deprecated, this is the method now
@@ -220,10 +221,12 @@
 
 ;; Normalize String
 (defun normalize-string (string)
+  "remove newlines or carriage returns in strings"
   (remove-if #'(lambda (x) (member x '(#\Newline #\Return))) string))
 
 ;; Run a shell command and format the output
 (defun run-shell-command-and-format (command)
+  "run a shell command, if output is empty reverse coloring and return string 'nil'"
   (let ((output (run-shell-command command t)))
     (if (string= output "")
 	"^Rnil^r"
@@ -231,19 +234,23 @@
 
 ;; Show the temperature
 (defun show-temp ()
+  "get temp data from sysctl"
   (run-shell-command-and-format "sysctl -n hw.sensors.cpu0.temp0"))
 
 ;; Show Volume
 (defun show-volume (type)
+  "show current volume given a (type) argument"
   (run-shell-command-and-format (format nil "sndioctl -n ~a.level" type)))
 
 ;; Show the current track
 (defun show-current-track ()
+  "use playerctl to get current track info"
   (run-shell-command-and-format
    "playerctl metadata --format '|[{{duration(position)}}] @{{trunc(volume, 5)}}|'"))
 
 ;; Show the window title
 (defun show-window-title ()
+  "show the title of the active window"
   (normalize-string (window-title (current-window))))
 
 ;;;
@@ -276,14 +283,20 @@
 
 ;; Generate a Component of a given color
 (defun generate-mode-line-component (out-color in-color component)
+  "Generate a Component of a given color"
   (list out-color "[" in-color component out-color "]"))
 
-(setf *screen-mode-line-format*
-	   (list
-	    (generate-mode-line-component group-bracket-color group-content-color group-fmt)
-	    (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt)
-	    (generate-mode-line-component status-bracket-color status-content-color status-fmt)
-	    (generate-mode-line-component win-bracket-color win-content-color win-fmt)))
+(defun generate-mode-line ()
+  "build a modeline"
+  (setf *screen-mode-line-format*
+	(list
+	 (generate-mode-line-component group-bracket-color group-content-color group-fmt)
+	 (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt)
+	 (generate-mode-line-component status-bracket-color status-content-color status-fmt)
+	 (generate-mode-line-component win-bracket-color win-content-color win-fmt))))
+
+;; Actually load my modeline
+(generate-mode-line)
 
 ;; Format Modeline
 (setf *mode-line-background-color* "#282828"
