@@ -97,7 +97,8 @@
     ("C-Left" "exchange-direction left")
     ("C-Right" "exchange-direction right")
     ("p" "toggle-float")
-    ("M-p" "flatten-floats")))
+    ("M-p" "flatten-floats")
+    ("/" "toggle-gaps")))
 
 ;; Raw StumpWM Module Commands
 (defvar *my-wm-module-commands*
