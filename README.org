@@ -107,6 +107,7 @@
 | =C-t=    | =M-Escape=                   | Toggle Modeline                              |
 | =C-t=    | =B=                          | Yank mouse focus to current window           |
 | =C-t=    | =C-b=                        | Hide mouse cursor                            |
+| =C-t=    | =/=                          | Toggle Gaps                                  |
 | =NONE=   | =M-Tab=                      | Switch to previous frame                     |
 | =NONE=   | =s-Tab=                      | list last open window in windowlist          |
 
@@ -132,6 +133,8 @@
 | =M-s=    | =w=    | Search Wikipedia for prompt      |
 | =M-s=    | =C-d=  | Search Witionary for selection   |
 | =M-s=    | =d=    | Search Wiktionary for prompt     |
+| =M-s=    | =C-c=  | Search Clew Blogs for selection  |
+| =M-s=    | =c=    | Search Clew Blogs for            |
 | =M-s=    | =o=    | Search Package Web for prompt    |
 | =M-s=    | =m=    | Search Manpages                  |
 | =M-s=    | =M=    | Open Manpage                     |
