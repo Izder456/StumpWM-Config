@@ -5,7 +5,11 @@
 ;; Set prefix key
 (set-prefix-key (kbd "C-t"))
 
-;; run-or-raise Firefox-ESR
+;;;
+;; Browser Notices for search engine module
+;;;
+
+;; Firefox-ESR
 (defcommand firefox-esr () ()
   "Set notice to Firefox ESR Opening"
   (bt:make-thread

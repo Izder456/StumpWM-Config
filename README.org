@@ -482,8 +482,7 @@ This is the first thing the WM Loads.
 	 (generate-mode-line-component group-bracket-color group-content-color group-fmt)
 	 (generate-mode-line-component status-bracket-color status-content-color status-fmt)
 	 (generate-mode-line-component win-bracket-color win-content-color win-fmt)
-	 (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt t)
-)))
+	 (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt t))))
 
 ;; Actually load my modeline
 (generate-mode-line)
@@ -525,7 +524,11 @@ Handling basic bind boilerplate that I +will definitely+ /never/ touch.
 *** Setup browser notices
 
 #+BEGIN_SRC lisp :tangle pre-bind.lisp
-;; run-or-raise Firefox-ESR
+;;;
+;; Browser Notices for search engine module
+;;;
+
+;; Firefox-ESR
 (defcommand firefox-esr () ()
   "Set notice to Firefox ESR Opening"
   (bt:make-thread
