@@ -282,7 +282,7 @@
 
 ;; Generate a Component of a given color
 (defun generate-mode-line-component (out-color in-color component &optional right-alignment)
-  "Generate a Component of a given color, by default it is Left aligned, set Right-alignment to not nil for right align"
+  "Generate a Component of a given color, by default the component is Left aligned. set right-alignment to not nil for Right alignment"
   (if right-alignment
       (list "^>" out-color "[" in-color component out-color "]")
       (list out-color "[" in-color component out-color "]")))
