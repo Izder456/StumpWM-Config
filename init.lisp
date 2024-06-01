@@ -281,9 +281,9 @@
 			'(:eval (show-current-track))))
 
 ;; Generate a Component of a given color
-(defun generate-mode-line-component (out-color in-color component &optional left-alignment)
-  "Generate a Component of a given color"
-  (if left-alignment
+(defun generate-mode-line-component (out-color in-color component &optional right-alignment)
+  "Generate a Component of a given color, by default it is Left aligned, set Right-alignment to not nil for right align"
+  (if right-alignment
       (list "^>" out-color "[" in-color component out-color "]")
       (list out-color "[" in-color component out-color "]")))
 
