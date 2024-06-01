@@ -121,7 +121,6 @@
    "swm-gaps" ;; gaps
    "swm-emacs" ;; emacs
    "swm-ssh" ;; ssh
-   "stumptray" ;; tray icons
    "scratchpad" ;; floating scratchterm
    "window-switch" ;; switch windows 
    "hostname" ;; native hostname
@@ -282,18 +281,21 @@
 			'(:eval (show-current-track))))
 
 ;; Generate a Component of a given color
-(defun generate-mode-line-component (out-color in-color component)
+(defun generate-mode-line-component (out-color in-color component &optional left-alignment)
   "Generate a Component of a given color"
-  (list out-color "[" in-color component out-color "]"))
+  (if left-alignment
+      (list "^>" out-color "[" in-color component out-color "]")
+      (list out-color "[" in-color component out-color "]")))
 
 (defun generate-mode-line ()
   "build a modeline"
   (setf *screen-mode-line-format*
 	(list
 	 (generate-mode-line-component group-bracket-color group-content-color group-fmt)
-	 (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt)
 	 (generate-mode-line-component status-bracket-color status-content-color status-fmt)
-	 (generate-mode-line-component win-bracket-color win-content-color win-fmt))))
+	 (generate-mode-line-component win-bracket-color win-content-color win-fmt)
+	 (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt t)
+)))
 
 ;; Actually load my modeline
 (generate-mode-line)
@@ -308,9 +310,6 @@
 
 ;; mode line
 (mode-line)
-
-;; Open Stumptray (AFTER modeline)
-(stumptray:stumptray)
 
 ;; cleanup/autostart
 (load "~/.stumpwm.d/autostart.lisp")
