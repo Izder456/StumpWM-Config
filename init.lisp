@@ -222,7 +222,7 @@
 (defun normalize-string (string)
   "remove newlines or carriage returns in strings"
   (remove-if #'(lambda (x) (member x '(#\Newline #\Return))) string))
-
+   
 ;; Run a shell command and format the output
 (defun run-shell-command-and-format (command)
   "run a shell command, if output is empty reverse coloring and return string 'nil'"
@@ -239,7 +239,7 @@
 ;; Show Volume
 (defun show-volume (type)
   "show current volume given a (type) argument"
-  (run-shell-command-and-format (format nil "sndioctl -n ~a.level" type)))
+  (format nil "~,1f%" (* 100 (read-from-string (run-shell-command-and-format (format nil "sndioctl -n ~a.level" type))))))
 
 ;; Show the current track
 (defun show-current-track ()
