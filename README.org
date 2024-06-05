@@ -408,9 +408,11 @@ This is the first thing the WM Loads.
 
 ;; Normalize String
 (defun normalize-string (string)
-  "remove newlines or carriage returns in strings"
-  (remove-if #'(lambda (x) (member x '(#\Newline #\Return))) string))
-   
+  "remove weird whitespace or in strings"
+  (string-trim
+   '(#\Space #\Newline #\Backspace #\Tab #\Linefeed #\Page #\Return #\Rubout)
+   string))
+
 ;; Run a shell command and format the output
 (defun run-shell-command-and-format (command)
   "run a shell command, if output is empty reverse coloring and return string 'nil'"
