@@ -220,7 +220,7 @@
 
 ;; Normalize String
 (defun normalize-string (string)
-  "remove weird whitespace or in strings"
+  "remove weird whitespace or rubbish in strings"
   (string-trim
    '(#\Space #\Newline #\Backspace #\Tab #\Linefeed #\Page #\Return #\Rubout)
    string))
