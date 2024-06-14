@@ -23,6 +23,12 @@
 ;; no style-warns
 (declaim #+sbcl(sb-ext:muffle-conditions style-warning))
 
+;; Optimize
+(declaim (optimize (speed 3) (safety 3)))
+
+;; Compile FASL
+(setq *block-compile-default* t)
+
 ;; this automatically prefixes 'stumpwm:' to commands that need it
 (in-package :stumpwm)
 (setf *default-package* :stumpwm)
