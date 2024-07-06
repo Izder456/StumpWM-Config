@@ -9,11 +9,11 @@
 ;; Browser Notices for search engine module
 ;;;
 
-;; Firefox-ESR
-(defcommand firefox-esr () ()
-  "Set notice to Firefox ESR Opening"
+;; Firefox
+(defcommand firefox () ()
+  "Set notice to Firefox Opening"
   (bt:make-thread
-   (lambda () (message "Opening Firefox ESR"))))
+   (lambda () (message "Opening Firefox"))))
 
 ;; surf
 (defcommand surf () ()

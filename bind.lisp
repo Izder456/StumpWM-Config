@@ -66,7 +66,7 @@
   '(("E" "claws-mail")
     ("d" "deadbeef")
     ("F" "pcmanfm")
-    ("f" "firefox-esr")))
+    ("f" "firefox")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*

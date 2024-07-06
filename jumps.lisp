@@ -15,7 +15,7 @@
 ;;;
 
 ;; Set browser exe
-(setf searchengines:*search-browser-executable* "firefox-esr")
+(setf searchengines:*search-browser-executable* "firefox")
 
 ;; Macro for search engine defines
 (defmacro define-searchengine (selection-name prompt-name url description key-selection key-prompt)

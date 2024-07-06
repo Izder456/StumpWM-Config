@@ -109,7 +109,7 @@
 
 ;; Set env vars
 (setf (getenv "PAGER") "less -R")
-(setf (getenv "BROWSER") "firefox-esr")
+(setf (getenv "BROWSER") "firefox")
 
 ;;;
 ;; Modules & their config

@@ -281,7 +281,7 @@ This is the first thing the WM Loads.
 
 ;; Set env vars
 (setf (getenv "PAGER") "less -R")
-(setf (getenv "BROWSER") "firefox-esr")
+(setf (getenv "BROWSER") "firefox")
 #+END_SRC
 
 *** Modules
@@ -536,11 +536,11 @@ Handling basic bind boilerplate that I +will definitely+ /never/ touch.
 ;; Browser Notices for search engine module
 ;;;
 
-;; Firefox-ESR
-(defcommand firefox-esr () ()
-  "Set notice to Firefox ESR Opening"
+;; Firefox
+(defcommand firefox () ()
+  "Set notice to Firefox Opening"
   (bt:make-thread
-   (lambda () (message "Opening Firefox ESR"))))
+   (lambda () (message "Opening Firefox"))))
 
 ;; surf
 (defcommand surf () ()
@@ -654,7 +654,7 @@ Handling bindings
   '(("E" "claws-mail")
     ("d" "deadbeef")
     ("F" "pcmanfm")
-    ("f" "firefox-esr")))
+    ("f" "firefox")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
@@ -757,7 +757,7 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;;;
 
 ;; Set browser exe
-(setf searchengines:*search-browser-executable* "firefox-esr")
+(setf searchengines:*search-browser-executable* "firefox")
 
 ;; Macro for search engine defines
 (defmacro define-searchengine (selection-name prompt-name url description key-selection key-prompt)
