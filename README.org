@@ -281,7 +281,6 @@ This is the first thing the WM Loads.
 
 ;; Set env vars
 (setf (getenv "PAGER") "less -R")
-(setf (getenv "BROWSER") "firefox")
 #+END_SRC
 
 *** Modules
