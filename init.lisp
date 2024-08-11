@@ -126,6 +126,7 @@
    "swm-gaps" ;; gaps
    "swm-emacs" ;; emacs
    "swm-ssh" ;; ssh
+   "stumptray" ;; System tray
    "scratchpad" ;; floating scratchterm
    "window-switch" ;; switch windows 
    "hostname" ;; native hostname
@@ -212,8 +213,8 @@
 (setf *time-modeline-string* "%I:%M%p")
 
 ;; Message window settings
-(setf *message-window-padding* 2
-      *message-window-y-padding* 2
+(setf *message-window-padding* 1
+      *message-window-y-padding* 1
       *message-window-gravity* :bottom)
 
 ;; Input window settings
@@ -248,12 +249,6 @@
   "show current volume given a (type) argument"
   (format nil "~,1f%" (* 100 (read-from-string (run-shell-command-and-format (format nil "sndioctl -n ~a.level" type))))))
 
-;; Show the current track
-(defun show-current-track ()
-  "use playerctl to get current track info"
-  (run-shell-command-and-format
-   "playerctl metadata --format '|[{{duration(position)}}] @{{trunc(volume, 5)}}|'"))
-
 ;; Show the window title
 (defun show-window-title ()
   "show the title of the active window"
@@ -267,7 +262,7 @@
 (defparameter pipe " | ")
 (defparameter group-bracket-color "^8") ;; Soft Orange
 (defparameter group-content-color "^6") ;; Soft Aqua
-(defparameter audio-bracket-color "^9") ;; Gray
+(defparameter audio-bracket-color "^7") ;; White
 (defparameter audio-content-color "^B^2*^b") ;; Soft Green
 (defparameter status-bracket-color "^5") ;; Soft Magenta
 (defparameter status-content-color "^3*") ;; Soft Yellow
@@ -276,16 +271,14 @@
 
 ;; Components
 (defvar group-fmt "%g")
-(defvar win-fmt "%v")
 (defvar status-fmt (list "%B" pipe ;; Battery
 		   '(:eval (show-temp)) pipe ;; Cpu Temp
 		   "%d" ;; Date
 		   ))
 (defvar audio-fmt (list '(:eval (show-volume "output"))
-			" / "
-			'(:eval (show-volume "input"))
-			" "
-			'(:eval (show-current-track))))
+			"/"
+			'(:eval (show-volume "input"))))
+(defvar win-fmt "%v")
 
 ;; Generate a Component of a given color
 (defun generate-mode-line-component (out-color in-color component &optional right-alignment)
@@ -300,8 +293,8 @@
 	(list
 	 (generate-mode-line-component group-bracket-color group-content-color group-fmt)
 	 (generate-mode-line-component status-bracket-color status-content-color status-fmt)
-	 (generate-mode-line-component win-bracket-color win-content-color win-fmt)
-	 (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt t))))
+  (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt)
+	 (generate-mode-line-component win-bracket-color win-content-color win-fmt))))
 
 ;; Actually load my modeline
 (generate-mode-line)
@@ -310,12 +303,15 @@
 (setf *mode-line-background-color* "#282828"
       *mode-line-border-color* "#EBDBB2"
       *mode-line-border-width* 1
-      *mode-line-pad-x* 6
-      *mode-line-pad-y* 6
+      *mode-line-pad-x* 1
+      *mode-line-pad-y* 1
       *mode-line-timeout* 1)
 
 ;; mode line
 (mode-line)
+
+;; Load in StumpTray
+(stumptray::stumptray)
 
 ;; cleanup/autostart
 (load "~/.stumpwm.d/autostart.lisp")
