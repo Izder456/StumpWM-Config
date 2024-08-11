@@ -363,7 +363,7 @@ This is the first thing the WM Loads.
 
 ;; pre-binds
 (load "~/.stumpwm.d/pre-bind.lisp")
- 
+
 ;; binds
 (load "~/.stumpwm.d/bind.lisp")
 
