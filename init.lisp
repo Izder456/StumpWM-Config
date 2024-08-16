@@ -34,7 +34,7 @@
 (setf *default-package* :stumpwm)
 
 ;; Set Modules
-; (set-contrib-dir) is deprecated, this is the method now
+                                        ; (set-contrib-dir) is deprecated, this is the method now
 (set-module-dir "~/.stumpwm.d/modules")
 
 ;;;
@@ -157,15 +157,15 @@
 
 ;; Oneko command
 (defcommand oneko () ()
-  "Oneko Start Command"
-  (bt:make-thread
-   (lambda ()
-     (run-shell-command "oneko -tora -tofocus -name 'neko'"))))
+            "Oneko Start Command"
+            (bt:make-thread
+             (lambda ()
+               (run-shell-command "oneko -tora -tofocus -name 'neko'"))))
 (defcommand kill-oneko () ()
-  "Oneko Stop Command"
-  (bt:make-thread
-   (lambda ()
-     (run-shell-command "pkill -9 oneko"))))
+            "Oneko Stop Command"
+            (bt:make-thread
+             (lambda ()
+               (run-shell-command "pkill -9 oneko"))))
 
 ;; scratchpad
 ;; define default scratchpad term
@@ -183,7 +183,7 @@
 
 ;; pre-binds
 (load "~/.stumpwm.d/pre-bind.lisp")
- 
+
 ;; binds
 (load "~/.stumpwm.d/bind.lisp")
 
@@ -237,7 +237,7 @@
   (let ((output (run-shell-command command t)))
     (if (string= output "")
 	"^Rnil^r"
-	(normalize-string output))))
+      (normalize-string output))))
 
 ;; Show the temperature
 (defun show-temp ()
@@ -272,9 +272,9 @@
 ;; Components
 (defvar group-fmt "%g")
 (defvar status-fmt (list "%B" pipe ;; Battery
-		   '(:eval (show-temp)) pipe ;; Cpu Temp
-		   "%d" ;; Date
-		   ))
+		         '(:eval (show-temp)) pipe ;; Cpu Temp
+		         "%d" ;; Date
+		         ))
 (defvar audio-fmt (list '(:eval (show-volume "output"))
 			"/"
 			'(:eval (show-volume "input"))))
@@ -285,7 +285,7 @@
   "Generate a Component of a given color, by default the component is Left aligned. set right-alignment to not nil for Right alignment"
   (if right-alignment
       (list "^>" out-color "[" in-color component out-color "]")
-      (list out-color "[" in-color component out-color "]")))
+    (list out-color "[" in-color component out-color "]")))
 
 (defun generate-mode-line ()
   "build a modeline"
@@ -293,7 +293,7 @@
 	(list
 	 (generate-mode-line-component group-bracket-color group-content-color group-fmt)
 	 (generate-mode-line-component status-bracket-color status-content-color status-fmt)
-  (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt)
+         (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt)
 	 (generate-mode-line-component win-bracket-color win-content-color win-fmt))))
 
 ;; Actually load my modeline

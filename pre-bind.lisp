@@ -10,16 +10,16 @@
 ;;;
 
 ;; Firefox
-(defcommand firefox () ()
-  "Set notice to Firefox Opening"
-  (bt:make-thread
-   (lambda () (message "Opening Firefox"))))
+(defcommand firefox-esr () ()
+            "Set notice to Firefox ESR Opening"
+            (bt:make-thread
+             (lambda () (message "Opening Firefox"))))
 
 ;; surf
 (defcommand surf () ()
-  "Set notice to Suckless SURF Opening"
-  (bt:make-thread
-   (lambda () (message "Opening Suckless SURF"))))
+            "Set notice to Suckless SURF Opening"
+            (bt:make-thread
+             (lambda () (message "Opening Suckless SURF"))))
 
 ;; gross binds
 (defvar *gross-default-binds*

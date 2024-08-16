@@ -194,7 +194,7 @@ This is the first thing the WM Loads.
 (setf *default-package* :stumpwm)
 
 ;; Set Modules
-; (set-contrib-dir) is deprecated, this is the method now
+                                        ; (set-contrib-dir) is deprecated, this is the method now
 (set-module-dir "~/.stumpwm.d/modules")
 #+END_SRC
 
@@ -333,15 +333,15 @@ This is the first thing the WM Loads.
 
 ;; Oneko command
 (defcommand oneko () ()
-  "Oneko Start Command"
-  (bt:make-thread
-   (lambda ()
-     (run-shell-command "oneko -tora -tofocus -name 'neko'"))))
+            "Oneko Start Command"
+            (bt:make-thread
+             (lambda ()
+               (run-shell-command "oneko -tora -tofocus -name 'neko'"))))
 (defcommand kill-oneko () ()
-  "Oneko Stop Command"
-  (bt:make-thread
-   (lambda ()
-     (run-shell-command "pkill -9 oneko"))))
+            "Oneko Stop Command"
+            (bt:make-thread
+             (lambda ()
+               (run-shell-command "pkill -9 oneko"))))
 
 ;; scratchpad
 ;; define default scratchpad term
@@ -425,7 +425,7 @@ This is the first thing the WM Loads.
   (let ((output (run-shell-command command t)))
     (if (string= output "")
 	"^Rnil^r"
-	(normalize-string output))))
+      (normalize-string output))))
 
 ;; Show the temperature
 (defun show-temp ()
@@ -460,9 +460,9 @@ This is the first thing the WM Loads.
 ;; Components
 (defvar group-fmt "%g")
 (defvar status-fmt (list "%B" pipe ;; Battery
-		   '(:eval (show-temp)) pipe ;; Cpu Temp
-		   "%d" ;; Date
-		   ))
+		         '(:eval (show-temp)) pipe ;; Cpu Temp
+		         "%d" ;; Date
+		         ))
 (defvar audio-fmt (list '(:eval (show-volume "output"))
 			"/"
 			'(:eval (show-volume "input"))))
@@ -473,7 +473,7 @@ This is the first thing the WM Loads.
   "Generate a Component of a given color, by default the component is Left aligned. set right-alignment to not nil for Right alignment"
   (if right-alignment
       (list "^>" out-color "[" in-color component out-color "]")
-      (list out-color "[" in-color component out-color "]")))
+    (list out-color "[" in-color component out-color "]")))
 
 (defun generate-mode-line ()
   "build a modeline"
@@ -481,7 +481,7 @@ This is the first thing the WM Loads.
 	(list
 	 (generate-mode-line-component group-bracket-color group-content-color group-fmt)
 	 (generate-mode-line-component status-bracket-color status-content-color status-fmt)
-  (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt)
+         (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt)
 	 (generate-mode-line-component win-bracket-color win-content-color win-fmt))))
 
 ;; Actually load my modeline
@@ -532,16 +532,16 @@ Handling basic bind boilerplate that I +will definitely+ /never/ touch.
 ;;;
 
 ;; Firefox
-(defcommand firefox () ()
-  "Set notice to Firefox Opening"
-  (bt:make-thread
-   (lambda () (message "Opening Firefox"))))
+(defcommand firefox-esr () ()
+            "Set notice to Firefox ESR Opening"
+            (bt:make-thread
+             (lambda () (message "Opening Firefox"))))
 
 ;; surf
 (defcommand surf () ()
-  "Set notice to Suckless SURF Opening"
-  (bt:make-thread
-   (lambda () (message "Opening Suckless SURF"))))
+            "Set notice to Suckless SURF Opening"
+            (bt:make-thread
+             (lambda () (message "Opening Suckless SURF"))))
 #+END_SRC
 
 *** Remove default binds
@@ -611,7 +611,7 @@ Handling bindings
   `(bt:make-thread
     (lambda ()
       (dolist (key-cmd ,key-cmd-list)
-              (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
+        (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
 #+END_SRC
 
 *** Define toggle-float command
@@ -619,9 +619,9 @@ Handling bindings
 #+BEGIN_SRC lisp :tangle bind.lisp
 ;; Push/Pop Current Window Into a Floating group
 (defcommand toggle-float () ()
-    (if (float-window-p (current-window))
-        (unfloat-this)
-        (float-this)))
+            (if (float-window-p (current-window))
+                (unfloat-this)
+              (float-this)))
 #+END_SRC
 
 *** Define Bind Keylists
@@ -649,7 +649,7 @@ Handling bindings
   '(("E" "claws-mail")
     ("d" "deadbeef")
     ("F" "pcmanfm")
-    ("f" "firefox")))
+    ("f" "firefox-esr")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
@@ -752,7 +752,7 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;;;
 
 ;; Set browser exe
-(setf searchengines:*search-browser-executable* "firefox")
+(setf searchengines:*search-browser-executable* "firefox-esr")
 
 ;; Macro for search engine defines
 (defmacro define-searchengine (selection-name prompt-name url description key-selection key-prompt)

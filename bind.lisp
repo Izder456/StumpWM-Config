@@ -36,13 +36,13 @@
   `(bt:make-thread
     (lambda ()
       (dolist (key-cmd ,key-cmd-list)
-              (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
+        (,bind-macro (first key-cmd) (second key-cmd) ,map)))))
 
 ;; Push/Pop Current Window Into a Floating group
 (defcommand toggle-float () ()
-    (if (float-window-p (current-window))
-        (unfloat-this)
-        (float-this)))
+            (if (float-window-p (current-window))
+                (unfloat-this)
+              (float-this)))
 
 ;;;
 ;; Bind Key Lists
@@ -66,7 +66,7 @@
   '(("E" "claws-mail")
     ("d" "deadbeef")
     ("F" "pcmanfm")
-    ("f" "firefox")))
+    ("f" "firefox-esr")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
