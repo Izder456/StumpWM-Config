@@ -293,7 +293,7 @@
 	(list
 	 (generate-mode-line-component group-bracket-color group-content-color group-fmt)
 	 (generate-mode-line-component status-bracket-color status-content-color status-fmt)
-         (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt)
+     (generate-mode-line-component audio-bracket-color audio-content-color audio-fmt)
 	 (generate-mode-line-component win-bracket-color win-content-color win-fmt))))
 
 ;; Actually load my modeline
