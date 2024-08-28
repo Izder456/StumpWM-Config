@@ -67,8 +67,8 @@
     ("d" "deadbeef")
     ("F" "pcmanfm")
     ("f" "firefox-esr")
-    ("e" "emacs")
-    ("C-e" "emacs")))
+    ("e" "emacsclient -a '' -c")
+    ("C-e" "emacsclient -a '' -c")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
