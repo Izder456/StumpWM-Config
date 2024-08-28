@@ -56,8 +56,8 @@
 
 ;; Set Shell Keys
 (defvar *my-shell-key-commands*
-  '(("c" "st")
-    ("C-c" "st")
+  '(("c" "urxvtc")
+    ("C-c" "urxvtc")
     ("l" "slock")
     ("M-b" "feh --bg-fill --randomize /usr/local/share/backgrounds")))
 
@@ -66,7 +66,9 @@
   '(("E" "claws-mail")
     ("d" "deadbeef")
     ("F" "pcmanfm")
-    ("f" "firefox-esr")))
+    ("f" "firefox-esr")
+    ("e" "emacs")
+    ("C-e" "emacs")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
@@ -102,10 +104,7 @@
 
 ;; Raw StumpWM Module Commands
 (defvar *my-wm-module-commands*
-  '(("/" "swm-ssh-menu")
-    ("s-e" "emacs-daemon-kill-force")
-    ("e" "swm-emacs")
-    ("C-e" "swm-emacs")))
+  '(("/" "swm-ssh-menu")))
 
 ;; Unprefixed Module Commands
 (defvar *my-unprefixed-module-commands*

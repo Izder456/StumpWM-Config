@@ -15,11 +15,6 @@
   (slynk:create-server
    :dont-close t))
 
-;; Quit
-(when *quit-hook*
-  ;; Kill emacs
-  (swm-emacs:emacs-daemon-kill-force))
-
 ;; Finish Threads
 (defvar *bind-thread-list*
   (list

@@ -300,7 +300,6 @@ This is the first thing the WM Loads.
 (defvar *modulenames*
   (list
    "swm-gaps" ;; gaps
-   "swm-emacs" ;; emacs
    "swm-ssh" ;; ssh
    "stumptray" ;; System tray
    "scratchpad" ;; floating scratchterm
@@ -321,10 +320,10 @@ This is the first thing the WM Loads.
 ;;
 ;; swm-gapes
 ;; Set Gaps
-(setf swm-gaps:*inner-gaps-size* 2
-      swm-gaps:*outer-gaps-size* 4)
+(setf swm-gaps:*inner-gaps-size* 3
+      swm-gaps:*outer-gaps-size* 5)
 ;; Turn em on
-(swm-gaps:toggle-gaps-off)
+(swm-gaps:toggle-gaps-on)
 ;; SSH
 (setq swm-ssh:*swm-ssh-default-term* "st")
 
@@ -639,8 +638,8 @@ Handling bindings
 
 ;; Set Shell Keys
 (defvar *my-shell-key-commands*
-  '(("c" "st")
-    ("C-c" "st")
+  '(("c" "urxvtc")
+    ("C-c" "urxvtc")
     ("l" "slock")
     ("M-b" "feh --bg-fill --randomize /usr/local/share/backgrounds")))
 
@@ -649,7 +648,9 @@ Handling bindings
   '(("E" "claws-mail")
     ("d" "deadbeef")
     ("F" "pcmanfm")
-    ("f" "firefox-esr")))
+    ("f" "firefox-esr")
+    ("e" "emacs")
+    ("C-e" "emacs")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
@@ -685,10 +686,7 @@ Handling bindings
 
 ;; Raw StumpWM Module Commands
 (defvar *my-wm-module-commands*
-  '(("/" "swm-ssh-menu")
-    ("s-e" "emacs-daemon-kill-force")
-    ("e" "swm-emacs")
-    ("C-e" "swm-emacs")))
+  '(("/" "swm-ssh-menu")))
 
 ;; Unprefixed Module Commands
 (defvar *my-unprefixed-module-commands*
@@ -785,10 +783,10 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
 ;;;
 
 ;; Define Terminal Jumps
-(make-term-jump "mansearch" "apropos" "st")
-(make-term-jump "manpage" "man" "st")
-(make-term-jump "pkgname" "pkg_info -Q" "st")
-(make-term-jump "pkgloc" "pkg_locate" "st")
+(make-term-jump "mansearch" "apropos" "urxvtc")
+(make-term-jump "manpage" "man" "urxvtc")
+(make-term-jump "pkgname" "pkg_info -Q" "urxvtc")
+(make-term-jump "pkgloc" "pkg_locate" "urxvtc")
 #+END_SRC
 
 *** Bind Jump Aliases
@@ -823,11 +821,6 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
   ;; re/start slynk server
   (slynk:create-server
    :dont-close t))
-
-;; Quit
-(when *quit-hook*
-  ;; Kill emacs
-  (swm-emacs:emacs-daemon-kill-force))
 
 ;; Finish Threads
 (defvar *bind-thread-list*

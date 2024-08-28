@@ -124,7 +124,6 @@
 (defvar *modulenames*
   (list
    "swm-gaps" ;; gaps
-   "swm-emacs" ;; emacs
    "swm-ssh" ;; ssh
    "stumptray" ;; System tray
    "scratchpad" ;; floating scratchterm
@@ -145,10 +144,10 @@
 ;;
 ;; swm-gapes
 ;; Set Gaps
-(setf swm-gaps:*inner-gaps-size* 2
-      swm-gaps:*outer-gaps-size* 4)
+(setf swm-gaps:*inner-gaps-size* 3
+      swm-gaps:*outer-gaps-size* 5)
 ;; Turn em on
-(swm-gaps:toggle-gaps-off)
+(swm-gaps:toggle-gaps-on)
 ;; SSH
 (setq swm-ssh:*swm-ssh-default-term* "st")
 

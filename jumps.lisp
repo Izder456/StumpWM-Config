@@ -44,10 +44,10 @@
 ;;;
 
 ;; Define Terminal Jumps
-(make-term-jump "mansearch" "apropos" "st")
-(make-term-jump "manpage" "man" "st")
-(make-term-jump "pkgname" "pkg_info -Q" "st")
-(make-term-jump "pkgloc" "pkg_locate" "st")
+(make-term-jump "mansearch" "apropos" "urxvtc")
+(make-term-jump "manpage" "man" "urxvtc")
+(make-term-jump "pkgname" "pkg_info -Q" "urxvtc")
+(make-term-jump "pkgloc" "pkg_locate" "urxvtc")
 
 ;;;
 ;; Bind Jump Defines from Earlier
