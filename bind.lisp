@@ -68,7 +68,7 @@
     ("F" "pcmanfm")
     ("f" "firefox-esr")
     ("e" "emacsclient -a '' -c")
-    ("C-e" "emacsclient -a '' -c")))
+    ("C-e" "emacsclient -e '(kill-emacs)' && emacs --daemon")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*

@@ -58,19 +58,20 @@
 
 ** Apps
 
-| Prefix | Bind     | Function                   |
-|--------+----------+----------------------------|
-| =M-a=    | =c= /OR/ =C-c= | open suckless term         |
-| =M-a=    | =f=        | open firefox               |
-| =M-a=    | =F=        | open pcmanfm               |
-| =M-a=    | =E=        | open claws-mail            |
-| =M-a=    | =e= /OR/ =C-e= | open emacs client          |
-| =M-a=    | =/=        | open ssh menu              |
-| =M-a=    | =s-e=      | force kill emacs daemon    |
-| =M-a=    | =Space=    | rofi drun menu             |
-| =M-a=    | =Return=   | stumpwm window select menu |
-| =M-a=    | =M-b=      | shuffle background         |
-| =M-a=    | =l=        | lock screen with slock     |
+| Prefix | Bind     | Function                    |
+|--------+----------+-----------------------------|
+| =M-a=    | =c= /OR/ =C-c= | open suckless term          |
+| =M-a=    | =f=        | open firefox                |
+| =M-a=    | =F=        | open pcmanfm                |
+| =M-a=    | =E=        | open claws-mail             |
+| =M-a=    | =e=        | open emacs client           |
+| =M-a=    | =C-e=      | kill & restart emacs daemon |
+| =M-a=    | =/=        | open ssh menu               |
+| =M-a=    | =s-e=      | force kill emacs daemon     |
+| =M-a=    | =Space=    | rofi drun menu              |
+| =M-a=    | =Return=   | stumpwm window select menu  |
+| =M-a=    | =M-b=      | shuffle background          |
+| =M-a=    | =l=        | lock screen with slock      |
 
 ** Player Commands
 
@@ -650,7 +651,7 @@ Handling bindings
     ("F" "pcmanfm")
     ("f" "firefox-esr")
     ("e" "emacsclient -a '' -c")
-    ("C-e" "emacsclient -a '' -c")))
+    ("C-e" "emacsclient -e '(kill-emacs)' && emacs --daemon")))
 
 ;; Set Rofi Keys
 (defvar *my-rofi-key-commands*
