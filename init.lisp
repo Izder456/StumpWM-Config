@@ -147,7 +147,7 @@
 (setf swm-gaps:*inner-gaps-size* 3
       swm-gaps:*outer-gaps-size* 5)
 ;; Turn em on
-(swm-gaps:toggle-gaps-on)
+(swm-gaps:toggle-gaps-off)
 ;; SSH
 (setq swm-ssh:*swm-ssh-default-term* "st")
 
