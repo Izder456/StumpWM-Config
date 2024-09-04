@@ -97,6 +97,9 @@
 ;; Welcome
 (setq *startup-message* (format nil "^b^8Welcome Izzy!")) ;; Orange
 
+;; Ignore Resize Hints
+(setq *ignore-wm-inc-hints* t)
+
 ;; Set focus and unfocus colors
 (set-focus-color "#EBDBB2")
 (set-unfocus-color "#928374")
