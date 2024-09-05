@@ -139,7 +139,6 @@
    "urgentwindows" ;; get urgent windows
    ))
 
-
 ;; Normalize String
 (defun normalize-string (string)
   "remove weird whitespace or rubbish in strings"
@@ -252,10 +251,13 @@
 	"^Rnil^r"
         (normalize-string output))))
 
-;; Show the temperature
+;; Show CPU Temperature
 (defun show-temp ()
   "get temp data from sysctl"
-  (run-shell-command-and-format "sysctl -n hw.sensors.cpu0.temp0"))
+  (run-shell-command-and-format 
+   "sysctl -n hw.sensors.cpu0.temp0 2>/dev/null || 
+    sysctl -n hw.sensors.acpitz0.temp0 2>/dev/null || 
+    echo ''"))
 
 ;; Show Volume
 (defun show-volume (type)
