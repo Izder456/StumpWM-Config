@@ -132,7 +132,6 @@
    "scratchpad" ;; floating scratchterm
    "window-switch" ;; switch windows 
    "hostname" ;; native hostname
-   "battery-portable" ;; battery level
    "stumpwm-sndioctl" ;; sound
    "searchengines" ;; search macros
    "beckon" ;; yank mouse cursor focus
@@ -140,8 +139,27 @@
    "urgentwindows" ;; get urgent windows
    ))
 
+
+;; Normalize String
+(defun normalize-string (string)
+  "remove weird whitespace or rubbish in strings"
+  (string-trim
+   '(#\Space #\Newline #\Backspace #\Tab #\Linefeed #\Page #\Return #\Rubout)
+   string))
+
+;; there a battery?
+(defun battery-present-p ()
+  (let ((output (normalize-string (run-shell-command "apm -b" t))))
+    (not (string= output "4"))))
+
+;; Conditionally add battery-portable module
+(when (battery-present-p)
+  (push "battery-portable" *modulenames*))
+
+;; Load modules
 (dolist (modulename *modulenames*)
   (load-module modulename))
+
 ;;
 ;; Module Settings
 ;;
@@ -226,20 +244,13 @@
 ;; Define Functions
 ;;;
 
-;; Normalize String
-(defun normalize-string (string)
-  "remove weird whitespace or rubbish in strings"
-  (string-trim
-   '(#\Space #\Newline #\Backspace #\Tab #\Linefeed #\Page #\Return #\Rubout)
-   string))
-
 ;; Run a shell command and format the output
 (defun run-shell-command-and-format (command)
   "run a shell command, if output is empty reverse coloring and return string 'nil'"
   (let ((output (run-shell-command command t)))
     (if (string= output "")
 	"^Rnil^r"
-      (normalize-string output))))
+        (normalize-string output))))
 
 ;; Show the temperature
 (defun show-temp ()
@@ -273,13 +284,17 @@
 
 ;; Components
 (defvar group-fmt "%g")
-(defvar status-fmt (list "%B" pipe ;; Battery
-		         '(:eval (show-temp)) pipe ;; Cpu Temp
-		         "%d" ;; Date
-		         ))
-(defvar audio-fmt (list '(:eval (show-volume "output"))
-			"/"
-			'(:eval (show-volume "input"))))
+(defvar status-fmt (list
+                    '(:eval (if (battery-present-p)
+                                (concatenate 'string "%B" pipe)
+                                "")) ;; Battery
+                    '(:eval (show-temp)) pipe ;; Cpu Temp
+                    "%d" ;; Date
+                    ))
+(defvar audio-fmt (list
+                   '(:eval (show-volume "output"))
+                   "/"
+                   '(:eval (show-volume "input"))))
 (defvar win-fmt "%v")
 
 ;; Generate a Component of a given color
@@ -287,7 +302,7 @@
   "Generate a Component of a given color, by default the component is Left aligned. set right-alignment to not nil for Right alignment"
   (if right-alignment
       (list "^>" out-color "[" in-color component out-color "]")
-    (list out-color "[" in-color component out-color "]")))
+      (list out-color "[" in-color component out-color "]")))
 
 (defun generate-mode-line ()
   "build a modeline"
