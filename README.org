@@ -316,16 +316,28 @@ This is the first thing the WM Loads.
    "urgentwindows" ;; get urgent windows
    ))
 
-;; Normalize String
+;; Return inversed nil if string empty
+(defun handle-empty-string (string)
+  "return '^Rnil^r' if string id empty, otherwise return the string"
+  (if (string= string "")
+      "^Rnil^r"
+    string))
+
+;; normalize String
 (defun normalize-string (string)
   "remove weird whitespace or rubbish in strings"
   (string-trim
    '(#\Space #\Newline #\Backspace #\Tab #\Linefeed #\Page #\Return #\Rubout)
    string))
 
+;; combine
+(defun normalize-and-handle-empty (string)
+  "normalize string and handle empty result"
+  (handle-empty-string (normalize-string string)))
+
 ;; there a battery?
 (defun battery-present-p ()
-  (let ((output (normalize-string (run-shell-command "apm -b" t))))
+  (let ((output (normalize-and-handle-empty (run-shell-command "apm -b" t))))
     (not (string= output "4"))))
 
 ;; Conditionally add battery-portable module
@@ -436,9 +448,7 @@ This is the first thing the WM Loads.
 (defun run-shell-command-and-format (command)
   "run a shell command, if output is empty reverse coloring and return string 'nil'"
   (let ((output (run-shell-command command t)))
-    (if (string= output "")
-	"^Rnil^r"
-        (normalize-string output))))
+        (normalize-and-handle-empty output)))
 
 ;; Show CPU Temperature
 (defun show-temp ()
@@ -451,12 +461,12 @@ This is the first thing the WM Loads.
 ;; Show Volume
 (defun show-volume (type)
   "show current volume given a (type) argument"
-  (format nil "~,1f%" (* 100 (read-from-string (run-shell-command-and-format (format nil "sndioctl -n ~a.level" type))))))
+   (format nil "~,1f%" (* 100 (read-from-string (run-shell-command-and-format (format nil "sndioctl -n ~a.level" type))))))
 
 ;; Show the window title
 (defun show-window-title ()
   "show the title of the active window"
-  (normalize-string (window-title (current-window))))
+  (normalize-and-handle-empty (window-title (current-window))))
 
 ;;;
 ;; Formatting
