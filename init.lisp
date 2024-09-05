@@ -269,10 +269,24 @@
     sysctl -n hw.sensors.acpitz0.temp0 2>/dev/null || 
     echo ''"))
 
+(defun safe-sndioctl (control)
+  (handler-case
+      (run-shell-command (format nil "sndioctl -n ~a" control) t)
+    (error (c)
+      (declare (ignore c))
+      "")))
+
 ;; Show Volume
 (defun show-volume (type)
   "show current volume given a (type) argument"
-   (format nil "~,1f%" (* 100 (read-from-string (run-shell-command-and-format (format nil "sndioctl -n ~a.level" type))))))
+  (let* ((command (format nil "sndioctl -n ~a.level" type))
+         (output (run-shell-command command t))
+         (normalized-output (normalize-string output)))
+    (if (string= normalized-output "")
+        (format nil "^Rnil^r")
+        (if (string-equal normalized-output "~a.level: no such control")
+            "^Rnil^r"
+            (format nil "~,1f%" (* 100 (read-from-string normalized-output)))))))
 
 ;; Show the window title
 (defun show-window-title ()
