@@ -309,8 +309,9 @@
       *mode-line-pad-y* 1
       *mode-line-timeout* 1)
 
-;; mode line
-(mode-line)
+;; mode line on all heads
+(dolist (h (screen-heads (current-screen)))
+  (enable-mode-line (current-screen) h t))
 
 ;; Load in StumpTray
 (stumptray::stumptray)

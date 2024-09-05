@@ -498,8 +498,9 @@ This is the first thing the WM Loads.
       ,*mode-line-pad-y* 1
       ,*mode-line-timeout* 1)
 
-;; mode line
-(mode-line)
+;; mode line on all heads
+(dolist (h (screen-heads (current-screen)))
+  (enable-mode-line (current-screen) h t))
 
 ;; Load in StumpTray
 (stumptray::stumptray)
@@ -817,11 +818,16 @@ These are my Web/Term jump macros for /easy-peasy/ manpage searching or websurfi
   (run-shell-command "sndioctl output.level=1.00"))
 
 
+(defun gnome-keyring ()
+  (run-shell-command "gnome-keyring-daemon -r -d -c secrets"))
+
 ;; Start
 (when *initializing*
   ;; Startup Sound
   (set-default-sounds)
   (play-startup-sound)
+  ;; gnome keyring
+  (gnome-keyring)
   ;; re/start slynk server
   (slynk:create-server
    :dont-close t))

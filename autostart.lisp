@@ -6,11 +6,16 @@
   (run-shell-command "sndioctl output.level=1.00"))
 
 
+(defun gnome-keyring ()
+  (run-shell-command "gnome-keyring-daemon -r -d -c secrets"))
+
 ;; Start
 (when *initializing*
   ;; Startup Sound
   (set-default-sounds)
   (play-startup-sound)
+  ;; gnome keyring
+  (gnome-keyring)
   ;; re/start slynk server
   (slynk:create-server
    :dont-close t))
